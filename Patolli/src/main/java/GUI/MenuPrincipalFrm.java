@@ -34,7 +34,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("PATOLLI");
@@ -62,6 +62,11 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         btnInstrucciones.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
         btnInstrucciones.setText("Instrucciones");
         btnInstrucciones.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnInstrucciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInstruccionesActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnInstrucciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 480, 150, 30));
 
         jPanel1.setBackground(new java.awt.Color(0, 51, 102));
@@ -108,9 +113,9 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fondo3.png"))); // NOI18N
-        jLabel1.setLabelFor(jLabel3);
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 422));
+        fondo.setIcon(new javax.swing.ImageIcon("C:\\Users\\adria\\OneDrive\\Documentos\\GitHub\\Patolli\\Patolli\\src\\main\\java\\img\\fondo3.png")); // NOI18N
+        fondo.setLabelFor(jLabel3);
+        jPanel2.add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 422));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 700, 370));
 
@@ -121,6 +126,12 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     private void btnUnirmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnirmeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUnirmeActionPerformed
+
+    private void btnInstruccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInstruccionesActionPerformed
+        InstruccionesFrm instrucciones = new InstruccionesFrm();
+        instrucciones.setVisible(true);
+        
+    }//GEN-LAST:event_btnInstruccionesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -162,7 +173,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     private javax.swing.JButton btnCrearPartida;
     private javax.swing.JButton btnInstrucciones;
     private javax.swing.JButton btnUnirme;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel fondo;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
