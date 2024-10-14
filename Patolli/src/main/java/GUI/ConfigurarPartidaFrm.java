@@ -4,6 +4,10 @@
  */
 package GUI;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+
 /**
  *
  * @author abelc
@@ -15,6 +19,23 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
      */
     public ConfigurarPartidaFrm() {
         initComponents();
+        jugadorRadioButton2.setSelected(true);
+        fichaRadioButton2.setSelected(true);
+        ButtonGroup grupoJugadores = new ButtonGroup();
+        ButtonGroup grupoFichas = new ButtonGroup();
+        grupoJugadores.add(jugadorRadioButton2);
+        grupoJugadores.add(jugadorRadioButton3);
+        grupoJugadores.add(jugadorRadioButton4);
+
+        grupoFichas.add(fichaRadioButton2);
+        grupoFichas.add(fichaRadioButton4);
+        grupoFichas.add(fichaRadioButton6);
+        SpinnerNumberModel fondoModel = new SpinnerNumberModel(0, 0, null, 100);
+        jSpinner2.setModel(fondoModel);
+        jSpinner2.setEditor(new JSpinner.NumberEditor(jSpinner2, "#"));
+        SpinnerNumberModel cantidadModel = new SpinnerNumberModel(0, 0, null, 50);
+        jSpinner1.setModel(cantidadModel);
+        jSpinner1.setEditor(new JSpinner.NumberEditor(jSpinner1, "#"));
     }
 
     /**
@@ -26,10 +47,136 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jugadorRadioButton2 = new javax.swing.JRadioButton();
+        jugadorRadioButton3 = new javax.swing.JRadioButton();
+        jugadorRadioButton4 = new javax.swing.JRadioButton();
+        jLabel4 = new javax.swing.JLabel();
+        fichaRadioButton2 = new javax.swing.JRadioButton();
+        fichaRadioButton4 = new javax.swing.JRadioButton();
+        fichaRadioButton6 = new javax.swing.JRadioButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
+        jLabel7 = new javax.swing.JLabel();
+        jSpinner2 = new javax.swing.JSpinner();
+        btnCrearPartida = new javax.swing.JButton();
+        btnCrearPartida1 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Configurar Partida");
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel2.setFont(new java.awt.Font("Algerian", 0, 65)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 51, 102));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Configuraciones");
+
+        jLabel3.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 51, 102));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Configuraciones de la partida");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(jLabel2)))
+                .addContainerGap(78, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(9, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 130));
+
+        jPanel2.setBackground(new java.awt.Color(0, 51, 102));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Algerian", 0, 24)); // NOI18N
+        jLabel1.setText("Apuestas:");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 150, -1));
+
+        jugadorRadioButton2.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
+        jugadorRadioButton2.setText("2 Jugadores");
+        jPanel2.add(jugadorRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 130, -1));
+
+        jugadorRadioButton3.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
+        jugadorRadioButton3.setText("3 jUGADORES");
+        jPanel2.add(jugadorRadioButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
+
+        jugadorRadioButton4.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
+        jugadorRadioButton4.setText("4 JUGADORES");
+        jPanel2.add(jugadorRadioButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 70, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Algerian", 0, 24)); // NOI18N
+        jLabel4.setText("Jugadores:");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 150, -1));
+
+        fichaRadioButton2.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
+        fichaRadioButton2.setText("2 Fichas");
+        jPanel2.add(fichaRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, 90, -1));
+
+        fichaRadioButton4.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
+        fichaRadioButton4.setText("4 fichas");
+        jPanel2.add(fichaRadioButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, -1, -1));
+
+        fichaRadioButton6.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
+        fichaRadioButton6.setText("6 fichas");
+        jPanel2.add(fichaRadioButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 150, 120, -1));
+
+        jLabel5.setFont(new java.awt.Font("Algerian", 0, 24)); // NOI18N
+        jLabel5.setText("Fichas:");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 150, -1));
+
+        jLabel6.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
+        jLabel6.setText("caNTIDAD A PAGAR:");
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 230, -1, -1));
+        jPanel2.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 230, 110, -1));
+
+        jLabel7.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
+        jLabel7.setText("Fondo de apuesta:");
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
+
+        jSpinner2.setToolTipText("");
+        jSpinner2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jPanel2.add(jSpinner2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 230, 110, -1));
+
+        btnCrearPartida.setBackground(new java.awt.Color(213, 198, 86));
+        btnCrearPartida.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
+        btnCrearPartida.setForeground(new java.awt.Color(0, 0, 0));
+        btnCrearPartida.setText("Crear Partida");
+        btnCrearPartida.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel2.add(btnCrearPartida, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 360, 190, 40));
+
+        btnCrearPartida1.setBackground(new java.awt.Color(213, 198, 86));
+        btnCrearPartida1.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
+        btnCrearPartida1.setForeground(new java.awt.Color(0, 0, 0));
+        btnCrearPartida1.setText("Regresar");
+        btnCrearPartida1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel2.add(btnCrearPartida1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 190, 40));
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 700, 420));
 
         pack();
         setLocationRelativeTo(null);
@@ -71,5 +218,24 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCrearPartida;
+    private javax.swing.JButton btnCrearPartida1;
+    private javax.swing.JRadioButton fichaRadioButton2;
+    private javax.swing.JRadioButton fichaRadioButton4;
+    private javax.swing.JRadioButton fichaRadioButton6;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JSpinner jSpinner2;
+    private javax.swing.JRadioButton jugadorRadioButton2;
+    private javax.swing.JRadioButton jugadorRadioButton3;
+    private javax.swing.JRadioButton jugadorRadioButton4;
     // End of variables declaration//GEN-END:variables
 }
