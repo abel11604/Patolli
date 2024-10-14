@@ -56,6 +56,11 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         btnCrearPartida.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
         btnCrearPartida.setText("Crear partida");
         btnCrearPartida.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCrearPartida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearPartidaActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnCrearPartida, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 270, 50));
 
         btnInstrucciones.setBackground(new java.awt.Color(213, 198, 86));
@@ -132,6 +137,11 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         instrucciones.setVisible(true);
         
     }//GEN-LAST:event_btnInstruccionesActionPerformed
+
+    private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
+       ConfigurarPartidaFrm configuraciones= new ConfigurarPartidaFrm();
+       configuraciones.setVisible(true);
+    }//GEN-LAST:event_btnCrearPartidaActionPerformed
 
      /**
      * @param args the command line arguments
