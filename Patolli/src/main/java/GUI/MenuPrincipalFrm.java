@@ -108,7 +108,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\adria\\OneDrive\\Documentos\\GitHub\\Patolli\\Patolli\\src\\main\\java\\img\\fondo3.png")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fondo3.png"))); // NOI18N
         jLabel1.setLabelFor(jLabel3);
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 422));
 
