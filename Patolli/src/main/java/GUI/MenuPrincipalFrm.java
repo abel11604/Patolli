@@ -113,7 +113,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        fondo.setIcon(new javax.swing.ImageIcon("C:\\Users\\adria\\OneDrive\\Documentos\\GitHub\\Patolli\\Patolli\\src\\main\\java\\img\\fondo3.png")); // NOI18N
+        fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fondo3.png"))); // NOI18N
         fondo.setLabelFor(jLabel3);
         jPanel2.add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 422));
 
@@ -133,7 +133,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnInstruccionesActionPerformed
 
-    /**
+     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -158,7 +158,6 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MenuPrincipalFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

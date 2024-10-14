@@ -298,7 +298,7 @@
     <Component class="javax.swing.JLabel" name="fondo">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\adria\OneDrive\Documentos\GitHub\Patolli\Patolli\src\main\java\img\fondo4_1.png"/>
+          <Image iconType="3" name="/img/fondo4_1.png"/>
         </Property>
       </Properties>
       <Constraints>
