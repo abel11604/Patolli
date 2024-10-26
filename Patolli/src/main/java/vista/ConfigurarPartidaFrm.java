@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package GUI;
+package vista;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JSpinner;
@@ -37,7 +37,6 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         jSpinner1.setModel(cantidadModel);
         jSpinner1.setEditor(new JSpinner.NumberEditor(jSpinner1, "#"));
         
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
     /**
@@ -113,7 +112,7 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
 
         jugadorRadioButton2.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jugadorRadioButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jugadorRadioButton2.setText("2 jugadores");
+        jugadorRadioButton2.setText("14 por aspa");
         jugadorRadioButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jugadorRadioButton2ActionPerformed(evt);
@@ -123,7 +122,7 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
 
         jugadorRadioButton3.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jugadorRadioButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jugadorRadioButton3.setText("3 jugadores");
+        jugadorRadioButton3.setText("20 por aspa");
         jugadorRadioButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jugadorRadioButton3ActionPerformed(evt);
@@ -133,14 +132,14 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
 
         jugadorRadioButton4.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         jugadorRadioButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jugadorRadioButton4.setText("4 jugadores");
+        jugadorRadioButton4.setText("24 por aspa");
         jPanel2.add(jugadorRadioButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, -1, -1));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setFont(new java.awt.Font("Bodoni MT", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("JUGADORES");
+        jLabel4.setText("Tamaño del tablero(num. de casillas)");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 40));
 
         fichaRadioButton2.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N

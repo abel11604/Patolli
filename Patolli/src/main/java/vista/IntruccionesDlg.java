@@ -2,21 +2,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package GUI;
+package vista;
 
 /**
  *
  * @author adria
  */
 public class IntruccionesDlg extends javax.swing.JDialog {
-
     /**
      * Creates new form IntruccionesDlg
      */
     public IntruccionesDlg(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+          super(parent, modal);
         initComponents();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        anterior.setVisible(false);
+        
     }
 
     /**
@@ -41,6 +41,10 @@ public class IntruccionesDlg extends javax.swing.JDialog {
         jLabel12 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
+        siguiente = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        anterior = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -91,7 +95,7 @@ public class IntruccionesDlg extends javax.swing.JDialog {
 
         jLabel14.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setText("(Si caes en una casilla ocupada, la ficha retrosede o se elimina).");
+        jLabel14.setText("Si caes en una casilla ocupada, tu ficha retrosede hacia tu casilla");
 
         btnAceptar.setBackground(new java.awt.Color(213, 198, 86));
         btnAceptar.setFont(new java.awt.Font("Bodoni MT", 0, 20)); // NOI18N
@@ -103,6 +107,32 @@ public class IntruccionesDlg extends javax.swing.JDialog {
             }
         });
 
+        siguiente.setFont(new java.awt.Font("Segoe UI", 3, 50)); // NOI18N
+        siguiente.setForeground(new java.awt.Color(255, 255, 255));
+        siguiente.setText("→");
+        siguiente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                siguienteMouseClicked(evt);
+            }
+        });
+
+        jLabel15.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel15.setText("de inicio, si la casilla esta ocupada y es central, eliminaras la ficha");
+
+        anterior.setFont(new java.awt.Font("Segoe UI", 3, 50)); // NOI18N
+        anterior.setForeground(new java.awt.Color(255, 255, 255));
+        anterior.setText("←");
+        anterior.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                anteriorMouseClicked(evt);
+            }
+        });
+
+        jLabel16.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel16.setText("rival.");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -112,39 +142,53 @@ public class IntruccionesDlg extends javax.swing.JDialog {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel12)))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnAceptar)
-                                .addComponent(jLabel14)))))
-                .addGap(28, 28, 28))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(33, 33, 33)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel10)
+                                        .addComponent(jLabel11)
+                                        .addComponent(jLabel12)))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(367, 367, 367)
+                                    .addComponent(btnAceptar))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel6)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel5)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel8)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(anterior)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(siguiente)
+                .addGap(24, 24, 24))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(siguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(anterior, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
@@ -161,15 +205,19 @@ public class IntruccionesDlg extends javax.swing.JDialog {
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel14)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel16)
+                .addGap(24, 24, 24)
                 .addComponent(btnAceptar)
-                .addGap(28, 28, 28))
+                .addGap(15, 15, 15))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 520, -1));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 520, 410));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fondo4_1.png"))); // NOI18N
-        getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 450));
+        getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 450));
 
         pack();
         setLocationRelativeTo(null);
@@ -178,6 +226,42 @@ public class IntruccionesDlg extends javax.swing.JDialog {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         dispose();
     }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void siguienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_siguienteMouseClicked
+      anterior.setVisible(true);
+      siguiente.setVisible(false);
+        jLabel2.setVisible(true);
+    jLabel4.setVisible(false);
+    jLabel5.setVisible(false);
+    jLabel6.setVisible(false);
+    jLabel7.setVisible(false);
+    jLabel8.setVisible(false);
+    jLabel9.setVisible(false);
+    jLabel10.setVisible(false);
+    jLabel11.setVisible(false);
+    jLabel12.setVisible(false);
+    jLabel14.setVisible(false);
+    jLabel15.setVisible(false);
+    jLabel16.setVisible(false);
+    }//GEN-LAST:event_siguienteMouseClicked
+
+    private void anteriorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_anteriorMouseClicked
+       siguiente.setVisible(true);
+       anterior.setVisible(false);
+    jLabel2.setVisible(true);
+    jLabel4.setVisible(true);
+    jLabel5.setVisible(true);
+    jLabel6.setVisible(true);
+    jLabel7.setVisible(true);
+    jLabel8.setVisible(true);
+    jLabel9.setVisible(true);
+    jLabel10.setVisible(true);
+    jLabel11.setVisible(true);
+    jLabel12.setVisible(true);
+    jLabel14.setVisible(true);
+    jLabel15.setVisible(true);
+    jLabel16.setVisible(true);
+    }//GEN-LAST:event_anteriorMouseClicked
 
     /**
      * @param args the command line arguments
@@ -222,12 +306,15 @@ public class IntruccionesDlg extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel anterior;
     private javax.swing.JButton btnAceptar;
     private javax.swing.JLabel fondo;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -236,5 +323,6 @@ public class IntruccionesDlg extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel siguiente;
     // End of variables declaration//GEN-END:variables
 }
