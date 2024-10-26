@@ -4,6 +4,8 @@
  */
 package GUI;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author abelc
@@ -15,6 +17,23 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
      */
     public MenuPrincipalFrm() {
         initComponents();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                
+                String[] botones = {"Sí", "No"};
+                
+                int opcion = JOptionPane.showOptionDialog(null, "¿Estás seguro de que quieres cerrar la aplicación?",
+                "Confirmar salida", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, botones, botones[0]);
+
+                if (opcion == 0) {
+                    System.exit(0);
+                }
+            }
+        });
     }
 
     /**
@@ -133,9 +152,8 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUnirmeActionPerformed
 
     private void btnInstruccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInstruccionesActionPerformed
-        InstruccionesFrm instrucciones = new InstruccionesFrm();
+        IntruccionesDlg instrucciones = new IntruccionesDlg(this, true);
         instrucciones.setVisible(true);
-        
     }//GEN-LAST:event_btnInstruccionesActionPerformed
 
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
