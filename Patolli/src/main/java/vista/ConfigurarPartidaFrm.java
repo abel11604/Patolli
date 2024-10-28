@@ -4,7 +4,11 @@
  */
 package vista;
 
+import control.ControlConfigurarPartida;
+import control.ControlNavegacion;
+import control.IControlConfigurarPartida;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
@@ -14,29 +18,34 @@ import javax.swing.SpinnerNumberModel;
  */
 public class ConfigurarPartidaFrm extends javax.swing.JFrame {
 
+    ControlNavegacion nav;
+    IControlConfigurarPartida confPartida;
+
     /**
      * Creates new form ConfigurarPartidaFrm
      */
     public ConfigurarPartidaFrm() {
+        this.confPartida = ControlConfigurarPartida.getInstance();
+        this.nav = ControlNavegacion.getInstance();
         initComponents();
-        jugadorRadioButton2.setSelected(true);
+        casillasRadioButton2.setSelected(true);
         fichaRadioButton2.setSelected(true);
         ButtonGroup grupoJugadores = new ButtonGroup();
         ButtonGroup grupoFichas = new ButtonGroup();
-        grupoJugadores.add(jugadorRadioButton2);
-        grupoJugadores.add(jugadorRadioButton3);
-        grupoJugadores.add(jugadorRadioButton4);
+        grupoJugadores.add(casillasRadioButton2);
+        grupoJugadores.add(casillasRadioButton3);
+        grupoJugadores.add(casillasRadioButton4);
 
         grupoFichas.add(fichaRadioButton2);
         grupoFichas.add(fichaRadioButton4);
         grupoFichas.add(fichaRadioButton6);
         SpinnerNumberModel fondoModel = new SpinnerNumberModel(0, 0, null, 100);
-        jSpinner2.setModel(fondoModel);
-        jSpinner2.setEditor(new JSpinner.NumberEditor(jSpinner2, "#"));
+        fondoApuestaSpinner.setModel(fondoModel);
+        fondoApuestaSpinner.setEditor(new JSpinner.NumberEditor(fondoApuestaSpinner, "#"));
         SpinnerNumberModel cantidadModel = new SpinnerNumberModel(0, 0, null, 50);
-        jSpinner1.setModel(cantidadModel);
-        jSpinner1.setEditor(new JSpinner.NumberEditor(jSpinner1, "#"));
-        
+        apuestaSpinner.setModel(cantidadModel);
+        apuestaSpinner.setEditor(new JSpinner.NumberEditor(apuestaSpinner, "#"));
+
     }
 
     /**
@@ -52,18 +61,18 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jugadorRadioButton2 = new javax.swing.JRadioButton();
-        jugadorRadioButton3 = new javax.swing.JRadioButton();
-        jugadorRadioButton4 = new javax.swing.JRadioButton();
+        casillasRadioButton2 = new javax.swing.JRadioButton();
+        casillasRadioButton3 = new javax.swing.JRadioButton();
+        casillasRadioButton4 = new javax.swing.JRadioButton();
         jLabel4 = new javax.swing.JLabel();
         fichaRadioButton2 = new javax.swing.JRadioButton();
         fichaRadioButton4 = new javax.swing.JRadioButton();
         fichaRadioButton6 = new javax.swing.JRadioButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        apuestaSpinner = new javax.swing.JSpinner();
         jLabel7 = new javax.swing.JLabel();
-        jSpinner2 = new javax.swing.JSpinner();
+        fondoApuestaSpinner = new javax.swing.JSpinner();
         btnCrearPartida = new javax.swing.JButton();
         btnCrearPartida1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -110,30 +119,30 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         jLabel1.setText("APUESTAS");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 700, 40));
 
-        jugadorRadioButton2.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
-        jugadorRadioButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jugadorRadioButton2.setText("14 por aspa");
-        jugadorRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        casillasRadioButton2.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        casillasRadioButton2.setForeground(new java.awt.Color(255, 255, 255));
+        casillasRadioButton2.setText("8 por aspa");
+        casillasRadioButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jugadorRadioButton2ActionPerformed(evt);
+                casillasRadioButton2ActionPerformed(evt);
             }
         });
-        jPanel2.add(jugadorRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, 130, -1));
+        jPanel2.add(casillasRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, 130, -1));
 
-        jugadorRadioButton3.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
-        jugadorRadioButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jugadorRadioButton3.setText("20 por aspa");
-        jugadorRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+        casillasRadioButton3.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        casillasRadioButton3.setForeground(new java.awt.Color(255, 255, 255));
+        casillasRadioButton3.setText("10 por aspa");
+        casillasRadioButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jugadorRadioButton3ActionPerformed(evt);
+                casillasRadioButton3ActionPerformed(evt);
             }
         });
-        jPanel2.add(jugadorRadioButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 60, -1, -1));
+        jPanel2.add(casillasRadioButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 60, -1, -1));
 
-        jugadorRadioButton4.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
-        jugadorRadioButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jugadorRadioButton4.setText("24 por aspa");
-        jPanel2.add(jugadorRadioButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, -1, -1));
+        casillasRadioButton4.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        casillasRadioButton4.setForeground(new java.awt.Color(255, 255, 255));
+        casillasRadioButton4.setText("14 por aspa");
+        jPanel2.add(casillasRadioButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, -1, -1));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setFont(new java.awt.Font("Bodoni MT", 1, 24)); // NOI18N
@@ -170,8 +179,8 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         jLabel6.setText("Cantidad a pagar:");
         jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 300, -1, -1));
 
-        jSpinner1.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
-        jPanel2.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 300, 110, -1));
+        apuestaSpinner.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        jPanel2.add(apuestaSpinner, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 300, 110, -1));
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
@@ -179,10 +188,10 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         jLabel7.setText("Fondo de apuesta:");
         jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, -1, -1));
 
-        jSpinner2.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
-        jSpinner2.setToolTipText("");
-        jSpinner2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel2.add(jSpinner2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 300, 110, -1));
+        fondoApuestaSpinner.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        fondoApuestaSpinner.setToolTipText("");
+        fondoApuestaSpinner.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jPanel2.add(fondoApuestaSpinner, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 300, 110, -1));
 
         btnCrearPartida.setBackground(new java.awt.Color(213, 198, 86));
         btnCrearPartida.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
@@ -257,47 +266,77 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void establecerCasillas() {
+        if (casillasRadioButton2.isSelected()) {
+            confPartida.setCasillaPorAspa(8);
+        }
+        if (casillasRadioButton3.isSelected()) {
+            confPartida.setCasillaPorAspa(10);
+        }
+        if (casillasRadioButton4.isSelected()) {
+            confPartida.setCasillaPorAspa(14);
+        }
+    }
+
+    private void establecerNumFichas() {
+        if (fichaRadioButton2.isSelected()) {
+            confPartida.setNumFichas(2);
+        }
+        if (fichaRadioButton4.isSelected()) {
+            confPartida.setNumFichas(4);
+        }
+        if (fichaRadioButton6.isSelected()) {
+            confPartida.setNumFichas(6);
+        }
+    }
+
+    private void establecerApuestas() {
+        int apuesta = (int) apuestaSpinner.getValue();
+        int fondo = (int) fondoApuestaSpinner.getValue();
+        confPartida.setApuesta(apuesta);
+        confPartida.setFondo(fondo);
+    }
+
+
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
-        // TODO add your handling code here:
+
+        if (!casillasRadioButton2.isSelected() && !casillasRadioButton3.isSelected() && !casillasRadioButton4.isSelected()) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un número de casillas.", "Error de selección", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!fichaRadioButton2.isSelected() && !fichaRadioButton4.isSelected() && !fichaRadioButton6.isSelected()) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un número de fichas.", "Error de selección", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int apuesta = (int) apuestaSpinner.getValue();
+        int fondo = (int) fondoApuestaSpinner.getValue();
+
+        if (fondo < apuesta) {
+            JOptionPane.showMessageDialog(this, "El fondo de apuesta no puede ser menor que la apuesta.", "Error de apuesta", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        establecerCasillas();
+        establecerNumFichas();
+        establecerApuestas();
+        this.dispose();
+        nav.mostrarListaDeEspera();
     }//GEN-LAST:event_btnCrearPartidaActionPerformed
 
-    private void jugadorRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jugadorRadioButton3ActionPerformed
+    private void casillasRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_casillasRadioButton3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jugadorRadioButton3ActionPerformed
+    }//GEN-LAST:event_casillasRadioButton3ActionPerformed
 
-    private void jugadorRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jugadorRadioButton2ActionPerformed
+    private void casillasRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_casillasRadioButton2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jugadorRadioButton2ActionPerformed
+    }//GEN-LAST:event_casillasRadioButton2ActionPerformed
 
     private void btnCrearPartida1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartida1ActionPerformed
-        // TODO add your handling code here:
+        nav.mostrarMenu();
     }//GEN-LAST:event_btnCrearPartida1ActionPerformed
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConfigurarPartidaFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConfigurarPartidaFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConfigurarPartidaFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConfigurarPartidaFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
+    public void mostrarPantalla() {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ConfigurarPartidaFrm().setVisible(true);
@@ -305,12 +344,18 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         });
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSpinner apuestaSpinner;
     private javax.swing.JButton btnCrearPartida;
     private javax.swing.JButton btnCrearPartida1;
+    private javax.swing.JRadioButton casillasRadioButton2;
+    private javax.swing.JRadioButton casillasRadioButton3;
+    private javax.swing.JRadioButton casillasRadioButton4;
     private javax.swing.JRadioButton fichaRadioButton2;
     private javax.swing.JRadioButton fichaRadioButton4;
     private javax.swing.JRadioButton fichaRadioButton6;
+    private javax.swing.JSpinner fondoApuestaSpinner;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -322,10 +367,5 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JRadioButton jugadorRadioButton2;
-    private javax.swing.JRadioButton jugadorRadioButton3;
-    private javax.swing.JRadioButton jugadorRadioButton4;
     // End of variables declaration//GEN-END:variables
 }

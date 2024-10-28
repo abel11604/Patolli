@@ -4,19 +4,34 @@
  */
 package vista;
 
+import control.ControlConfigurarPartida;
+import control.ControlNavegacion;
+import control.IControlConfigurarPartida;
+import entidades.Casilla;
+import entidades.Ficha;
+import entidades.Jugador;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author abelc
  */
 public class ListaEspera extends javax.swing.JFrame {
-
+    ControlNavegacion nav;
+     IControlConfigurarPartida confPartida;
     /**
      * Creates new form ListaEspera
      */
     public ListaEspera() {
+        this.confPartida = ControlConfigurarPartida.getInstance();
+        this.nav = ControlNavegacion.getInstance();
         initComponents();
+        amarilloPanel.setVisible(false);
+        naranjaPanel.setVisible(false);
+        cafePanel.setVisible(false);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,57 +41,431 @@ public class ListaEspera extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        lblJugadores = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        cafePanel = new javax.swing.JPanel();
+        blancoPanel = new javax.swing.JPanel();
+        amarilloPanel = new javax.swing.JPanel();
+        naranjaPanel = new javax.swing.JPanel();
+        btnCrearPartida1 = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        jugadorCafelbl = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jugadorBlancolbl = new javax.swing.JLabel();
+        jugadorAmarillolbl = new javax.swing.JLabel();
+        jugadorNaranjalbl = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(700, 477));
+
+        jPanel1.setBackground(new java.awt.Color(0, 51, 102));
+
+        jLabel2.setBackground(new java.awt.Color(221, 209, 121));
+        jLabel2.setFont(new java.awt.Font("Bodoni MT", 1, 48)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(213, 198, 86));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Esperando jugadores");
+        jLabel2.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        jPanel2.setBackground(new java.awt.Color(0, 51, 102));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel3.setBackground(new java.awt.Color(0, 102, 153));
+
+        lblJugadores.setFont(new java.awt.Font("Bodoni MT", 1, 24)); // NOI18N
+        lblJugadores.setText("1/4");
+
+        jLabel3.setFont(new java.awt.Font("Bodoni MT", 1, 24)); // NOI18N
+        jLabel3.setText("Jugadores:");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(259, 259, 259)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(lblJugadores)
+                .addContainerGap(284, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblJugadores)
+                    .addComponent(jLabel3))
+                .addContainerGap())
+        );
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 30));
+
+        cafePanel.setBackground(new java.awt.Color(102, 51, 0));
+        cafePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+
+        javax.swing.GroupLayout cafePanelLayout = new javax.swing.GroupLayout(cafePanel);
+        cafePanel.setLayout(cafePanelLayout);
+        cafePanelLayout.setHorizontalGroup(
+            cafePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        cafePanelLayout.setVerticalGroup(
+            cafePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(cafePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 70, -1, -1));
+
+        blancoPanel.setBackground(new java.awt.Color(255, 255, 255));
+        blancoPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+
+        javax.swing.GroupLayout blancoPanelLayout = new javax.swing.GroupLayout(blancoPanel);
+        blancoPanel.setLayout(blancoPanelLayout);
+        blancoPanelLayout.setHorizontalGroup(
+            blancoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        blancoPanelLayout.setVerticalGroup(
+            blancoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(blancoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, -1, -1));
+
+        amarilloPanel.setBackground(new java.awt.Color(204, 204, 0));
+        amarilloPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+
+        javax.swing.GroupLayout amarilloPanelLayout = new javax.swing.GroupLayout(amarilloPanel);
+        amarilloPanel.setLayout(amarilloPanelLayout);
+        amarilloPanelLayout.setHorizontalGroup(
+            amarilloPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        amarilloPanelLayout.setVerticalGroup(
+            amarilloPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(amarilloPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 70, -1, -1));
+
+        naranjaPanel.setBackground(new java.awt.Color(255, 153, 0));
+        naranjaPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+
+        javax.swing.GroupLayout naranjaPanelLayout = new javax.swing.GroupLayout(naranjaPanel);
+        naranjaPanel.setLayout(naranjaPanelLayout);
+        naranjaPanelLayout.setHorizontalGroup(
+            naranjaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        naranjaPanelLayout.setVerticalGroup(
+            naranjaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(naranjaPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 70, -1, -1));
+
+        btnCrearPartida1.setBackground(new java.awt.Color(213, 198, 86));
+        btnCrearPartida1.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
+        btnCrearPartida1.setForeground(new java.awt.Color(0, 0, 0));
+        btnCrearPartida1.setText("Empezar");
+        btnCrearPartida1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCrearPartida1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearPartida1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnCrearPartida1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 300, 160, 40));
+
+        btnCancelar.setBackground(new java.awt.Color(213, 198, 86));
+        btnCancelar.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 160, 40));
+
+        jugadorCafelbl.setFont(new java.awt.Font("Bodoni MT", 1, 18)); // NOI18N
+        jugadorCafelbl.setText("Jugador 4");
+        jugadorCafelbl.setVisible(false);
+        jPanel2.add(jugadorCafelbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 180, -1, -1));
+
+        jButton1.setText("quitar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 240, -1, -1));
+
+        jButton2.setText("agregar j");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 240, -1, -1));
+
+        jugadorBlancolbl.setFont(new java.awt.Font("Bodoni MT", 1, 18)); // NOI18N
+        jugadorBlancolbl.setText("Jugador 1");
+        jPanel2.add(jugadorBlancolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, -1, -1));
+
+        jugadorAmarillolbl.setFont(new java.awt.Font("Bodoni MT", 1, 18)); // NOI18N
+        jugadorAmarillolbl.setText("Jugador 2");
+        jugadorAmarillolbl.setVisible(false);
+        jPanel2.add(jugadorAmarillolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 180, -1, -1));
+
+        jugadorNaranjalbl.setFont(new java.awt.Font("Bodoni MT", 1, 18)); // NOI18N
+        jugadorNaranjalbl.setText("Jugador 3");
+        jugadorNaranjalbl.setVisible(false);
+        jPanel2.add(jugadorNaranjalbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 180, -1, -1));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(51, 51, 51))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ListaEspera.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ListaEspera.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ListaEspera.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ListaEspera.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void crearJugadores(){
+        List<Jugador> jugadores = new ArrayList<>();
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+    if (amarilloPanel.isVisible() && !naranjaPanel.isVisible() && !cafePanel.isVisible()) {
+        // Crear y agregar jugador blanco
+        Jugador jugadorBlanco = new Jugador();
+        jugadorBlanco.setColor("Blanco");
+        jugadorBlanco.setNombre(jugadorBlancolbl.getText());
+        jugadorBlanco.setFondoApuesta(confPartida.getFondo());
+
+        // Crear fichas para el jugador blanco
+        List<Ficha> fichasBlanco = new ArrayList<>();
+        for (int i = 0; i < confPartida.getNumFichas(); i++) {
+            Ficha ficha = new Ficha();
+            ficha.setJugador(jugadorBlanco);
+            fichasBlanco.add(ficha);
+        }
+        jugadorBlanco.setFichas(fichasBlanco);
+        jugadores.add(jugadorBlanco);
+
+        // Crear y agregar jugador amarillo
+        Jugador jugadorAmarillo = new Jugador();
+        jugadorAmarillo.setColor("Amarillo");
+        jugadorAmarillo.setNombre(jugadorAmarillolbl.getText());
+
+        // Crear fichas para el jugador amarillo
+        List<Ficha> fichasAmarillo = new ArrayList<>();
+        for (int i = 0; i < confPartida.getNumFichas(); i++) {
+            Ficha ficha = new Ficha();
+            ficha.setJugador(jugadorAmarillo);
+            fichasAmarillo.add(ficha);
+        }
+        jugadorAmarillo.setFichas(fichasAmarillo);
+        jugadores.add(jugadorAmarillo);
+
+    } else if (amarilloPanel.isVisible() && naranjaPanel.isVisible() && !cafePanel.isVisible()) {
+        // Crear y agregar jugadores: blanco, amarillo, y naranja
+        // Jugador blanco
+        Jugador jugadorBlanco = new Jugador();
+        jugadorBlanco.setColor("Blanco");
+        jugadorBlanco.setNombre(jugadorBlancolbl.getText());
+        jugadorBlanco.setFondoApuesta(confPartida.getFondo());
+        List<Ficha> fichasBlanco = new ArrayList<>();
+        for (int i = 0; i < confPartida.getNumFichas(); i++) {
+            Ficha ficha = new Ficha();
+            ficha.setJugador(jugadorBlanco);
+            fichasBlanco.add(ficha);
+        }
+        jugadorBlanco.setFichas(fichasBlanco);
+        jugadores.add(jugadorBlanco);
+
+        // Jugador amarillo
+        Jugador jugadorAmarillo = new Jugador();
+        jugadorAmarillo.setColor("Amarillo");
+        jugadorAmarillo.setNombre(jugadorAmarillolbl.getText());
+        List<Ficha> fichasAmarillo = new ArrayList<>();
+        for (int i = 0; i < confPartida.getNumFichas(); i++) {
+            Ficha ficha = new Ficha();
+            ficha.setJugador(jugadorAmarillo);
+            fichasAmarillo.add(ficha);
+        }
+        jugadorAmarillo.setFichas(fichasAmarillo);
+        jugadores.add(jugadorAmarillo);
+
+        // Jugador naranja
+        Jugador jugadorNaranja = new Jugador();
+        jugadorNaranja.setColor("Naranja");
+        jugadorNaranja.setNombre(jugadorNaranjalbl.getText());
+        List<Ficha> fichasNaranja = new ArrayList<>();
+        for (int i = 0; i < confPartida.getNumFichas(); i++) {
+            Ficha ficha = new Ficha();
+            ficha.setJugador(jugadorNaranja);
+            fichasNaranja.add(ficha);
+        }
+        jugadorNaranja.setFichas(fichasNaranja);
+        jugadores.add(jugadorNaranja);
+
+    } else if (amarilloPanel.isVisible() && naranjaPanel.isVisible() && cafePanel.isVisible()) {
+        // Crear y agregar jugadores: blanco, amarillo, naranja, y café
+        // Jugador blanco
+        Jugador jugadorBlanco = new Jugador();
+        jugadorBlanco.setColor("Blanco");
+        jugadorBlanco.setNombre(jugadorBlancolbl.getText());
+        jugadorBlanco.setFondoApuesta(confPartida.getFondo());
+        List<Ficha> fichasBlanco = new ArrayList<>();
+        for (int i = 0; i < confPartida.getNumFichas(); i++) {
+            Ficha ficha = new Ficha();
+            ficha.setJugador(jugadorBlanco);
+            fichasBlanco.add(ficha);
+        }
+        jugadorBlanco.setFichas(fichasBlanco);
+        jugadores.add(jugadorBlanco);
+
+        // Jugador amarillo
+        Jugador jugadorAmarillo = new Jugador();
+        jugadorAmarillo.setColor("Amarillo");
+        jugadorAmarillo.setNombre(jugadorAmarillolbl.getText());
+        List<Ficha> fichasAmarillo = new ArrayList<>();
+        for (int i = 0; i < confPartida.getNumFichas(); i++) {
+            Ficha ficha = new Ficha();
+            ficha.setJugador(jugadorAmarillo);
+            fichasAmarillo.add(ficha);
+        }
+        jugadorAmarillo.setFichas(fichasAmarillo);
+        jugadores.add(jugadorAmarillo);
+
+        // Jugador naranja
+        Jugador jugadorNaranja = new Jugador();
+        jugadorNaranja.setColor("Naranja");
+        jugadorNaranja.setNombre(jugadorNaranjalbl.getText());
+        List<Ficha> fichasNaranja = new ArrayList<>();
+        for (int i = 0; i < confPartida.getNumFichas(); i++) {
+            Ficha ficha = new Ficha();
+            ficha.setJugador(jugadorNaranja);
+            fichasNaranja.add(ficha);
+        }
+        jugadorNaranja.setFichas(fichasNaranja);
+        jugadores.add(jugadorNaranja);
+
+        // Jugador café
+        Jugador jugadorCafe = new Jugador();
+        jugadorCafe.setColor("Café");
+        jugadorCafe.setNombre(jugadorCafelbl.getText());
+        List<Ficha> fichasCafe = new ArrayList<>();
+        for (int i = 0; i < confPartida.getNumFichas(); i++) {
+            Ficha ficha = new Ficha();
+            ficha.setJugador(jugadorCafe);
+            fichasCafe.add(ficha);
+        }
+        jugadorCafe.setFichas(fichasCafe);
+        jugadores.add(jugadorCafe);
+    }
+    confPartida.setJugadores(jugadores);
+    }
+    
+    private void btnCrearPartida1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartida1ActionPerformed
+      crearJugadores();
+      this.dispose();
+      nav.mostrarPantallaJuego();
+    }//GEN-LAST:event_btnCrearPartida1ActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.dispose();
+        nav.QuieroUnasConfiguracioneeees();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    if (!amarilloPanel.isVisible() && !naranjaPanel.isVisible() && !cafePanel.isVisible()) {
+        amarilloPanel.setVisible(true);
+        jugadorAmarillolbl.setVisible(true);
+        lblJugadores.setText("2/4");
+    } else if (amarilloPanel.isVisible() && !naranjaPanel.isVisible()) {
+        naranjaPanel.setVisible(true);
+        jugadorNaranjalbl.setVisible(true);
+        lblJugadores.setText("3/4");
+    } else if (amarilloPanel.isVisible() && naranjaPanel.isVisible() && !cafePanel.isVisible()) {
+        cafePanel.setVisible(true);
+        jugadorCafelbl.setVisible(true);
+        lblJugadores.setText("4/4");
+    }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+          if (cafePanel.isVisible()) {
+        cafePanel.setVisible(false);
+        jugadorCafelbl.setVisible(false);
+        lblJugadores.setText("3/4");
+    } else if (naranjaPanel.isVisible()) {
+        naranjaPanel.setVisible(false);
+        jugadorNaranjalbl.setVisible(false);
+        lblJugadores.setText("2/4");
+    } else if (amarilloPanel.isVisible()) {
+        amarilloPanel.setVisible(false);
+        jugadorAmarillolbl.setVisible(false);
+        lblJugadores.setText("1/4");
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+
+    public void mostrarPantalla(){
+          java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ListaEspera().setVisible(true);
             }
         });
+          
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel amarilloPanel;
+    private javax.swing.JPanel blancoPanel;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCrearPartida1;
+    private javax.swing.JPanel cafePanel;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel jugadorAmarillolbl;
+    private javax.swing.JLabel jugadorBlancolbl;
+    private javax.swing.JLabel jugadorCafelbl;
+    private javax.swing.JLabel jugadorNaranjalbl;
+    private javax.swing.JLabel lblJugadores;
+    private javax.swing.JPanel naranjaPanel;
     // End of variables declaration//GEN-END:variables
 }

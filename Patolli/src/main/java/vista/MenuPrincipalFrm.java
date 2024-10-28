@@ -4,6 +4,7 @@
  */
 package vista;
 
+import control.ControlNavegacion;
 import javax.swing.JOptionPane;
 
 /**
@@ -11,13 +12,14 @@ import javax.swing.JOptionPane;
  * @author abelc
  */
 public class MenuPrincipalFrm extends javax.swing.JFrame {
-
+     ControlNavegacion nav;
     /**
      * Creates new form menuPrincipalFrm
      */
     public MenuPrincipalFrm() {
+        this.nav=ControlNavegacion.getInstance();
         initComponents();
-
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -152,50 +154,27 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUnirmeActionPerformed
 
     private void btnInstruccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInstruccionesActionPerformed
+          this.dispose();
         IntruccionesDlg instrucciones = new IntruccionesDlg(this, true);
         instrucciones.setVisible(true);
     }//GEN-LAST:event_btnInstruccionesActionPerformed
 
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
-       ConfigurarPartidaFrm configuraciones= new ConfigurarPartidaFrm();
-       configuraciones.setVisible(true);
+       this.dispose();
+       nav.QuieroUnasConfiguracioneeees();
     }//GEN-LAST:event_btnCrearPartidaActionPerformed
 
-     /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipalFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipalFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipalFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipalFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+    
+    public void mostrarPantalla(){
+      java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MenuPrincipalFrm().setVisible(true);
             }
         });
     }
-
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrearPartida;
     private javax.swing.JButton btnInstrucciones;

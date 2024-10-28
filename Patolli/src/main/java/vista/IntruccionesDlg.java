@@ -4,17 +4,21 @@
  */
 package vista;
 
+import control.ControlNavegacion;
+
 /**
  *
  * @author adria
  */
 public class IntruccionesDlg extends javax.swing.JDialog {
+    ControlNavegacion nav;
     /**
      * Creates new form IntruccionesDlg
      */
     public IntruccionesDlg(java.awt.Frame parent, boolean modal) {
           super(parent, modal);
         initComponents();
+         this.nav=ControlNavegacion.getInstance();
         anterior.setVisible(false);
         
     }
@@ -146,10 +150,9 @@ public class IntruccionesDlg extends javax.swing.JDialog {
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGap(33, 33, 33)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel10)
-                                        .addComponent(jLabel11)
-                                        .addComponent(jLabel12)))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGap(367, 367, 367)
                                     .addComponent(btnAceptar))
@@ -167,7 +170,9 @@ public class IntruccionesDlg extends javax.swing.JDialog {
                                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
@@ -225,21 +230,22 @@ public class IntruccionesDlg extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         dispose();
+        nav.mostrarMenu();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void siguienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_siguienteMouseClicked
-      anterior.setVisible(true);
-      siguiente.setVisible(false);
-        jLabel2.setVisible(true);
+    anterior.setVisible(true);
+    siguiente.setVisible(false);
+    jLabel2.setVisible(true);
     jLabel4.setVisible(false);
     jLabel5.setVisible(false);
     jLabel6.setVisible(false);
     jLabel7.setVisible(false);
-    jLabel8.setVisible(false);
-    jLabel9.setVisible(false);
-    jLabel10.setVisible(false);
-    jLabel11.setVisible(false);
-    jLabel12.setVisible(false);
+    jLabel8.setText("Apuestas");
+    jLabel9.setText("el jugador debe pagar apuesta cuando: ");
+    jLabel10.setText("-Al momento de tirar cañas son todas lisas");
+    jLabel11.setText("-Al caer en una casilla roja pagara doble");
+    jLabel12.setText("La cantidad a pagar se establece antes de iniciar la partida");
     jLabel14.setVisible(false);
     jLabel15.setVisible(false);
     jLabel16.setVisible(false);
@@ -247,7 +253,12 @@ public class IntruccionesDlg extends javax.swing.JDialog {
 
     private void anteriorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_anteriorMouseClicked
        siguiente.setVisible(true);
-       anterior.setVisible(false);
+    anterior.setVisible(false);
+    jLabel8.setText("• Movimiento:");
+    jLabel9.setText("Lanza 5 cañas (dados):");
+    jLabel10.setText("- 1 caña con punto = 1 casilla.");
+    jLabel11.setText("- 2 cañas con punto = 2 casillas, etc.");
+    jLabel12.setText("- Si todas son lisas, pierdes el punto.");
     jLabel2.setVisible(true);
     jLabel4.setVisible(true);
     jLabel5.setVisible(true);
@@ -263,47 +274,7 @@ public class IntruccionesDlg extends javax.swing.JDialog {
     jLabel16.setVisible(true);
     }//GEN-LAST:event_anteriorMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(IntruccionesDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(IntruccionesDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(IntruccionesDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(IntruccionesDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                IntruccionesDlg dialog = new IntruccionesDlg(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel anterior;
