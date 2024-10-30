@@ -39,10 +39,10 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         grupoFichas.add(fichaRadioButton2);
         grupoFichas.add(fichaRadioButton4);
         grupoFichas.add(fichaRadioButton6);
-        SpinnerNumberModel fondoModel = new SpinnerNumberModel(0, 0, null, 100);
+        SpinnerNumberModel fondoModel = new SpinnerNumberModel(0, 0, null, 50);
         fondoApuestaSpinner.setModel(fondoModel);
         fondoApuestaSpinner.setEditor(new JSpinner.NumberEditor(fondoApuestaSpinner, "#"));
-        SpinnerNumberModel cantidadModel = new SpinnerNumberModel(0, 0, null, 50);
+        SpinnerNumberModel cantidadModel = new SpinnerNumberModel(0, 0, null, 100);
         apuestaSpinner.setModel(cantidadModel);
         apuestaSpinner.setEditor(new JSpinner.NumberEditor(apuestaSpinner, "#"));
 
@@ -313,13 +313,14 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         int apuesta = (int) apuestaSpinner.getValue();
         int fondo = (int) fondoApuestaSpinner.getValue();
 
-        if (fondo < apuesta) {
+        if (fondo > apuesta) {
             JOptionPane.showMessageDialog(this, "El fondo de apuesta no puede ser menor que la apuesta.", "Error de apuesta", JOptionPane.ERROR_MESSAGE);
             return;
         }
         establecerCasillas();
         establecerNumFichas();
         establecerApuestas();
+        System.out.println(confPartida.getNumFichas());
         this.dispose();
         nav.mostrarListaDeEspera();
     }//GEN-LAST:event_btnCrearPartidaActionPerformed

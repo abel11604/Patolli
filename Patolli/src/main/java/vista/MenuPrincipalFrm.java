@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
  * @author abelc
  */
 public class MenuPrincipalFrm extends javax.swing.JFrame {
-     ControlNavegacion nav;
+     private ControlNavegacion nav;
     /**
      * Creates new form menuPrincipalFrm
      */

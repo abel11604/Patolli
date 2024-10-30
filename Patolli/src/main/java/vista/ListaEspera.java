@@ -18,8 +18,8 @@ import java.util.List;
  * @author abelc
  */
 public class ListaEspera extends javax.swing.JFrame {
-    ControlNavegacion nav;
-     IControlConfigurarPartida confPartida;
+     private ControlNavegacion nav;
+     private IControlConfigurarPartida confPartida;
     /**
      * Creates new form ListaEspera
      */
