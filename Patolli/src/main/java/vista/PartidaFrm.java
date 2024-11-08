@@ -39,6 +39,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         fondoApuestalbl2.setText("Fondo de apuesta: " + Integer.toString(confPartida.getFondo()));
         fondoApuestalbl3.setText("Fondo de apuesta: " + Integer.toString(confPartida.getFondo()));
         fondoApuestalbl4.setText("Fondo de apuesta: " + Integer.toString(confPartida.getFondo()));
+      
 
     }
 
@@ -166,6 +167,7 @@ public class PartidaFrm extends javax.swing.JFrame {
             tablero.add(label);
             casillas.add(label);
         }
+       
     }
 
     /**

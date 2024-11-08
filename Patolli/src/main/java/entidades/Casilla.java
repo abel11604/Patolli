@@ -13,6 +13,17 @@ public class Casilla {
     private Jugador ocupadoPor;
     private int numCasilla;
 
+    public Casilla() {
+    }
+
+    public Casilla(String tipo, Jugador ocupadoPor, int numCasilla) {
+        this.tipo = tipo;
+        this.ocupadoPor = ocupadoPor;
+        this.numCasilla = numCasilla;
+    }
+
+    
+    
     public String getTipo() {
         return tipo;
     }

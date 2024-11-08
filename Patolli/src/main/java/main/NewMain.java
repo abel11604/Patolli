@@ -4,7 +4,7 @@
  */
 package main;
 
-import control.ControlNavegacion;
+import vista.ControlNavegacion;
 import vista.PartidaFrm;
 
 /**

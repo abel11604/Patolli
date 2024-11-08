@@ -19,6 +19,21 @@ public class Jugador {
     public Jugador() {
     }
 
+    public Jugador(String nombre, String color, List<Ficha> fichas, int fondoApuesta) {
+        this.nombre = nombre;
+        this.color = color;
+        this.fichas = fichas;
+        this.fondoApuesta = fondoApuesta;
+    }
+
+    public Jugador(String nombre, String color, int fondoApuesta) {
+        this.nombre = nombre;
+        this.color = color;
+        this.fondoApuesta = fondoApuesta;
+    }
+    
+    
+
     public String getNombre() {
         return nombre;
     }

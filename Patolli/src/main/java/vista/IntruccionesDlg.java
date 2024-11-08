@@ -4,8 +4,6 @@
  */
 package vista;
 
-import control.ControlNavegacion;
-
 /**
  *
  * @author adria
@@ -175,7 +173,7 @@ public class IntruccionesDlg extends javax.swing.JDialog {
                                 .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(23, 23, 23)
                 .addComponent(anterior)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(siguiente)
@@ -214,9 +212,9 @@ public class IntruccionesDlg extends javax.swing.JDialog {
                 .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel16)
-                .addGap(24, 24, 24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnAceptar)
-                .addGap(15, 15, 15))
+                .addGap(27, 27, 27))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 520, 410));

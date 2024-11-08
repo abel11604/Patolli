@@ -5,7 +5,6 @@
 package vista;
 
 import control.ControlConfigurarPartida;
-import control.ControlNavegacion;
 import control.IControlConfigurarPartida;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;

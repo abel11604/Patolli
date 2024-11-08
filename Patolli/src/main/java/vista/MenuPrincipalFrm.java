@@ -4,7 +4,6 @@
  */
 package vista;
 
-import control.ControlNavegacion;
 import javax.swing.JOptionPane;
 
 /**

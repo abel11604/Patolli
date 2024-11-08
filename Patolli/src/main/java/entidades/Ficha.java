@@ -15,6 +15,11 @@ public class Ficha {
     public Ficha() {
     }
 
+    public Ficha(Casilla casillaActual, Jugador jugador) {
+        this.casillaActual = casillaActual;
+        this.jugador = jugador;
+    }
+
     public Casilla getCasillaActual() {
         return casillaActual;
     }

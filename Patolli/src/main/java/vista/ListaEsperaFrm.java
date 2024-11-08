@@ -5,7 +5,6 @@
 package vista;
 
 import control.ControlConfigurarPartida;
-import control.ControlNavegacion;
 import control.IControlConfigurarPartida;
 import entidades.Casilla;
 import entidades.Ficha;
@@ -17,13 +16,15 @@ import java.util.List;
  *
  * @author abelc
  */
-public class ListaEspera extends javax.swing.JFrame {
-     private ControlNavegacion nav;
-     private IControlConfigurarPartida confPartida;
+public class ListaEsperaFrm extends javax.swing.JFrame {
+
+    private ControlNavegacion nav;
+    private IControlConfigurarPartida confPartida;
+
     /**
      * Creates new form ListaEspera
      */
-    public ListaEspera() {
+    public ListaEsperaFrm() {
         this.confPartida = ControlConfigurarPartida.getInstance();
         this.nav = ControlNavegacion.getInstance();
         initComponents();
@@ -31,7 +32,7 @@ public class ListaEspera extends javax.swing.JFrame {
         naranjaPanel.setVisible(false);
         cafePanel.setVisible(false);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -76,33 +77,15 @@ public class ListaEspera extends javax.swing.JFrame {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel3.setBackground(new java.awt.Color(0, 102, 153));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblJugadores.setFont(new java.awt.Font("Bodoni MT", 1, 24)); // NOI18N
         lblJugadores.setText("1/4");
+        jPanel3.add(lblJugadores, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 0, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Bodoni MT", 1, 24)); // NOI18N
         jLabel3.setText("Jugadores:");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(259, 259, 259)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addComponent(lblJugadores)
-                .addContainerGap(284, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblJugadores)
-                    .addComponent(jLabel3))
-                .addContainerGap())
-        );
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 0, -1, -1));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 30));
 
@@ -260,145 +243,46 @@ public class ListaEspera extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void crearJugadores(){
+    private void crearJugadores() {
         List<Jugador> jugadores = new ArrayList<>();
 
-    if (amarilloPanel.isVisible() && !naranjaPanel.isVisible() && !cafePanel.isVisible()) {
-        // Crear y agregar jugador blanco
-        Jugador jugadorBlanco = new Jugador();
-        jugadorBlanco.setColor("Blanco");
-        jugadorBlanco.setNombre(jugadorBlancolbl.getText());
-        jugadorBlanco.setFondoApuesta(confPartida.getFondo());
+        if (amarilloPanel.isVisible()) {
+            jugadores.add(crearJugador(jugadorBlancolbl.getText(), "Blanco", confPartida.getFondo()));
+            jugadores.add(crearJugador(jugadorAmarillolbl.getText(), "Amarillo", confPartida.getFondo()));
 
-        // Crear fichas para el jugador blanco
-        List<Ficha> fichasBlanco = new ArrayList<>();
-        for (int i = 0; i < confPartida.getNumFichas(); i++) {
-            Ficha ficha = new Ficha();
-            ficha.setJugador(jugadorBlanco);
-            fichasBlanco.add(ficha);
+            if (naranjaPanel.isVisible()) {
+                jugadores.add(crearJugador("Naranja", jugadorNaranjalbl.getText(), confPartida.getFondo()));
+
+                if (cafePanel.isVisible()) {
+                    jugadores.add(crearJugador("Café", jugadorCafelbl.getText(), confPartida.getFondo()));
+                }
+            }
         }
-        jugadorBlanco.setFichas(fichasBlanco);
-        jugadores.add(jugadorBlanco);
 
-        // Crear y agregar jugador amarillo
-        Jugador jugadorAmarillo = new Jugador();
-        jugadorAmarillo.setColor("Amarillo");
-        jugadorAmarillo.setNombre(jugadorAmarillolbl.getText());
-
-        // Crear fichas para el jugador amarillo
-        List<Ficha> fichasAmarillo = new ArrayList<>();
-        for (int i = 0; i < confPartida.getNumFichas(); i++) {
-            Ficha ficha = new Ficha();
-            ficha.setJugador(jugadorAmarillo);
-            fichasAmarillo.add(ficha);
-        }
-        jugadorAmarillo.setFichas(fichasAmarillo);
-        jugadores.add(jugadorAmarillo);
-
-    } else if (amarilloPanel.isVisible() && naranjaPanel.isVisible() && !cafePanel.isVisible()) {
-        // Crear y agregar jugadores: blanco, amarillo, y naranja
-        // Jugador blanco
-        Jugador jugadorBlanco = new Jugador();
-        jugadorBlanco.setColor("Blanco");
-        jugadorBlanco.setNombre(jugadorBlancolbl.getText());
-        jugadorBlanco.setFondoApuesta(confPartida.getFondo());
-        List<Ficha> fichasBlanco = new ArrayList<>();
-        for (int i = 0; i < confPartida.getNumFichas(); i++) {
-            Ficha ficha = new Ficha();
-            ficha.setJugador(jugadorBlanco);
-            fichasBlanco.add(ficha);
-        }
-        jugadorBlanco.setFichas(fichasBlanco);
-        jugadores.add(jugadorBlanco);
-
-        // Jugador amarillo
-        Jugador jugadorAmarillo = new Jugador();
-        jugadorAmarillo.setColor("Amarillo");
-        jugadorAmarillo.setNombre(jugadorAmarillolbl.getText());
-        List<Ficha> fichasAmarillo = new ArrayList<>();
-        for (int i = 0; i < confPartida.getNumFichas(); i++) {
-            Ficha ficha = new Ficha();
-            ficha.setJugador(jugadorAmarillo);
-            fichasAmarillo.add(ficha);
-        }
-        jugadorAmarillo.setFichas(fichasAmarillo);
-        jugadores.add(jugadorAmarillo);
-
-        // Jugador naranja
-        Jugador jugadorNaranja = new Jugador();
-        jugadorNaranja.setColor("Naranja");
-        jugadorNaranja.setNombre(jugadorNaranjalbl.getText());
-        List<Ficha> fichasNaranja = new ArrayList<>();
-        for (int i = 0; i < confPartida.getNumFichas(); i++) {
-            Ficha ficha = new Ficha();
-            ficha.setJugador(jugadorNaranja);
-            fichasNaranja.add(ficha);
-        }
-        jugadorNaranja.setFichas(fichasNaranja);
-        jugadores.add(jugadorNaranja);
-
-    } else if (amarilloPanel.isVisible() && naranjaPanel.isVisible() && cafePanel.isVisible()) {
-        // Crear y agregar jugadores: blanco, amarillo, naranja, y café
-        // Jugador blanco
-        Jugador jugadorBlanco = new Jugador();
-        jugadorBlanco.setColor("Blanco");
-        jugadorBlanco.setNombre(jugadorBlancolbl.getText());
-        jugadorBlanco.setFondoApuesta(confPartida.getFondo());
-        List<Ficha> fichasBlanco = new ArrayList<>();
-        for (int i = 0; i < confPartida.getNumFichas(); i++) {
-            Ficha ficha = new Ficha();
-            ficha.setJugador(jugadorBlanco);
-            fichasBlanco.add(ficha);
-        }
-        jugadorBlanco.setFichas(fichasBlanco);
-        jugadores.add(jugadorBlanco);
-
-        // Jugador amarillo
-        Jugador jugadorAmarillo = new Jugador();
-        jugadorAmarillo.setColor("Amarillo");
-        jugadorAmarillo.setNombre(jugadorAmarillolbl.getText());
-        List<Ficha> fichasAmarillo = new ArrayList<>();
-        for (int i = 0; i < confPartida.getNumFichas(); i++) {
-            Ficha ficha = new Ficha();
-            ficha.setJugador(jugadorAmarillo);
-            fichasAmarillo.add(ficha);
-        }
-        jugadorAmarillo.setFichas(fichasAmarillo);
-        jugadores.add(jugadorAmarillo);
-
-        // Jugador naranja
-        Jugador jugadorNaranja = new Jugador();
-        jugadorNaranja.setColor("Naranja");
-        jugadorNaranja.setNombre(jugadorNaranjalbl.getText());
-        List<Ficha> fichasNaranja = new ArrayList<>();
-        for (int i = 0; i < confPartida.getNumFichas(); i++) {
-            Ficha ficha = new Ficha();
-            ficha.setJugador(jugadorNaranja);
-            fichasNaranja.add(ficha);
-        }
-        jugadorNaranja.setFichas(fichasNaranja);
-        jugadores.add(jugadorNaranja);
-
-        // Jugador café
-        Jugador jugadorCafe = new Jugador();
-        jugadorCafe.setColor("Café");
-        jugadorCafe.setNombre(jugadorCafelbl.getText());
-        List<Ficha> fichasCafe = new ArrayList<>();
-        for (int i = 0; i < confPartida.getNumFichas(); i++) {
-            Ficha ficha = new Ficha();
-            ficha.setJugador(jugadorCafe);
-            fichasCafe.add(ficha);
-        }
-        jugadorCafe.setFichas(fichasCafe);
-        jugadores.add(jugadorCafe);
+        confPartida.setJugadores(jugadores);
     }
-    confPartida.setJugadores(jugadores);
+
+    private Jugador crearJugador(String color, String nombre, int fondoApuesta) {
+        Jugador jugador = new Jugador(color, nombre, fondoApuesta); // Constructor de Jugador
+        List<Ficha> fichas = new ArrayList<>();
+
+        for (int i = 0; i < confPartida.getNumFichas(); i++) {
+            Ficha ficha = new Ficha();
+            ficha.setJugador(jugador);
+            fichas.add(ficha);
+        }
+
+        jugador.setFichas(fichas);
+        return jugador;
     }
-    
+
     private void btnCrearPartida1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartida1ActionPerformed
-      crearJugadores();
-      this.dispose();
-      nav.mostrarPantallaJuego();
+        crearJugadores();
+        this.dispose();
+        for (Jugador jugador : confPartida.getJugadores()) {
+            System.out.println(jugador.getColor());
+        }
+        // nav.mostrarPantallaJuego();
     }//GEN-LAST:event_btnCrearPartida1ActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -407,45 +291,44 @@ public class ListaEspera extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    if (!amarilloPanel.isVisible() && !naranjaPanel.isVisible() && !cafePanel.isVisible()) {
-        amarilloPanel.setVisible(true);
-        jugadorAmarillolbl.setVisible(true);
-        lblJugadores.setText("2/4");
-    } else if (amarilloPanel.isVisible() && !naranjaPanel.isVisible()) {
-        naranjaPanel.setVisible(true);
-        jugadorNaranjalbl.setVisible(true);
-        lblJugadores.setText("3/4");
-    } else if (amarilloPanel.isVisible() && naranjaPanel.isVisible() && !cafePanel.isVisible()) {
-        cafePanel.setVisible(true);
-        jugadorCafelbl.setVisible(true);
-        lblJugadores.setText("4/4");
-    }
+        if (!amarilloPanel.isVisible() && !naranjaPanel.isVisible() && !cafePanel.isVisible()) {
+            amarilloPanel.setVisible(true);
+            jugadorAmarillolbl.setVisible(true);
+            lblJugadores.setText("2/4");
+        } else if (amarilloPanel.isVisible() && !naranjaPanel.isVisible()) {
+            naranjaPanel.setVisible(true);
+            jugadorNaranjalbl.setVisible(true);
+            lblJugadores.setText("3/4");
+        } else if (amarilloPanel.isVisible() && naranjaPanel.isVisible() && !cafePanel.isVisible()) {
+            cafePanel.setVisible(true);
+            jugadorCafelbl.setVisible(true);
+            lblJugadores.setText("4/4");
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-          if (cafePanel.isVisible()) {
-        cafePanel.setVisible(false);
-        jugadorCafelbl.setVisible(false);
-        lblJugadores.setText("3/4");
-    } else if (naranjaPanel.isVisible()) {
-        naranjaPanel.setVisible(false);
-        jugadorNaranjalbl.setVisible(false);
-        lblJugadores.setText("2/4");
-    } else if (amarilloPanel.isVisible()) {
-        amarilloPanel.setVisible(false);
-        jugadorAmarillolbl.setVisible(false);
-        lblJugadores.setText("1/4");
-    }
+        if (cafePanel.isVisible()) {
+            cafePanel.setVisible(false);
+            jugadorCafelbl.setVisible(false);
+            lblJugadores.setText("3/4");
+        } else if (naranjaPanel.isVisible()) {
+            naranjaPanel.setVisible(false);
+            jugadorNaranjalbl.setVisible(false);
+            lblJugadores.setText("2/4");
+        } else if (amarilloPanel.isVisible()) {
+            amarilloPanel.setVisible(false);
+            jugadorAmarillolbl.setVisible(false);
+            lblJugadores.setText("1/4");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-
-    public void mostrarPantalla(){
-          java.awt.EventQueue.invokeLater(new Runnable() {
+    public void mostrarPantalla() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ListaEspera().setVisible(true);
+                new ListaEsperaFrm().setVisible(true);
             }
         });
-          
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
