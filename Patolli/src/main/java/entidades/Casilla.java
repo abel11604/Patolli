@@ -5,6 +5,7 @@ package entidades;
  * @author abelc
  */
 public class Casilla {
+
     private String tipo;
     private Ficha ocupadoPor;
     private int numCasilla;
@@ -17,8 +18,9 @@ public class Casilla {
         this.ocupadoPor = ocupadoPor;
         this.numCasilla = numCasilla;
 
-    }   
+    }
 
+    
     
     public String getTipo() {
         return tipo;
@@ -36,8 +38,6 @@ public class Casilla {
         this.ocupadoPor = ocupadoPor;
     }
 
-   
-
     public int getNumCasilla() {
         return numCasilla;
     }
@@ -45,5 +45,5 @@ public class Casilla {
     public void setNumCasilla(int numCasilla) {
         this.numCasilla = numCasilla;
     }
-        
+
 }
