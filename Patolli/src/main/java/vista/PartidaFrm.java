@@ -2,6 +2,7 @@ package vista;
 
 import control.ControlConfigurarPartida;
 import control.IControlConfigurarPartida;
+import entidades.Jugador;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class PartidaFrm extends javax.swing.JFrame {
 
     private List<JLabel> casillas;
     private IControlConfigurarPartida confPartida;
+    private int turnoActual = 0;
 
     /**
      * Creates new form PartidaFrm
@@ -27,14 +29,45 @@ public class PartidaFrm extends javax.swing.JFrame {
     public PartidaFrm() {
         this.confPartida = ControlConfigurarPartida.getInstance();
         initComponents();
+        
+        panelJ1.setVisible(false);
+        panelJ2.setVisible(false);
+        panelJ3.setVisible(false);
+        panelJ4.setVisible(false);
+        
         casillas = new ArrayList<>();
         generarTablero();
         pintarFichas();
-        apuestalbl.setText(Integer.toString(confPartida.getApuesta()));
-        fondoApuestalbl1.setText("Fondo de apuesta: " + Integer.toString(confPartida.getFondo()));
-        fondoApuestalbl2.setText("Fondo de apuesta: " + Integer.toString(confPartida.getFondo()));
-        fondoApuestalbl3.setText("Fondo de apuesta: " + Integer.toString(confPartida.getFondo()));
-        fondoApuestalbl4.setText("Fondo de apuesta: " + Integer.toString(confPartida.getFondo()));
+        
+        List<Jugador> jugadores = confPartida.getJugadores();
+        
+        if (jugadores.size() >= 1) {
+            fondoApuestalbl1.setText("Fondo de apuesta: " + Integer.toString(confPartida.getFondo()));
+            panelJ1.setVisible(true);
+        } else {
+            fondoApuestalbl1.setVisible(false);
+        }
+
+        if (jugadores.size() >= 2) {
+            fondoApuestalbl2.setText("Fondo de apuesta: " + Integer.toString(confPartida.getFondo()));
+            panelJ2.setVisible(true);
+        } else {
+            fondoApuestalbl2.setVisible(false);
+        }
+
+        if (jugadores.size() >= 3) {
+            fondoApuestalbl3.setText("Fondo de apuesta: " + Integer.toString(confPartida.getFondo()));
+            panelJ3.setVisible(true);
+        } else {
+            fondoApuestalbl3.setVisible(false);
+        }
+
+        if (jugadores.size() >= 4) {
+            fondoApuestalbl4.setText("Fondo de apuesta: " + Integer.toString(confPartida.getFondo()));
+            panelJ4.setVisible(true);
+        } else {
+            fondoApuestalbl4.setVisible(false);
+        }
     }
 
     private void pintarFichas() {
@@ -65,7 +98,6 @@ public class PartidaFrm extends javax.swing.JFrame {
             jLabel31.setVisible(false);
             jLabel35.setVisible(false);
             jLabel36.setVisible(false);
-
         }
     }
 
@@ -225,9 +257,10 @@ public class PartidaFrm extends javax.swing.JFrame {
         casillasIzq = new javax.swing.JPanel();
         casillasArriba = new javax.swing.JPanel();
         casillasDer = new javax.swing.JPanel();
-        apuestalbl = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblApuesta = new javax.swing.JLabel();
+        lblTurno = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1058, 549));
@@ -241,8 +274,9 @@ public class PartidaFrm extends javax.swing.JFrame {
         panelJ1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jugadorBlanco.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
+        jugadorBlanco.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jugadorBlanco.setText("Jugador 1");
-        panelJ1.add(jugadorBlanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 8, -1, -1));
+        panelJ1.add(jugadorBlanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 90, -1));
 
         fondoApuestalbl1.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
         fondoApuestalbl1.setText("Fondo de apuestas:");
@@ -270,7 +304,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
         panelJ1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(104, 112, -1, -1));
 
-        jPanel1.add(panelJ1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 150));
+        jPanel1.add(panelJ1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 160));
 
         panelJ3.setBackground(new java.awt.Color(255, 255, 255));
         panelJ3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -278,7 +312,7 @@ public class PartidaFrm extends javax.swing.JFrame {
 
         jugadorNaranja.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
         jugadorNaranja.setText("Jugador 3");
-        panelJ3.add(jugadorNaranja, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 8, -1, -1));
+        panelJ3.add(jugadorNaranja, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, -1, -1));
 
         fondoApuestalbl3.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
         fondoApuestalbl3.setText("Fondo de apuestas:");
@@ -306,7 +340,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         jLabel31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
         panelJ3.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(136, 114, -1, -1));
 
-        jPanel1.add(panelJ3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 410, -1, 170));
+        jPanel1.add(panelJ3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, -1, 160));
 
         panelJ2.setBackground(new java.awt.Color(255, 255, 255));
         panelJ2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -342,14 +376,14 @@ public class PartidaFrm extends javax.swing.JFrame {
         jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
         panelJ2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 114, -1, -1));
 
-        jPanel1.add(panelJ2, new org.netbeans.lib.awtextra.AbsoluteConstraints(856, 0, 200, 170));
+        jPanel1.add(panelJ2, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 0, 200, 160));
 
         panelJ4.setBackground(new java.awt.Color(255, 255, 255));
         panelJ4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         JugadorCafe.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
         JugadorCafe.setText("Jugador 4");
-        panelJ4.add(JugadorCafe, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 6, -1, -1));
+        panelJ4.add(JugadorCafe, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
 
         fondoApuestalbl4.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
         fondoApuestalbl4.setText("Fondo de apuestas:");
@@ -377,22 +411,22 @@ public class PartidaFrm extends javax.swing.JFrame {
         jLabel37.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
         panelJ4.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 112, -1, -1));
 
-        jPanel1.add(panelJ4, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 410, 210, 160));
+        jPanel1.add(panelJ4, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 420, 200, 160));
 
         caña1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cañaLisa.png"))); // NOI18N
-        jPanel1.add(caña1, new org.netbeans.lib.awtextra.AbsoluteConstraints(863, 261, 30, 64));
+        jPanel1.add(caña1, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 260, 30, 64));
 
         caña2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cañaLisa.png"))); // NOI18N
-        jPanel1.add(caña2, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 260, 30, 64));
+        jPanel1.add(caña2, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 260, 30, 64));
 
         caña3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cañaLisa.png"))); // NOI18N
-        jPanel1.add(caña3, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 260, 30, 64));
+        jPanel1.add(caña3, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 260, 30, 64));
 
         caña4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cañaLisa.png"))); // NOI18N
-        jPanel1.add(caña4, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 260, 30, 64));
+        jPanel1.add(caña4, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 260, 30, 64));
 
         caña5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cañaLisa.png"))); // NOI18N
-        jPanel1.add(caña5, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 260, 30, 64));
+        jPanel1.add(caña5, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 260, 30, 64));
 
         btnLanzarCañas.setBackground(new java.awt.Color(213, 198, 86));
         btnLanzarCañas.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
@@ -403,7 +437,7 @@ public class PartidaFrm extends javax.swing.JFrame {
                 btnLanzarCañasActionPerformed(evt);
             }
         });
-        jPanel1.add(btnLanzarCañas, new org.netbeans.lib.awtextra.AbsoluteConstraints(863, 343, 190, 40));
+        jPanel1.add(btnLanzarCañas, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 340, 190, 40));
 
         casillasCentrales.setBackground(new java.awt.Color(0, 51, 102));
         casillasCentrales.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -412,7 +446,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         casillasCentrales.setLayout(casillasCentralesLayout);
         casillasCentralesLayout.setHorizontalGroup(
             casillasCentralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
         casillasCentralesLayout.setVerticalGroup(
             casillasCentralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -460,7 +494,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         casillasArriba.setLayout(casillasArribaLayout);
         casillasArribaLayout.setHorizontalGroup(
             casillasArribaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
         casillasArribaLayout.setVerticalGroup(
             casillasArribaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -485,19 +519,28 @@ public class PartidaFrm extends javax.swing.JFrame {
 
         jPanel1.add(casillasDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(563, 251, -1, -1));
 
-        apuestalbl.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        apuestalbl.setForeground(new java.awt.Color(255, 255, 255));
-        jPanel1.add(apuestalbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, 70, 20));
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Turno:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 180, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 180, 140, 20));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Apuesta a pagar:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
+        lblApuesta.setFont(new java.awt.Font("Bodoni MT", 1, 18)); // NOI18N
+        lblApuesta.setForeground(new java.awt.Color(255, 255, 255));
+        lblApuesta.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel1.add(lblApuesta, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 130, 20));
+
+        lblTurno.setFont(new java.awt.Font("Bodoni MT", 1, 18)); // NOI18N
+        lblTurno.setForeground(new java.awt.Color(255, 255, 255));
+        lblTurno.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTurno.setText("Jugador 1");
+        jPanel1.add(lblTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 200, 140, -1));
+
+        jLabel5.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Apuesta a pagar:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 130, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1070, 600));
 
@@ -505,8 +548,24 @@ public class PartidaFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public void cambiarTurno(){
+        List<Jugador> jugadores = confPartida.getJugadores();
+        turnoActual = (turnoActual + 1) % jugadores.size(); 
+        lblTurno.setText("Jugador " + (turnoActual + 1));
+    }
+    
+    public void setApuesta(int apuesta) {
+        lblApuesta.setText(""+apuesta);
+    }
+    
+    public void actualizarApuesta() {
+        int apuesta = confPartida.getApuesta();
+        lblApuesta.setText(""+apuesta);
+    }
+    
     private void btnLanzarCañasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLanzarCañasActionPerformed
         generarCañas();
+        cambiarTurno();
     }//GEN-LAST:event_btnLanzarCañasActionPerformed
 
     public void mostrarPantalla() {
@@ -519,7 +578,6 @@ public class PartidaFrm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel JugadorCafe;
-    private javax.swing.JLabel apuestalbl;
     private javax.swing.JButton btnLanzarCañas;
     private javax.swing.JPanel casillasAbajo;
     private javax.swing.JPanel casillasArriba;
@@ -554,7 +612,6 @@ public class PartidaFrm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
@@ -564,11 +621,14 @@ public class PartidaFrm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel jugadorAmarillo;
     private javax.swing.JLabel jugadorBlanco;
     private javax.swing.JLabel jugadorNaranja;
+    private javax.swing.JLabel lblApuesta;
+    private javax.swing.JLabel lblTurno;
     private javax.swing.JPanel panelJ1;
     private javax.swing.JPanel panelJ2;
     private javax.swing.JPanel panelJ3;

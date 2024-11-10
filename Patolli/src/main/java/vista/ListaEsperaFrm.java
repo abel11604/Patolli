@@ -56,8 +56,8 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
         btnCrearPartida1 = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         jugadorCafelbl = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnEliminarJugador = new javax.swing.JButton();
+        btnAgregarJugador = new javax.swing.JButton();
         jugadorBlancolbl = new javax.swing.JLabel();
         jugadorAmarillolbl = new javax.swing.JLabel();
         jugadorNaranjalbl = new javax.swing.JLabel();
@@ -182,25 +182,25 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
         jugadorCafelbl.setVisible(false);
         jPanel2.add(jugadorCafelbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(533, 180, 100, -1));
 
-        jButton1.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
-        jButton1.setText("Eliminar jugador");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminarJugador.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
+        btnEliminarJugador.setText("Eliminar jugador");
+        btnEliminarJugador.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEliminarJugador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnEliminarJugadorActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 240, -1, -1));
+        jPanel2.add(btnEliminarJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 240, -1, -1));
 
-        jButton2.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
-        jButton2.setText("Agregar jugador");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnAgregarJugador.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
+        btnAgregarJugador.setText("Agregar jugador");
+        btnAgregarJugador.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAgregarJugador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnAgregarJugadorActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 240, -1, -1));
+        jPanel2.add(btnAgregarJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 240, -1, -1));
 
         jugadorBlancolbl.setFont(new java.awt.Font("Bodoni MT", 1, 18)); // NOI18N
         jugadorBlancolbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -290,12 +290,17 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
             return;
         }
         
-        crearJugadores();
-        this.dispose();
-        for (Jugador jugador : confPartida.getJugadores()) {
-            System.out.println(jugador.getColor());
+        if (confPartida.getJugadores().size() < 2) {
+            JOptionPane.showMessageDialog(this, "No hay suficientes jugadores en la lista",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-        // nav.mostrarPantallaJuego();
+        
+        PartidaFrm partidaFrm = new PartidaFrm(); 
+        partidaFrm.setApuesta(confPartida.getApuesta());
+        partidaFrm.setVisible(true);
+
+        this.dispose();
     }//GEN-LAST:event_btnCrearPartida1ActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -303,23 +308,29 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
         nav.QuieroUnasConfiguracioneeees();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnAgregarJugadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarJugadorActionPerformed
+        List<Jugador> jugadores = confPartida.getJugadores();
+        
         if (!amarilloPanel.isVisible() && !naranjaPanel.isVisible() && !cafePanel.isVisible()) {
             amarilloPanel.setVisible(true);
             jugadorAmarillolbl.setVisible(true);
+            jugadores.add(new Jugador());
+            jugadores.add(new Jugador()); 
             lblJugadores.setText("2/4");
         } else if (amarilloPanel.isVisible() && !naranjaPanel.isVisible()) {
             naranjaPanel.setVisible(true);
             jugadorNaranjalbl.setVisible(true);
+            jugadores.add(new Jugador());
             lblJugadores.setText("3/4");
         } else if (amarilloPanel.isVisible() && naranjaPanel.isVisible() && !cafePanel.isVisible()) {
             cafePanel.setVisible(true);
             jugadorCafelbl.setVisible(true);
+            jugadores.add(new Jugador());
             lblJugadores.setText("4/4");
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnAgregarJugadorActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnEliminarJugadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarJugadorActionPerformed
         if (cafePanel.isVisible()) {
             cafePanel.setVisible(false);
             jugadorCafelbl.setVisible(false);
@@ -333,7 +344,7 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
             jugadorAmarillolbl.setVisible(false);
             lblJugadores.setText("1/4");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnEliminarJugadorActionPerformed
 
     public void mostrarPantalla() {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -347,11 +358,11 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel amarilloPanel;
     private javax.swing.JPanel blancoPanel;
+    private javax.swing.JButton btnAgregarJugador;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCrearPartida1;
+    private javax.swing.JButton btnEliminarJugador;
     private javax.swing.JPanel cafePanel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;

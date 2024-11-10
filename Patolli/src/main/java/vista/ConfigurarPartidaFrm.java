@@ -312,8 +312,12 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor, ingresa tu apuesta y fondo", "Error de apuesta", JOptionPane.ERROR_MESSAGE);
             return;
         } else {
-            if (fondo > apuesta) {
-                JOptionPane.showMessageDialog(this, "El fondo de apuesta no puede ser mayor que la apuesta.", "Error de apuesta", JOptionPane.ERROR_MESSAGE);
+            if (fondo < apuesta) {
+                JOptionPane.showMessageDialog(this, "El fondo de apuesta no puede ser menor que la apuesta a pagar.", "Error de apuesta", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if(fondo==apuesta){
+                JOptionPane.showMessageDialog(this, "El fondo de apuesta tiene que ser mayor que la apuesta a pagar", "Error de apuesta", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
@@ -336,6 +340,7 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
 
     private void btnCrearPartida1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartida1ActionPerformed
         nav.mostrarMenu();
+        dispose();
     }//GEN-LAST:event_btnCrearPartida1ActionPerformed
 
     public void mostrarPantalla() {

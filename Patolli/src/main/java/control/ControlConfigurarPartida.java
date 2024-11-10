@@ -6,6 +6,7 @@ package control;
 
 import entidades.Juego;
 import entidades.Jugador;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,13 +21,17 @@ public class ControlConfigurarPartida implements IControlConfigurarPartida {
     private int fondoApuesta;
     private int apuesta;
     
+    private ControlConfigurarPartida() {
+        jugadores = new ArrayList<>(); 
+    }
+    
     public static ControlConfigurarPartida getInstance() {
         if (instance == null) {
             instance = new ControlConfigurarPartida();
         }
         return instance;
     }
-
+    
     @Override
     public int getNumFichas() {
         return numFichas;
@@ -81,6 +86,6 @@ public class ControlConfigurarPartida implements IControlConfigurarPartida {
     @Override
     public void setFondo(int fondoApuesta) {
        this.fondoApuesta=fondoApuesta;
-    }  
+    }
     
 }
