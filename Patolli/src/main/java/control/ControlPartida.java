@@ -93,13 +93,10 @@ public class ControlPartida implements IControlPartida {
      */
     @Override
     public void cobrarApuesta(Jugador jugador) {
-        int apuesta = partida.getApuesta();
-        int fondoActual = jugador.getFondoApuesta();
-
-        if (fondoActual >= apuesta) {
-            jugador.setFondoApuesta(fondoActual - apuesta);
+         if (jugador.getFondoApuesta() >= partida.getApuesta()) {
+            jugador.setFondoApuesta(jugador.getFondoApuesta() - partida.getApuesta());
         } else {
-            System.out.println("El jugador " + jugador.getNombre() + " no tiene suficiente fondo para cubrir la apuesta.");
+            eliminarJugador(jugador);
         }
     }
 
@@ -108,13 +105,10 @@ public class ControlPartida implements IControlPartida {
      */
     @Override
     public void cobrarApuestaDoble(Jugador jugador) {
-        int apuesta = partida.getApuesta();
-        int fondoActual = jugador.getFondoApuesta();
-
-        if (fondoActual >= apuesta * 2) {
-            jugador.setFondoApuesta(fondoActual - apuesta * 2);
+             if (jugador.getFondoApuesta() >= 2 * partida.getApuesta()) {
+            jugador.setFondoApuesta(jugador.getFondoApuesta() - 2 * partida.getApuesta());
         } else {
-            System.out.println("El jugador " + jugador.getNombre() + " no tiene suficiente fondo para cubrir la apuesta.");
+            eliminarJugador(jugador);
         }
     }
 
@@ -149,7 +143,11 @@ public class ControlPartida implements IControlPartida {
      */
     @Override
     public void eliminarFicha(Ficha ficha) {
-        throw new UnsupportedOperationException("Not supported yet."); // Implementar lógica para eliminar ficha si es necesario
+        ficha.getJugador().getFichas().remove(ficha);
+        //Si el jugador se queda sin fichas, se elimina del juego
+        if (ficha.getJugador().getFichas().isEmpty()) {
+            eliminarJugador(ficha.getJugador());
+        }
     }
 
     /**
@@ -157,6 +155,10 @@ public class ControlPartida implements IControlPartida {
      */
     @Override
     public void eliminarJugador(Jugador jugador) {
-        throw new UnsupportedOperationException("Not supported yet."); // Implementar lógica para eliminar jugador si es necesario
+        partida.getJugadores().remove(jugador);
+        for (Ficha ficha : jugador.getFichas()) {
+            partida.getCasillas().get(ficha.getCasillaActual().getNumCasilla()).setOcupadoPor(null);
+        }
     }
+
 }
