@@ -14,11 +14,11 @@ public class IntruccionesDlg extends javax.swing.JDialog {
      * Creates new form IntruccionesDlg
      */
     public IntruccionesDlg(java.awt.Frame parent, boolean modal) {
-          super(parent, modal);
+        super(parent, modal);
         initComponents();
-         this.nav=ControlNavegacion.getInstance();
+        this.nav = ControlNavegacion.getInstance();
         anterior.setVisible(false);
-        
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     }
 
     /**
@@ -112,6 +112,7 @@ public class IntruccionesDlg extends javax.swing.JDialog {
         siguiente.setFont(new java.awt.Font("Segoe UI", 3, 50)); // NOI18N
         siguiente.setForeground(new java.awt.Color(255, 255, 255));
         siguiente.setText("→");
+        siguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         siguiente.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 siguienteMouseClicked(evt);
@@ -125,6 +126,7 @@ public class IntruccionesDlg extends javax.swing.JDialog {
         anterior.setFont(new java.awt.Font("Segoe UI", 3, 50)); // NOI18N
         anterior.setForeground(new java.awt.Color(255, 255, 255));
         anterior.setText("←");
+        anterior.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         anterior.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 anteriorMouseClicked(evt);
@@ -220,7 +222,7 @@ public class IntruccionesDlg extends javax.swing.JDialog {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 520, 410));
 
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fondo4_1.png"))); // NOI18N
-        getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 450));
+        getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 450));
 
         pack();
         setLocationRelativeTo(null);
@@ -239,8 +241,8 @@ public class IntruccionesDlg extends javax.swing.JDialog {
     jLabel5.setVisible(false);
     jLabel6.setVisible(false);
     jLabel7.setVisible(false);
-    jLabel8.setText("Apuestas");
-    jLabel9.setText("el jugador debe pagar apuesta cuando: ");
+    jLabel8.setText("Apuestas:");
+    jLabel9.setText("El jugador debe pagar apuesta cuando: ");
     jLabel10.setText("-Al momento de tirar cañas son todas lisas");
     jLabel11.setText("-Al caer en una casilla roja pagara doble");
     jLabel12.setText("La cantidad a pagar se establece antes de iniciar la partida");

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package control;
 
 import entidades.Casilla;
@@ -17,7 +13,11 @@ public class ControlPartida implements IControlPartida {
 
     private Juego partida;
 
+
     private static ControlPartida instance;
+
+    public static ControlPartida instance;
+
 
     public static ControlPartida getInstance() {
         if (instance == null) {
@@ -38,6 +38,7 @@ public class ControlPartida implements IControlPartida {
 
     @Override
     public void avanzarCasillas(int numCasillas, Ficha fichaSel) {
+
       // Obtener la casilla actual de la ficha
     Casilla casillaActual = fichaSel.getCasillaActual();
 
@@ -74,10 +75,35 @@ public class ControlPartida implements IControlPartida {
     fichaSel.setCasillaActual(casillaDestino);
     casillaDestino.setOcupadoPor(fichaSel);
 
+
+        Casilla casillaActual = fichaSel.getCasillaActual();
+        int numCasillaActual = casillaActual.getNumCasilla();
+        int nuevaCasilla = numCasillaActual + numCasillas;
+
+        if (nuevaCasilla < 0 || nuevaCasilla >= partida.getCasillas().size()) {
+            return;
+        }
+
+        Casilla casillaDestino = partida.getCasillas().get(nuevaCasilla);
+
+        if (casillaDestino.getOcupadoPor() != null) {
+            Jugador jugadorOcupante = casillaDestino.getOcupadoPor();
+            if (!jugadorOcupante.equals(fichaSel.getJugador())) {
+                //Si la casilla está ocupada por otra, se elimina 
+                eliminarFicha(casillaDestino.getOcupadoPor().getFichas().get(0));
+            }
+        }
+
+        fichaSel.setCasillaActual(casillaDestino);
+        casillaDestino.setOcupadoPor(fichaSel.getJugador());
+
+        partida.getCasillas().get(numCasillaActual).setOcupadoPor(null);
+
     }
 
     @Override
     public void cobrarApuesta(Jugador jugador) {
+
 
         int apuesta = partida.getApuesta();
         int fondoActual = jugador.getFondoApuesta(); 
@@ -88,10 +114,18 @@ public class ControlPartida implements IControlPartida {
             System.out.println("El jugador " + jugador.getNombre() + " no tiene suficiente fondo para cubrir la apuesta.");
         }
 
+
+        if (jugador.getFondoApuesta() >= partida.getApuesta()) {
+            jugador.setFondoApuesta(jugador.getFondoApuesta() - partida.getApuesta());
+        } else {
+            eliminarJugador(jugador);
+        }
+
     }
 
     @Override
     public void cobrarApuestaDoble(Jugador jugador) {
+
     
         int apuesta = partida.getApuesta();
         int fondoActual = jugador.getFondoApuesta(); 
@@ -101,10 +135,18 @@ public class ControlPartida implements IControlPartida {
         } else {
             System.out.println("El jugador " + jugador.getNombre() + " no tiene suficiente fondo para cubrir la apuesta.");
         }    
+
+        if (jugador.getFondoApuesta() >= 2 * partida.getApuesta()) {
+            jugador.setFondoApuesta(jugador.getFondoApuesta() - 2 * partida.getApuesta());
+        } else {
+            eliminarJugador(jugador);
+        }
+
     }
 
     @Override
     public void reiniciarFicha(Ficha ficha) {
+
 
         String tipoInicial = "";
         switch (ficha.getJugador().getColor()) {
@@ -125,11 +167,30 @@ public class ControlPartida implements IControlPartida {
                 break;
             }
         }
+
+        ficha.setCasillaActual(partida.getCasillas().get(ficha.getJugador().getFichas().indexOf(ficha)));
+
     }
 
     @Override
     public void eliminarFicha(Ficha ficha) {
+
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        ficha.getJugador().getFichas().remove(ficha);
+        //Si el jugador se queda sin fichas, se elimina del juego
+        if (ficha.getJugador().getFichas().isEmpty()) {
+            eliminarJugador(ficha.getJugador());
+        }
+    }
+
+    @Override
+    public void eliminarJugador(Jugador jugador) {
+        partida.getJugadores().remove(jugador);
+        for (Ficha ficha : jugador.getFichas()) {
+            partida.getCasillas().get(ficha.getCasillaActual().getNumCasilla()).setOcupadoPor(null);
+        }
+
     }
 
 }

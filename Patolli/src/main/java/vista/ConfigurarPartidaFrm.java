@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package vista;
 
 import control.ControlConfigurarPartida;
@@ -311,11 +307,17 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
 
         int apuesta = (int) apuestaSpinner.getValue();
         int fondo = (int) fondoApuestaSpinner.getValue();
-
-        if (fondo > apuesta) {
-            JOptionPane.showMessageDialog(this, "El fondo de apuesta no puede ser menor que la apuesta.", "Error de apuesta", JOptionPane.ERROR_MESSAGE);
+        
+        if (apuesta == 0 || fondo == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa tu apuesta y fondo", "Error de apuesta", JOptionPane.ERROR_MESSAGE);
             return;
+        } else {
+            if (fondo > apuesta) {
+                JOptionPane.showMessageDialog(this, "El fondo de apuesta no puede ser mayor que la apuesta.", "Error de apuesta", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         }
+        
         establecerCasillas();
         establecerNumFichas();
         establecerApuestas();

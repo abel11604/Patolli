@@ -19,6 +19,7 @@ public class ControlConfigurarPartida implements IControlConfigurarPartida {
     private int casillaPorAspa;
     private int fondoApuesta;
     private int apuesta;
+    
     public static ControlConfigurarPartida getInstance() {
         if (instance == null) {
             instance = new ControlConfigurarPartida();
@@ -80,7 +81,6 @@ public class ControlConfigurarPartida implements IControlConfigurarPartida {
     @Override
     public void setFondo(int fondoApuesta) {
        this.fondoApuesta=fondoApuesta;
-    }
-    
+    }  
     
 }
