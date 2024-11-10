@@ -10,17 +10,18 @@ package entidades;
  */
 public class Casilla {
     private String tipo;
-    private Jugador ocupadoPor;
+    private Ficha ocupadoPor;
     private int numCasilla;
 
     public Casilla() {
     }
 
-    public Casilla(String tipo, Jugador ocupadoPor, int numCasilla) {
+    public Casilla(String tipo, Ficha ocupadoPor, int numCasilla) {
         this.tipo = tipo;
         this.ocupadoPor = ocupadoPor;
         this.numCasilla = numCasilla;
     }
+
 
     
     
@@ -32,13 +33,15 @@ public class Casilla {
         this.tipo = tipo;
     }
 
-    public Jugador getOcupadoPor() {
+    public Ficha getOcupadoPor() {
         return ocupadoPor;
     }
 
-    public void setOcupadoPor(Jugador ocupadoPor) {
+    public void setOcupadoPor(Ficha ocupadoPor) {
         this.ocupadoPor = ocupadoPor;
     }
+
+   
 
     public int getNumCasilla() {
         return numCasilla;
