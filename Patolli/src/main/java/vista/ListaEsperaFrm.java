@@ -11,6 +11,7 @@ import entidades.Ficha;
 import entidades.Jugador;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -103,7 +104,7 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        jPanel2.add(cafePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 70, -1, -1));
+        jPanel2.add(cafePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 70, -1, -1));
 
         blancoPanel.setBackground(new java.awt.Color(255, 255, 255));
         blancoPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
@@ -119,7 +120,7 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        jPanel2.add(blancoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, -1, -1));
+        jPanel2.add(blancoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 70, -1, -1));
 
         amarilloPanel.setBackground(new java.awt.Color(204, 204, 0));
         amarilloPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
@@ -135,7 +136,7 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        jPanel2.add(amarilloPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 70, -1, -1));
+        jPanel2.add(amarilloPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, -1, -1));
 
         naranjaPanel.setBackground(new java.awt.Color(255, 153, 0));
         naranjaPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
@@ -151,11 +152,10 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        jPanel2.add(naranjaPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 70, -1, -1));
+        jPanel2.add(naranjaPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 70, -1, -1));
 
         btnCrearPartida1.setBackground(new java.awt.Color(213, 198, 86));
         btnCrearPartida1.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
-        btnCrearPartida1.setForeground(new java.awt.Color(0, 0, 0));
         btnCrearPartida1.setText("Empezar");
         btnCrearPartida1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCrearPartida1.addActionListener(new java.awt.event.ActionListener() {
@@ -163,11 +163,10 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
                 btnCrearPartida1ActionPerformed(evt);
             }
         });
-        jPanel2.add(btnCrearPartida1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 300, 160, 40));
+        jPanel2.add(btnCrearPartida1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 310, 160, 40));
 
         btnCancelar.setBackground(new java.awt.Color(213, 198, 86));
         btnCancelar.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
-        btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
         btnCancelar.setText("Cancelar");
         btnCancelar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -178,39 +177,47 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
         jPanel2.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 160, 40));
 
         jugadorCafelbl.setFont(new java.awt.Font("Bodoni MT", 1, 18)); // NOI18N
+        jugadorCafelbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jugadorCafelbl.setText("Jugador 4");
         jugadorCafelbl.setVisible(false);
-        jPanel2.add(jugadorCafelbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 180, -1, -1));
+        jPanel2.add(jugadorCafelbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(533, 180, 100, -1));
 
-        jButton1.setText("quitar");
+        jButton1.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
+        jButton1.setText("Eliminar jugador");
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 240, -1, -1));
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 240, -1, -1));
 
-        jButton2.setText("agregar j");
+        jButton2.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
+        jButton2.setText("Agregar jugador");
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 240, -1, -1));
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 240, -1, -1));
 
         jugadorBlancolbl.setFont(new java.awt.Font("Bodoni MT", 1, 18)); // NOI18N
+        jugadorBlancolbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jugadorBlancolbl.setText("Jugador 1");
-        jPanel2.add(jugadorBlancolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, -1, -1));
+        jPanel2.add(jugadorBlancolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(63, 180, 100, -1));
 
         jugadorAmarillolbl.setFont(new java.awt.Font("Bodoni MT", 1, 18)); // NOI18N
+        jugadorAmarillolbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jugadorAmarillolbl.setText("Jugador 2");
         jugadorAmarillolbl.setVisible(false);
-        jPanel2.add(jugadorAmarillolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 180, -1, -1));
+        jPanel2.add(jugadorAmarillolbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 180, 100, -1));
 
         jugadorNaranjalbl.setFont(new java.awt.Font("Bodoni MT", 1, 18)); // NOI18N
+        jugadorNaranjalbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jugadorNaranjalbl.setText("Jugador 3");
         jugadorNaranjalbl.setVisible(false);
-        jPanel2.add(jugadorNaranjalbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 180, -1, -1));
+        jPanel2.add(jugadorNaranjalbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(373, 180, 100, -1));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -277,6 +284,12 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
     }
 
     private void btnCrearPartida1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartida1ActionPerformed
+        if(!amarilloPanel.isVisible()){
+            JOptionPane.showMessageDialog(this, "Debe haber al menos 2 jugadores para comenzar el juego", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         crearJugadores();
         this.dispose();
         for (Jugador jugador : confPartida.getJugadores()) {
