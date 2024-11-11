@@ -51,41 +51,40 @@ public class ControlPartida implements IControlPartida {
      */
     @Override
     public void avanzarCasillas(int numCasillas, Ficha fichaSel) {
-        // Obtener la casilla actual de la ficha
-        Casilla casillaActual = fichaSel.getCasillaActual();
+       // Obtener la casilla actual de la ficha
+    Casilla casillaActual = fichaSel.getCasillaActual();
 
-        // Encontrar la posición actual de la casilla en la lista de casillas
-        int posicionActual = partida.getCasillas().indexOf(casillaActual);
+    // Encontrar la posición actual de la casilla en la lista de casillas
+    int posicionActual = partida.getCasillas().indexOf(casillaActual);
 
-        // Calcular la nueva posición
-        int nuevaPosicion = posicionActual + numCasillas;
+    // Calcular la nueva posición
+    int nuevaPosicion = posicionActual + numCasillas;
 
-        // Verificar si la nueva posición está dentro del tablero
-        if (nuevaPosicion >= partida.getCasillas().size()) {
-            nuevaPosicion = partida.getCasillas().size() - 1; // Asegurar que no salga del tablero
-        }
+    // Si la nueva posición supera el tamaño de la lista, reiniciarla al inicio
+    if (nuevaPosicion >= partida.getCasillas().size()) {
+        nuevaPosicion = nuevaPosicion % partida.getCasillas().size(); // Hacer un ciclo hacia el inicio
+    }
 
-        // Obtener la casilla de destino
-        Casilla casillaDestino = partida.getCasillas().get(nuevaPosicion);
+    // Obtener la casilla de destino
+    Casilla casillaDestino = partida.getCasillas().get(nuevaPosicion);
 
-        // Manejar el caso si la casilla de destino está ocupada y es de tipo "Central"
-        if (casillaDestino.getOcupadoPor() != null && casillaDestino.getTipo().equals("Central")) {
-            eliminarFicha(casillaDestino.getOcupadoPor()); // Elimina la ficha contraria
-            return; // Sale del método después de eliminar la ficha
-        }
+    // Manejar el caso si la casilla de destino está ocupada y es de tipo "Central"
+    if (casillaDestino.getOcupadoPor() != null && casillaDestino.getTipo().equalsIgnoreCase("Central")) {
+        eliminarFicha(casillaDestino.getOcupadoPor()); // Elimina la ficha contraria
+    }
 
-        // Manejar el caso si la casilla de destino está ocupada y es de tipo "Normal"
-        if (casillaDestino.getOcupadoPor() != null && casillaDestino.getTipo().equals("Normal")) {
-            reiniciarFicha(fichaSel); // Reinicia la posición de la ficha actual
-            return; // Sale del método, ya que la ficha ha sido reiniciada
-        }
+    // Manejar el caso si la casilla de destino está ocupada y es de tipo "Normal"
+    if (casillaDestino.getOcupadoPor() != null && casillaDestino.getTipo().equalsIgnoreCase("Normal")) {
+        reiniciarFicha(fichaSel); // Reinicia la posición de la ficha actual
+        return; // Sale del método, ya que la ficha ha sido reiniciada
+    }
 
-        // Liberar la casilla actual
-        casillaActual.setOcupadoPor(null);
-
-        // Colocar la ficha en la nueva casilla
-        fichaSel.setCasillaActual(casillaDestino);
-        casillaDestino.setOcupadoPor(fichaSel);
+    // Liberar la casilla actual
+    casillaActual.setOcupadoPor(null);
+    
+    // Colocar la ficha en la nueva casilla
+    fichaSel.setCasillaActual(casillaDestino);
+    casillaDestino.setOcupadoPor(fichaSel);
     }
 
     /**
@@ -117,25 +116,25 @@ public class ControlPartida implements IControlPartida {
      */
     @Override
     public void reiniciarFicha(Ficha ficha) {
-        String tipoInicial = "";
-        switch (ficha.getJugador().getColor()) {
-            case "Blanco" ->
-                tipoInicial = "inicialJ1";
-            case "Amarillo" ->
-                tipoInicial = "inicialJ2";
-            case "Naranja" ->
-                tipoInicial = "inicialJ3";
-            case "Cafe" ->
-                tipoInicial = "inicialJ4";
-        }
+       String tipoInicial = "";
+    switch (ficha.getJugador().getColor().toLowerCase()) { // Convertir a minúsculas para mayor consistencia
+        case "blanco" ->
+            tipoInicial = "inicialJ1";
+        case "amarillo" ->
+            tipoInicial = "inicialJ2";
+        case "naranja" ->
+            tipoInicial = "inicialJ3";
+        case "cafe" ->
+            tipoInicial = "inicialJ4";
+    }
 
-        for (Casilla casilla : partida.getCasillas()) {
-            if (casilla.getTipo().equals(tipoInicial)) {
-                casilla.setOcupadoPor(ficha);
-                ficha.setCasillaActual(casilla);
-                break;
-            }
+    for (Casilla casilla : partida.getCasillas()) {
+        if (casilla.getTipo().equalsIgnoreCase(tipoInicial)) { // Comparación sin distinción de mayúsculas y minúsculas
+            casilla.setOcupadoPor(ficha);
+            ficha.setCasillaActual(casilla);
+            break;
         }
+    }
     }
 
     /**

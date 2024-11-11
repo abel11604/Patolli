@@ -13,15 +13,13 @@ public class Casilla {
     public Casilla() {
     }
 
-    public Casilla(String tipo, Ficha ocupadoPor, int numCasilla) {
+    public Casilla(String tipo, int numCasilla) {
         this.tipo = tipo;
-        this.ocupadoPor = ocupadoPor;
+        this.ocupadoPor = null;
         this.numCasilla = numCasilla;
 
     }
 
-    
-    
     public String getTipo() {
         return tipo;
     }
