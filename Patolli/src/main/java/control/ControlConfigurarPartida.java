@@ -108,7 +108,7 @@ public class ControlConfigurarPartida implements IControlConfigurarPartida {
 
         return casillas;
     }
-
+    
 // Método auxiliar para generar una aspa completa
     private int generarCasillasAspa(List<Casilla> casillas, int contadorCasilla, int casillasPorAspa,
             String inicialJugador, int apuestaPos1, int apuestaPos2, int dobleTurnoPos1, int dobleTurnoPos2) {

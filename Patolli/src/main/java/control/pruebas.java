@@ -61,17 +61,19 @@ public class pruebas {
         jugador1.setFondoApuesta(100);
         jugador1.setNombre("j1");
         ficha.setJugador(jugador1);
+        fichas.add(ficha);
         jugador1.setFichas(fichas);
         jugadores.add(jugador1);
         //jugador2
-          List<Ficha> fichas2 = new ArrayList<>();
+        List<Ficha> fichas2 = new ArrayList<>();
         Ficha ficha2 = new Ficha();
         Jugador jugador2 = new Jugador();
-        ficha.setCasillaActual(null);
+        ficha2.setCasillaActual(null);
         jugador2.setColor("Blanco");
-        jugador1.setFondoApuesta(100);
-        jugador1.setNombre("j2");
-        ficha.setJugador(jugador2);
+        jugador2.setFondoApuesta(100);
+        jugador2.setNombre("j2");
+        ficha2.setJugador(jugador2);
+        fichas2.add(ficha2);
         jugador2.setFichas(fichas2);
         jugadores.add(jugador2);
         configurador.setJugadores(jugadores);
@@ -80,7 +82,7 @@ public class pruebas {
         Juego partida = configurador.crearPartida();
         ControlPartida c = ControlPartida.getInstance();
         c.setPartida(partida);
-        c.reiniciarFicha(ficha);
+        c.reiniciarFicha(jugador1.getFichas().get(0));
         // Imprimir todas las casillas generadas
         System.out.println("Antes de avanzar");
         for (Casilla casilla : c.getPartida().getCasillas()) {
@@ -90,7 +92,7 @@ public class pruebas {
             System.out.println("numC: " + casilla.getNumCasilla() + " tipo: " + casilla.getTipo() + " ocupadaPor: " + ocupadaPor);
         }
 
-        c.avanzarCasillas(18, ficha);
+        c.avanzarCasillas(18, jugador1.getFichas().get(0));
         System.out.println("Despues de avanzar");
           for (Casilla casilla : c.getPartida().getCasillas()) {
             String ocupadaPor = (casilla.getOcupadoPor() != null)
@@ -100,6 +102,30 @@ public class pruebas {
         }
         
         System.out.println("otro jugador");
-        
+        c.reiniciarFicha(ficha2);
+            for (Casilla casilla : c.getPartida().getCasillas()) {
+            String ocupadaPor = (casilla.getOcupadoPor() != null)
+                    ? casilla.getOcupadoPor().getJugador().getNombre()
+                    : "no ocupado";
+            System.out.println("numC: " + casilla.getNumCasilla() + " tipo: " + casilla.getTipo() + " ocupadaPor: " + ocupadaPor);
+        }
+            
+        c.avanzarCasillas(2, ficha2);
+        System.out.println("mover la ficha 2");
+            for (Casilla casilla : c.getPartida().getCasillas()) {
+            String ocupadaPor = (casilla.getOcupadoPor() != null)
+                    ? casilla.getOcupadoPor().getJugador().getNombre()
+                    : "no ocupado";
+            System.out.println("numC: " + casilla.getNumCasilla() + " tipo: " + casilla.getTipo() + " ocupadaPor: " + ocupadaPor);
+        }
+            c.avanzarCasillas(1, ficha);
+            System.out.println("prueba de reinicio de ficha");
+                 for (Casilla casilla : c.getPartida().getCasillas()) {
+            String ocupadaPor = (casilla.getOcupadoPor() != null)
+                    ? casilla.getOcupadoPor().getJugador().getNombre()
+                    : "no ocupado";
+            System.out.println("numC: " + casilla.getNumCasilla() + " tipo: " + casilla.getTipo() + " ocupadaPor: " + ocupadaPor);
+        }
+            
     }
 }

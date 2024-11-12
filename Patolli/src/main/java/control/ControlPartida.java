@@ -75,6 +75,7 @@ public class ControlPartida implements IControlPartida {
 
     // Manejar el caso si la casilla de destino está ocupada y es de tipo "Normal"
     if (casillaDestino.getOcupadoPor() != null && casillaDestino.getTipo().equalsIgnoreCase("Normal")) {
+        casillaActual.setOcupadoPor(null);
         reiniciarFicha(fichaSel); // Reinicia la posición de la ficha actual
         return; // Sale del método, ya que la ficha ha sido reiniciada
     }

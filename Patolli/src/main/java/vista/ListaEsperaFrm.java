@@ -284,22 +284,22 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
     }
 
     private void btnCrearPartida1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartida1ActionPerformed
-        if(!amarilloPanel.isVisible()){
-            JOptionPane.showMessageDialog(this, "Debe haber al menos 2 jugadores para comenzar el juego", 
+        if (!amarilloPanel.isVisible()) {
+            JOptionPane.showMessageDialog(this, "Debe haber al menos 2 jugadores para comenzar el juego",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         if (confPartida.getJugadores().size() < 2) {
             JOptionPane.showMessageDialog(this, "No hay suficientes jugadores en la lista",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        PartidaFrm partidaFrm = new PartidaFrm(); 
-        partidaFrm.setApuesta(confPartida.getApuesta());
-        partidaFrm.setVisible(true);
 
+        crearJugadores();
+        
+        System.out.println(confPartida.getJugadores().size());
+        nav.mostrarPantallaJuego();
         this.dispose();
     }//GEN-LAST:event_btnCrearPartida1ActionPerformed
 
@@ -310,12 +310,12 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
 
     private void btnAgregarJugadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarJugadorActionPerformed
         List<Jugador> jugadores = confPartida.getJugadores();
-        
+
         if (!amarilloPanel.isVisible() && !naranjaPanel.isVisible() && !cafePanel.isVisible()) {
             amarilloPanel.setVisible(true);
             jugadorAmarillolbl.setVisible(true);
             jugadores.add(new Jugador());
-            jugadores.add(new Jugador()); 
+            jugadores.add(new Jugador());
             lblJugadores.setText("2/4");
         } else if (amarilloPanel.isVisible() && !naranjaPanel.isVisible()) {
             naranjaPanel.setVisible(true);

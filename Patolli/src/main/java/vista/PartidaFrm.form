@@ -463,7 +463,7 @@
             <Property name="useNullLayout" type="boolean" value="false"/>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="JugadorCafe">
+            <Component class="javax.swing.JLabel" name="jugadorCafe">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Algerian" size="14" style="0"/>

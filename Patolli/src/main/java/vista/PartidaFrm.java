@@ -24,8 +24,7 @@ public class PartidaFrm extends javax.swing.JFrame {
     private List<JLabel> casillas;
     private IControlConfigurarPartida confPartida;
     private IControlPartida partida;
-    private int turnoActual = 0;
-    
+    private Jugador turnoActual;
 
     /**
      * Creates new form PartidaFrm
@@ -33,35 +32,20 @@ public class PartidaFrm extends javax.swing.JFrame {
     public PartidaFrm() {
         this.confPartida = ControlConfigurarPartida.getInstance();
         this.partida = ControlPartida.getInstance();
-        //partida.setPartida(confPartida.crearPartida());
+        partida.setPartida(confPartida.crearPartida());
         initComponents();
-
         // Ocultar todos los paneles al inicio
         panelJ1.setVisible(false);
         panelJ2.setVisible(false);
         panelJ3.setVisible(false);
         panelJ4.setVisible(false);
-
         casillas = new ArrayList<>();
         generarTablero();
+        pintarJugadores();
         pintarFichas();
+        iniciarTurno();
 
-        // Obtener los jugadores configurados
-        List<Jugador> jugadores = confPartida.getJugadores();
-        int fondoApuesta = confPartida.getFondo();
-
-        // Array de paneles y etiquetas de fondo de apuesta para iterar dinámicamente
-        JPanel[] panels = {panelJ1, panelJ2, panelJ3, panelJ4};
-        JLabel[] fondoApuestaLabels = {fondoApuestalbl1, fondoApuestalbl2, fondoApuestalbl3, fondoApuestalbl4};
-
-        for (int i = 0; i < panels.length; i++) {
-            if (i < jugadores.size()) {
-                fondoApuestaLabels[i].setText("Fondo de apuesta: " + fondoApuesta);
-                panels[i].setVisible(true);
-            } else {
-                fondoApuestaLabels[i].setVisible(false);
-            }
-        }
+        setApuesta(partida.getPartida().getApuesta());
     }
 
     private void pintarFichas() {
@@ -231,7 +215,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         ficha5Amarillo = new javax.swing.JLabel();
         ficha4Amarillo = new javax.swing.JLabel();
         panelJ4 = new javax.swing.JPanel();
-        JugadorCafe = new javax.swing.JLabel();
+        jugadorCafe = new javax.swing.JLabel();
         fondoApuestalbl4 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         ficha1Cafe = new javax.swing.JLabel();
@@ -375,9 +359,9 @@ public class PartidaFrm extends javax.swing.JFrame {
         panelJ4.setBackground(new java.awt.Color(255, 255, 255));
         panelJ4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        JugadorCafe.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
-        JugadorCafe.setText("Jugador 4");
-        panelJ4.add(JugadorCafe, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
+        jugadorCafe.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
+        jugadorCafe.setText("Jugador 4");
+        panelJ4.add(jugadorCafe, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
 
         fondoApuestalbl4.setFont(new java.awt.Font("Algerian", 0, 14)); // NOI18N
         fondoApuestalbl4.setText("Fondo de apuestas:");
@@ -542,10 +526,26 @@ public class PartidaFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public void iniciarTurno() {
+        List<Jugador> jugadores = confPartida.getJugadores();
+        turnoActual = jugadores.get(0); // Inicializar con el primer jugador al iniciar el juego
+        actualizarEtiquetaTurno();
+    }
+
     public void cambiarTurno() {
         List<Jugador> jugadores = confPartida.getJugadores();
-        turnoActual = (turnoActual + 1) % jugadores.size();
-        lblTurno.setText("Jugador " + (turnoActual + 1));
+
+        // Encontrar el índice del jugador actual y mover al siguiente jugador de manera cíclica
+        int indiceActual = jugadores.indexOf(turnoActual);
+        int siguienteIndice = (indiceActual + 1) % jugadores.size();
+        turnoActual = jugadores.get(siguienteIndice);
+
+        // Actualizar la etiqueta de turno
+        actualizarEtiquetaTurno();
+    }
+
+    private void actualizarEtiquetaTurno() {
+        lblTurno.setText(turnoActual.getNombre());
     }
 
     public void setApuesta(int apuesta) {
@@ -553,8 +553,44 @@ public class PartidaFrm extends javax.swing.JFrame {
     }
 
     public void actualizarApuesta() {
-        int apuesta = confPartida.getApuesta();
+        int apuesta = partida.getPartida().getApuesta();
         lblApuesta.setText("" + apuesta);
+    }
+
+    public void actualizarFondoApuesta() {
+        JLabel[] etiquetasFondoApuesta = {fondoApuestalbl1, fondoApuestalbl2, fondoApuestalbl3, fondoApuestalbl4};
+
+        List<Jugador> jugadores = partida.getPartida().getJugadores();
+
+        // Recorrer los jugadores y actualizar el texto de su respectiva etiqueta
+        for (int i = 0; i < jugadores.size(); i++) {
+            Jugador jugador = jugadores.get(i);
+            etiquetasFondoApuesta[i].setText("Fondo de apuesta: " + jugador.getFondoApuesta());
+        }
+    }
+
+    private void pintarJugadores() {
+        // Obtener los jugadores configurados
+        List<Jugador> jugadores = partida.getPartida().getJugadores();
+
+        // Arreglos de etiquetas y paneles
+        JLabel[] etiquetasJugadores = {jugadorBlanco, jugadorAmarillo, jugadorNaranja, jugadorCafe};
+        JLabel[] fondoApuestaLabels = {fondoApuestalbl1, fondoApuestalbl2, fondoApuestalbl3, fondoApuestalbl4};
+        JPanel[] panels = {panelJ1, panelJ2, panelJ3, panelJ4};
+
+        // Recorrer los jugadores y actualizar etiquetas y visibilidad de paneles
+        for (int i = 0; i < panels.length; i++) {
+            if (i < jugadores.size()) {
+                Jugador jugador = jugadores.get(i);
+                panels[i].setVisible(true); // Mostrar panel del jugador
+                etiquetasJugadores[i].setText(jugador.getNombre()); // Actualizar el nombre del jugador
+                fondoApuestaLabels[i].setText("Fondo de apuesta: " + jugador.getFondoApuesta()); // Actualizar el fondo de apuesta
+                fondoApuestaLabels[i].setVisible(true); // Asegurarse de que la etiqueta de fondo esté visible
+            } else {
+                panels[i].setVisible(false); // Ocultar panel si no hay jugador
+                fondoApuestaLabels[i].setVisible(false); // Ocultar etiqueta de fondo si no hay jugador
+            }
+        }
     }
 
     private void btnLanzarCañasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLanzarCañasActionPerformed
@@ -572,7 +608,6 @@ public class PartidaFrm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Ficha3Naranja;
-    private javax.swing.JLabel JugadorCafe;
     private javax.swing.JButton btnLanzarCañas;
     private javax.swing.JPanel casillasAbajo;
     private javax.swing.JPanel casillasArriba;
@@ -620,6 +655,7 @@ public class PartidaFrm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel jugadorAmarillo;
     private javax.swing.JLabel jugadorBlanco;
+    private javax.swing.JLabel jugadorCafe;
     private javax.swing.JLabel jugadorNaranja;
     private javax.swing.JLabel lblApuesta;
     private javax.swing.JLabel lblTurno;
