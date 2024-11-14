@@ -4,15 +4,19 @@ import control.ControlConfigurarPartida;
 import control.ControlPartida;
 import control.IControlConfigurarPartida;
 import control.IControlPartida;
+import entidades.Casilla;
 import entidades.Jugador;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 /**
@@ -25,6 +29,7 @@ public class PartidaFrm extends javax.swing.JFrame {
     private IControlConfigurarPartida confPartida;
     private IControlPartida partida;
     private Jugador turnoActual;
+    private Map<Casilla, JLabel> casillaVistaMap = new HashMap<>();
 
     /**
      * Creates new form PartidaFrm
@@ -44,6 +49,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         pintarJugadores();
         pintarFichas();
         iniciarTurno();
+        vincularCasillasConVista(casillas);
 
         setApuesta(partida.getPartida().getApuesta());
     }
@@ -85,7 +91,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         return numeroAleatorio < 50;
     }
 
-    private void generarCañas() {
+    private int pintarCañas() {
         int casillasAvanzar = 0;
         JLabel[] cañas = {caña1, caña2, caña3, caña4, caña5};
         for (JLabel caña : cañas) {
@@ -98,30 +104,99 @@ public class PartidaFrm extends javax.swing.JFrame {
             }
         }
 
-        // Muestra el número total de casillas a avanzar
         System.out.println("Casillas a avanzar: " + casillasAvanzar);
+        return casillasAvanzar;
+    }
+
+    public void vincularCasillasConVista(List<JLabel> casillasVista) {
+        List<Casilla> casillasModelo = partida.getPartida().getCasillas();
+        int casillasPorAspa = confPartida.getCasillaPorAspa();
+
+        int[] indicesMapeo;
+        switch (casillasPorAspa) {
+            case 8:
+                indicesMapeo = new int[]{
+                    15, 13, 11, 9, 7, 5, 3, 1, 0,
+                    2, 4, 6, 8, 10, 12, 14, 64,
+                    55, 54, 53, 52, 51, 50, 49, 48,
+                    56, 57, 58, 59, 60, 61, 62, 63, 66,
+                    16, 18, 20, 22, 24, 26, 28, 30, 31, 29,
+                    27, 25, 23, 21, 19, 17, 67, 40,
+                    41, 42, 43, 44, 45, 46, 47, 39,
+                    38, 37, 36, 35, 34, 33, 32, 65
+                };
+                break;
+
+            case 10:
+                indicesMapeo = new int[]{
+                    19, 17, 15, 13, 11, 9, 7, 5, 3, 1, 0, 2, 4, 6, 8,
+                    10, 12, 14, 16, 18, 83,
+                    61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48,
+                    62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 82,
+                    20, 22, 24, 26, 28, 30, 32, 34, 35, 33, 31, 29, 27, 25, 23, 21, 84,
+                    80, 79, 78, 77, 76, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 81
+                };
+                break;
+
+            case 14:
+
+                indicesMapeo = new int[]{
+                    27, 25, 23, 21, 19, 17, 15, 13, 11, 9, 7, 5, 3, 1, 0,
+                    2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 112, 97,
+                    96, 95, 94, 93, 92, 91, 90, 89, 88, 87, 86, 85, 84, 88,
+                    99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 114, 28, 30,
+                    32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 55, 53, 51, 49,
+                    47, 45, 43, 41, 39, 37, 35, 33, 31, 29, 115, 70, 71, 72, 73, 74,
+                    75, 76, 77, 78, 79, 80, 81, 82, 83, 69, 68, 67, 66, 65, 64, 63, 62, 61, 60, 59, 58, 57, 56, 113
+
+                };
+                break;
+
+            default:
+                throw new IllegalArgumentException("Tamaño de casillas por aspa no soportado: " + casillasPorAspa);
+        }
+
+        // Crear el mapeo entre el modelo y la vista basado en el arreglo de índices
+        for (int i = 0; i < casillasModelo.size(); i++) {
+            int indiceVista = indicesMapeo[i];
+            casillaVistaMap.put(casillasModelo.get(i), casillasVista.get(indiceVista));
+        }
+    }
+
+    public void actualizarVistaCasilla(Casilla casilla) {
+        JLabel casillaLabel = casillaVistaMap.get(casilla);
+        if (casillaLabel != null) {
+            if (casilla.getOcupadoPor() != null) {
+                casillaLabel.setBackground(Color.BLUE); // Cambiar el color según el estado
+            } else {
+                casillaLabel.setBackground(Color.WHITE); // Restablecer si está vacía
+            }
+        }
+
     }
 
     private void generarTablero() {
-        pintarTablero(casillasArriba, confPartida.getCasillaPorAspa(), 2, false);
-        pintarTablero(casillasAbajo, confPartida.getCasillaPorAspa(), 2, true);
-        pintarTablero(casillasDer, 2, confPartida.getCasillaPorAspa(), true);
-        pintarTablero(casillasIzq, 2, confPartida.getCasillaPorAspa(), false);
-        pintarTablero(casillasCentrales, 2, 2, true);
+        int contadorCasillas = 1; // Contador para enumerar todas las casillas
+        contadorCasillas = pintarTablero(casillasArriba, confPartida.getCasillaPorAspa(), 2, false, contadorCasillas);
+        contadorCasillas = pintarTablero(casillasAbajo, confPartida.getCasillaPorAspa(), 2, true, contadorCasillas);
+        contadorCasillas = pintarTablero(casillasDer, 2, confPartida.getCasillaPorAspa(), true, contadorCasillas);
+        contadorCasillas = pintarTablero(casillasIzq, 2, confPartida.getCasillaPorAspa(), false, contadorCasillas);
+        pintarTablero(casillasCentrales, 2, 2, true, contadorCasillas);
     }
 
-    private void pintarTablero(JPanel tablero, int filas, int columnas, boolean invertir) {
+    private int pintarTablero(JPanel tablero, int filas, int columnas, boolean invertir, int contadorCasillas) {
         tablero.setLayout(new GridLayout(filas, columnas));
         tablero.setPreferredSize(tablero.getSize());
         tablero.setMinimumSize(tablero.getSize());
         tablero.setMaximumSize(tablero.getSize());
 
         for (int i = 1; i <= filas * columnas; i++) {
-            JLabel label = new JLabel("");
+            JLabel label = new JLabel(String.valueOf(contadorCasillas), SwingConstants.CENTER); // Etiqueta con el número de casilla
             label.setBorder(new LineBorder(Color.BLACK, 1));
             label.setOpaque(true);
             label.setBackground(Color.WHITE);
 
+            // Colorear las casillas de acuerdo con su posición
             if (filas * columnas > 6) {
                 if (invertir) {
                     if (columnas > filas) {
@@ -169,9 +244,11 @@ public class PartidaFrm extends javax.swing.JFrame {
             }
 
             tablero.add(label);
-            casillas.add(label);
+            casillas.add(label); // Añadir el JLabel al listado general de casillas
+            contadorCasillas++; // Incrementar el contador para el siguiente JLabel
         }
 
+        return contadorCasillas; // Retornar el contador actualizado para la siguiente sección del tablero
     }
 
     /**
@@ -483,6 +560,7 @@ public class PartidaFrm extends javax.swing.JFrame {
 
         casillasDer.setBackground(new java.awt.Color(0, 51, 102));
         casillasDer.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        casillasDer.setPreferredSize(new java.awt.Dimension(196, 102));
 
         javax.swing.GroupLayout casillasDerLayout = new javax.swing.GroupLayout(casillasDer);
         casillasDer.setLayout(casillasDerLayout);
@@ -492,10 +570,10 @@ public class PartidaFrm extends javax.swing.JFrame {
         );
         casillasDerLayout.setVerticalGroup(
             casillasDerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 98, Short.MAX_VALUE)
         );
 
-        jPanel1.add(casillasDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(563, 251, -1, -1));
+        jPanel1.add(casillasDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(563, 251, -1, 100));
 
         jLabel2.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -594,7 +672,18 @@ public class PartidaFrm extends javax.swing.JFrame {
     }
 
     private void btnLanzarCañasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLanzarCañasActionPerformed
-        generarCañas();
+        int resultado = pintarCañas();
+        if (resultado == 1) {
+            partida.reiniciarFicha(turnoActual.getFichas().get(1));
+            actualizarVistaCasilla(turnoActual.getFichas().get(1).getCasillaActual());
+            for (Casilla casilla : partida.getPartida().getCasillas()) {
+                String ocupadaPor = (casilla.getOcupadoPor() != null)
+                        ? casilla.getOcupadoPor().getJugador().getNombre()
+                        : "no ocupado";
+                System.out.println("numC: " + casilla.getNumCasilla() + " tipo: " + casilla.getTipo() + " ocupadaPor: " + ocupadaPor);
+            }
+
+        }
         cambiarTurno();
     }//GEN-LAST:event_btnLanzarCañasActionPerformed
 
