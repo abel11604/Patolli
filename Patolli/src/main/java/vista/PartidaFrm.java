@@ -5,6 +5,7 @@ import control.ControlPartida;
 import control.IControlConfigurarPartida;
 import control.IControlPartida;
 import entidades.Casilla;
+import entidades.Ficha;
 import entidades.Jugador;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -30,6 +31,11 @@ public class PartidaFrm extends javax.swing.JFrame {
     private IControlPartida partida;
     private Jugador turnoActual;
     private Map<Casilla, JLabel> casillaVistaMap = new HashMap<>();
+    private JLabel[] fichasBlanco;
+    private JLabel[] fichasAmarillo;
+    private JLabel[] fichasNaranja;
+    private JLabel[] fichasCafe;
+    private Map<Ficha, JLabel> fichaLabelMap = new HashMap<>();
 
     /**
      * Creates new form PartidaFrm
@@ -47,208 +53,13 @@ public class PartidaFrm extends javax.swing.JFrame {
         casillas = new ArrayList<>();
         generarTablero();
         pintarJugadores();
+        inicializarFichas();
         pintarFichas();
-        iniciarTurno();
+        vincularFichasConVista(partida.getPartida().getJugadores());
         vincularCasillasConVista(casillas);
-
         setApuesta(partida.getPartida().getApuesta());
-    }
+        iniciarTurno();
 
-    private void pintarFichas() {
-        if (confPartida.getNumFichas() == 2) {
-            ficha6Blanco.setVisible(false);
-            ficha5Blanco.setVisible(false);
-            ficha4Blanco.setVisible(false);
-            ficha3Blanco.setVisible(false);
-            ficha6Amarillo.setVisible(false);
-            ficha5Amarillo.setVisible(false);
-            ficha4Amarillo.setVisible(false);
-            ficha3Amarillo.setVisible(false);
-            ficha6Naranja.setVisible(false);
-            ficha5Naranja.setVisible(false);
-            ficha4Naranja.setVisible(false);
-            Ficha3Naranja.setVisible(false);
-            ficha3Cafe.setVisible(false);
-            ficha4Cafe.setVisible(false);
-            ficha5Cafe.setVisible(false);
-            ficha6Cafe.setVisible(false);
-        }
-        if (confPartida.getNumFichas() == 4) {
-            ficha5Blanco.setVisible(false);
-            ficha6Blanco.setVisible(false);
-            ficha6Amarillo.setVisible(false);
-            ficha5Amarillo.setVisible(false);
-            ficha5Naranja.setVisible(false);
-            ficha6Naranja.setVisible(false);
-            ficha6Cafe.setVisible(false);
-            ficha5Cafe.setVisible(false);
-        }
-    }
-
-    public static boolean darVerdaderoFalso() {
-        Random random = new Random();
-        int numeroAleatorio = random.nextInt(100);
-        return numeroAleatorio < 50;
-    }
-
-    private int pintarCañas() {
-        int casillasAvanzar = 0;
-        JLabel[] cañas = {caña1, caña2, caña3, caña4, caña5};
-        for (JLabel caña : cañas) {
-            boolean resultado = darVerdaderoFalso();
-            if (resultado) {
-                caña.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/punto.png")));
-                casillasAvanzar++; // Incrementa el contador si es true
-            } else {
-                caña.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cañaLisa.png")));
-            }
-        }
-
-        System.out.println("Casillas a avanzar: " + casillasAvanzar);
-        return casillasAvanzar;
-    }
-
-    public void vincularCasillasConVista(List<JLabel> casillasVista) {
-        List<Casilla> casillasModelo = partida.getPartida().getCasillas();
-        int casillasPorAspa = confPartida.getCasillaPorAspa();
-
-        int[] indicesMapeo;
-        switch (casillasPorAspa) {
-            case 8:
-                indicesMapeo = new int[]{
-                    15, 13, 11, 9, 7, 5, 3, 1, 0,
-                    2, 4, 6, 8, 10, 12, 14, 64,
-                    55, 54, 53, 52, 51, 50, 49, 48,
-                    56, 57, 58, 59, 60, 61, 62, 63, 66,
-                    16, 18, 20, 22, 24, 26, 28, 30, 31, 29,
-                    27, 25, 23, 21, 19, 17, 67, 40,
-                    41, 42, 43, 44, 45, 46, 47, 39,
-                    38, 37, 36, 35, 34, 33, 32, 65
-                };
-                break;
-
-            case 10:
-                indicesMapeo = new int[]{
-                    19, 17, 15, 13, 11, 9, 7, 5, 3, 1, 0, 2, 4, 6, 8,
-                    10, 12, 14, 16, 18, 83,
-                    61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48,
-                    62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 82,
-                    20, 22, 24, 26, 28, 30, 32, 34, 35, 33, 31, 29, 27, 25, 23, 21, 84,
-                    80, 79, 78, 77, 76, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 81
-                };
-                break;
-
-            case 14:
-
-                indicesMapeo = new int[]{
-                    27, 25, 23, 21, 19, 17, 15, 13, 11, 9, 7, 5, 3, 1, 0,
-                    2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 112, 97,
-                    96, 95, 94, 93, 92, 91, 90, 89, 88, 87, 86, 85, 84, 88,
-                    99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 114, 28, 30,
-                    32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 55, 53, 51, 49,
-                    47, 45, 43, 41, 39, 37, 35, 33, 31, 29, 115, 70, 71, 72, 73, 74,
-                    75, 76, 77, 78, 79, 80, 81, 82, 83, 69, 68, 67, 66, 65, 64, 63, 62, 61, 60, 59, 58, 57, 56, 113
-
-                };
-                break;
-
-            default:
-                throw new IllegalArgumentException("Tamaño de casillas por aspa no soportado: " + casillasPorAspa);
-        }
-
-        // Crear el mapeo entre el modelo y la vista basado en el arreglo de índices
-        for (int i = 0; i < casillasModelo.size(); i++) {
-            int indiceVista = indicesMapeo[i];
-            casillaVistaMap.put(casillasModelo.get(i), casillasVista.get(indiceVista));
-        }
-    }
-
-    public void actualizarVistaCasilla(Casilla casilla) {
-        JLabel casillaLabel = casillaVistaMap.get(casilla);
-        if (casillaLabel != null) {
-            if (casilla.getOcupadoPor() != null) {
-                casillaLabel.setBackground(Color.BLUE); // Cambiar el color según el estado
-            } else {
-                casillaLabel.setBackground(Color.WHITE); // Restablecer si está vacía
-            }
-        }
-
-    }
-
-    private void generarTablero() {
-        int contadorCasillas = 1; // Contador para enumerar todas las casillas
-        contadorCasillas = pintarTablero(casillasArriba, confPartida.getCasillaPorAspa(), 2, false, contadorCasillas);
-        contadorCasillas = pintarTablero(casillasAbajo, confPartida.getCasillaPorAspa(), 2, true, contadorCasillas);
-        contadorCasillas = pintarTablero(casillasDer, 2, confPartida.getCasillaPorAspa(), true, contadorCasillas);
-        contadorCasillas = pintarTablero(casillasIzq, 2, confPartida.getCasillaPorAspa(), false, contadorCasillas);
-        pintarTablero(casillasCentrales, 2, 2, true, contadorCasillas);
-    }
-
-    private int pintarTablero(JPanel tablero, int filas, int columnas, boolean invertir, int contadorCasillas) {
-        tablero.setLayout(new GridLayout(filas, columnas));
-        tablero.setPreferredSize(tablero.getSize());
-        tablero.setMinimumSize(tablero.getSize());
-        tablero.setMaximumSize(tablero.getSize());
-
-        for (int i = 1; i <= filas * columnas; i++) {
-            JLabel label = new JLabel(String.valueOf(contadorCasillas), SwingConstants.CENTER); // Etiqueta con el número de casilla
-            label.setBorder(new LineBorder(Color.BLACK, 1));
-            label.setOpaque(true);
-            label.setBackground(Color.WHITE);
-
-            // Colorear las casillas de acuerdo con su posición
-            if (filas * columnas > 6) {
-                if (invertir) {
-                    if (columnas > filas) {
-                        if (i == columnas + 1) {
-                            label.setBackground(Color.YELLOW);
-                        }
-                    } else {
-                        if (i == 1) {
-                            label.setBackground(Color.YELLOW);
-                        }
-                    }
-                } else {
-                    if (columnas > filas) {
-                        if (i == columnas) {
-                            label.setBackground(Color.YELLOW);
-                        }
-                    } else {
-                        if (i == filas * columnas) {
-                            label.setBackground(Color.YELLOW);
-                        }
-                    }
-                }
-
-                if (invertir) {
-                    if (columnas > filas) {
-                        if (i == columnas - 3 || i == columnas * filas - 3) {
-                            label.setBackground(Color.RED);
-                        }
-                    } else {
-                        if (i == filas * columnas - 7 || i == filas * columnas - 6) {
-                            label.setBackground(Color.RED);
-                        }
-                    }
-                } else {
-                    if (columnas > filas) {
-                        if (i == 4 || i == columnas + 4) {
-                            label.setBackground(Color.RED);
-                        }
-                    } else {
-                        if (i == 7 || i == 8) {
-                            label.setBackground(Color.RED);
-                        }
-                    }
-                }
-            }
-
-            tablero.add(label);
-            casillas.add(label); // Añadir el JLabel al listado general de casillas
-            contadorCasillas++; // Incrementar el contador para el siguiente JLabel
-        }
-
-        return contadorCasillas; // Retornar el contador actualizado para la siguiente sección del tablero
     }
 
     /**
@@ -265,42 +76,42 @@ public class PartidaFrm extends javax.swing.JFrame {
         jugadorBlanco = new javax.swing.JLabel();
         fondoApuestalbl1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        ficha1Blanco = new javax.swing.JLabel();
-        ficha2Blanco = new javax.swing.JLabel();
-        ficha3Blanco = new javax.swing.JLabel();
-        ficha6Blanco = new javax.swing.JLabel();
-        ficha4Blanco = new javax.swing.JLabel();
-        ficha5Blanco = new javax.swing.JLabel();
+        ficha1J1 = new javax.swing.JLabel();
+        ficha2J1 = new javax.swing.JLabel();
+        ficha3J1 = new javax.swing.JLabel();
+        ficha6J1 = new javax.swing.JLabel();
+        ficha4J1 = new javax.swing.JLabel();
+        ficha5J1 = new javax.swing.JLabel();
         panelJ3 = new javax.swing.JPanel();
         jugadorNaranja = new javax.swing.JLabel();
         fondoApuestalbl3 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        ficha1Naranja = new javax.swing.JLabel();
-        ficha2Naranja = new javax.swing.JLabel();
-        Ficha3Naranja = new javax.swing.JLabel();
-        ficha4Naranja = new javax.swing.JLabel();
-        ficha5Naranja = new javax.swing.JLabel();
-        ficha6Naranja = new javax.swing.JLabel();
+        ficha1J3 = new javax.swing.JLabel();
+        ficha2J3 = new javax.swing.JLabel();
+        ficha3J3 = new javax.swing.JLabel();
+        ficha4J3 = new javax.swing.JLabel();
+        ficha5J3 = new javax.swing.JLabel();
+        ficha6J3 = new javax.swing.JLabel();
         panelJ2 = new javax.swing.JPanel();
         jugadorAmarillo = new javax.swing.JLabel();
         fondoApuestalbl2 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        ficha1Amarillo = new javax.swing.JLabel();
-        ficha2Amarillo = new javax.swing.JLabel();
-        ficha3Amarillo = new javax.swing.JLabel();
-        ficha6Amarillo = new javax.swing.JLabel();
-        ficha5Amarillo = new javax.swing.JLabel();
-        ficha4Amarillo = new javax.swing.JLabel();
+        ficha1J2 = new javax.swing.JLabel();
+        ficha2J2 = new javax.swing.JLabel();
+        ficha3J2 = new javax.swing.JLabel();
+        ficha6J2 = new javax.swing.JLabel();
+        ficha5J2 = new javax.swing.JLabel();
+        ficha4J2 = new javax.swing.JLabel();
         panelJ4 = new javax.swing.JPanel();
         jugadorCafe = new javax.swing.JLabel();
         fondoApuestalbl4 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        ficha1Cafe = new javax.swing.JLabel();
-        ficha2Cafe = new javax.swing.JLabel();
-        ficha3Cafe = new javax.swing.JLabel();
-        ficha6Cafe = new javax.swing.JLabel();
-        ficha5Cafe = new javax.swing.JLabel();
-        ficha4Cafe = new javax.swing.JLabel();
+        ficha1J4 = new javax.swing.JLabel();
+        ficha2J4 = new javax.swing.JLabel();
+        ficha3J4 = new javax.swing.JLabel();
+        ficha6J4 = new javax.swing.JLabel();
+        ficha5J4 = new javax.swing.JLabel();
+        ficha4J4 = new javax.swing.JLabel();
         caña1 = new javax.swing.JLabel();
         caña2 = new javax.swing.JLabel();
         caña3 = new javax.swing.JLabel();
@@ -341,23 +152,23 @@ public class PartidaFrm extends javax.swing.JFrame {
         jLabel4.setText("Fichas:");
         panelJ1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 76, -1, -1));
 
-        ficha1Blanco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
-        panelJ1.add(ficha1Blanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 76, -1, -1));
+        ficha1J1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
+        panelJ1.add(ficha1J1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 76, -1, -1));
 
-        ficha2Blanco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
-        panelJ1.add(ficha2Blanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(104, 76, -1, -1));
+        ficha2J1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
+        panelJ1.add(ficha2J1, new org.netbeans.lib.awtextra.AbsoluteConstraints(104, 76, -1, -1));
 
-        ficha3Blanco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
-        panelJ1.add(ficha3Blanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 76, -1, -1));
+        ficha3J1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
+        panelJ1.add(ficha3J1, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 76, -1, -1));
 
-        ficha6Blanco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
-        panelJ1.add(ficha6Blanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 112, -1, -1));
+        ficha6J1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
+        panelJ1.add(ficha6J1, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 112, -1, -1));
 
-        ficha4Blanco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
-        panelJ1.add(ficha4Blanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 112, -1, -1));
+        ficha4J1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
+        panelJ1.add(ficha4J1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 112, -1, -1));
 
-        ficha5Blanco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
-        panelJ1.add(ficha5Blanco, new org.netbeans.lib.awtextra.AbsoluteConstraints(104, 112, -1, -1));
+        ficha5J1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaDos.png"))); // NOI18N
+        panelJ1.add(ficha5J1, new org.netbeans.lib.awtextra.AbsoluteConstraints(104, 112, -1, -1));
 
         jPanel1.add(panelJ1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 160));
 
@@ -377,23 +188,23 @@ public class PartidaFrm extends javax.swing.JFrame {
         jLabel7.setText("Fichas:");
         panelJ3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 76, -1, -1));
 
-        ficha1Naranja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
-        panelJ3.add(ficha1Naranja, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 76, -1, -1));
+        ficha1J3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
+        panelJ3.add(ficha1J3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 76, -1, -1));
 
-        ficha2Naranja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
-        panelJ3.add(ficha2Naranja, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 76, -1, -1));
+        ficha2J3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
+        panelJ3.add(ficha2J3, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 76, -1, -1));
 
-        Ficha3Naranja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
-        panelJ3.add(Ficha3Naranja, new org.netbeans.lib.awtextra.AbsoluteConstraints(136, 76, -1, -1));
+        ficha3J3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
+        panelJ3.add(ficha3J3, new org.netbeans.lib.awtextra.AbsoluteConstraints(136, 76, -1, -1));
 
-        ficha4Naranja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
-        panelJ3.add(ficha4Naranja, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 114, -1, -1));
+        ficha4J3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
+        panelJ3.add(ficha4J3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 114, -1, -1));
 
-        ficha5Naranja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
-        panelJ3.add(ficha5Naranja, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 114, -1, -1));
+        ficha5J3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
+        panelJ3.add(ficha5J3, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 114, -1, -1));
 
-        ficha6Naranja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
-        panelJ3.add(ficha6Naranja, new org.netbeans.lib.awtextra.AbsoluteConstraints(136, 114, -1, -1));
+        ficha6J3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaCuatro.png"))); // NOI18N
+        panelJ3.add(ficha6J3, new org.netbeans.lib.awtextra.AbsoluteConstraints(136, 114, -1, -1));
 
         jPanel1.add(panelJ3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, -1, 160));
 
@@ -413,23 +224,23 @@ public class PartidaFrm extends javax.swing.JFrame {
         jLabel10.setText("Fichas:");
         panelJ2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 76, -1, -1));
 
-        ficha1Amarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
-        panelJ2.add(ficha1Amarillo, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 76, -1, -1));
+        ficha1J2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
+        panelJ2.add(ficha1J2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 76, -1, -1));
 
-        ficha2Amarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
-        panelJ2.add(ficha2Amarillo, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 76, -1, -1));
+        ficha2J2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
+        panelJ2.add(ficha2J2, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 76, -1, -1));
 
-        ficha3Amarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
-        panelJ2.add(ficha3Amarillo, new org.netbeans.lib.awtextra.AbsoluteConstraints(136, 76, -1, -1));
+        ficha3J2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
+        panelJ2.add(ficha3J2, new org.netbeans.lib.awtextra.AbsoluteConstraints(136, 76, -1, -1));
 
-        ficha6Amarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
-        panelJ2.add(ficha6Amarillo, new org.netbeans.lib.awtextra.AbsoluteConstraints(136, 114, -1, -1));
+        ficha6J2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
+        panelJ2.add(ficha6J2, new org.netbeans.lib.awtextra.AbsoluteConstraints(136, 114, -1, -1));
 
-        ficha5Amarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
-        panelJ2.add(ficha5Amarillo, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 114, -1, -1));
+        ficha5J2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
+        panelJ2.add(ficha5J2, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 114, -1, -1));
 
-        ficha4Amarillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
-        panelJ2.add(ficha4Amarillo, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 114, -1, -1));
+        ficha4J2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaTres.png"))); // NOI18N
+        panelJ2.add(ficha4J2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 114, -1, -1));
 
         jPanel1.add(panelJ2, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 0, 200, 160));
 
@@ -448,23 +259,23 @@ public class PartidaFrm extends javax.swing.JFrame {
         jLabel13.setText("Fichas:");
         panelJ4.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 74, -1, -1));
 
-        ficha1Cafe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
-        panelJ4.add(ficha1Cafe, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 74, -1, -1));
+        ficha1J4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
+        panelJ4.add(ficha1J4, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 74, -1, -1));
 
-        ficha2Cafe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
-        panelJ4.add(ficha2Cafe, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 74, -1, -1));
+        ficha2J4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
+        panelJ4.add(ficha2J4, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 74, -1, -1));
 
-        ficha3Cafe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
-        panelJ4.add(ficha3Cafe, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 74, -1, -1));
+        ficha3J4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
+        panelJ4.add(ficha3J4, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 74, -1, -1));
 
-        ficha6Cafe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
-        panelJ4.add(ficha6Cafe, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 112, -1, -1));
+        ficha6J4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
+        panelJ4.add(ficha6J4, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 112, -1, -1));
 
-        ficha5Cafe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
-        panelJ4.add(ficha5Cafe, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 112, -1, -1));
+        ficha5J4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
+        panelJ4.add(ficha5J4, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 112, -1, -1));
 
-        ficha4Cafe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
-        panelJ4.add(ficha4Cafe, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 112, -1, -1));
+        ficha4J4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fichaUno.png"))); // NOI18N
+        panelJ4.add(ficha4J4, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 112, -1, -1));
 
         jPanel1.add(panelJ4, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 420, 200, 160));
 
@@ -687,6 +498,248 @@ public class PartidaFrm extends javax.swing.JFrame {
         cambiarTurno();
     }//GEN-LAST:event_btnLanzarCañasActionPerformed
 
+    private void pintarFichas() {
+        int numFichas = confPartida.getNumFichas();
+
+        // Actualizar fichas para cada jugador según el número de fichas configurado
+        actualizarVisibilidadFichas(fichasBlanco, numFichas);
+        actualizarVisibilidadFichas(fichasAmarillo, numFichas);
+        actualizarVisibilidadFichas(fichasNaranja, numFichas);
+        actualizarVisibilidadFichas(fichasCafe, numFichas);
+    }
+
+    public static boolean darVerdaderoFalso() {
+        Random random = new Random();
+        int numeroAleatorio = random.nextInt(100);
+        return numeroAleatorio < 50;
+    }
+
+    private int pintarCañas() {
+        int casillasAvanzar = 0;
+        JLabel[] cañas = {caña1, caña2, caña3, caña4, caña5};
+        for (JLabel caña : cañas) {
+            boolean resultado = darVerdaderoFalso();
+            if (resultado) {
+                caña.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/punto.png")));
+                casillasAvanzar++; // Incrementa el contador si es true
+            } else {
+                caña.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cañaLisa.png")));
+            }
+        }
+
+        System.out.println("Casillas a avanzar: " + casillasAvanzar);
+        return casillasAvanzar;
+    }
+
+    public void vincularCasillasConVista(List<JLabel> casillasVista) {
+        List<Casilla> casillasModelo = partida.getPartida().getCasillas();
+        int casillasPorAspa = confPartida.getCasillaPorAspa();
+
+        int[] indicesMapeo;
+        switch (casillasPorAspa) {
+            case 8:
+                indicesMapeo = new int[]{
+                    15, 13, 11, 9, 7, 5, 3, 1, 0,
+                    2, 4, 6, 8, 10, 12, 14, 64,
+                    55, 54, 53, 52, 51, 50, 49, 48,
+                    56, 57, 58, 59, 60, 61, 62, 63, 66,
+                    16, 18, 20, 22, 24, 26, 28, 30, 31, 29,
+                    27, 25, 23, 21, 19, 17, 67, 40,
+                    41, 42, 43, 44, 45, 46, 47, 39,
+                    38, 37, 36, 35, 34, 33, 32, 65
+                };
+                break;
+
+            case 10:
+                indicesMapeo = new int[]{
+                    19, 17, 15, 13, 11, 9, 7, 5, 3, 1, 0, 2, 4, 6, 8,
+                    10, 12, 14, 16, 18, 83,
+                    61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48,
+                    62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 82,
+                    20, 22, 24, 26, 28, 30, 32, 34, 35, 33, 31, 29, 27, 25, 23, 21, 84,
+                    80, 79, 78, 77, 76, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 81
+                };
+                break;
+
+            case 14:
+
+                indicesMapeo = new int[]{
+                    27, 25, 23, 21, 19, 17, 15, 13, 11, 9, 7, 5, 3, 1, 0,
+                    2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 112, 97,
+                    96, 95, 94, 93, 92, 91, 90, 89, 88, 87, 86, 85, 84, 88,
+                    99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 114, 28, 30,
+                    32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 55, 53, 51, 49,
+                    47, 45, 43, 41, 39, 37, 35, 33, 31, 29, 115, 70, 71, 72, 73, 74,
+                    75, 76, 77, 78, 79, 80, 81, 82, 83, 69, 68, 67, 66, 65, 64, 63, 62, 61, 60, 59, 58, 57, 56, 113
+
+                };
+                break;
+
+            default:
+                throw new IllegalArgumentException("Tamaño de casillas por aspa no soportado: " + casillasPorAspa);
+        }
+
+        // Crear el mapeo entre el modelo y la vista basado en el arreglo de índices
+        for (int i = 0; i < casillasModelo.size(); i++) {
+            int indiceVista = indicesMapeo[i];
+            casillaVistaMap.put(casillasModelo.get(i), casillasVista.get(indiceVista));
+        }
+    }
+
+    public void actualizarVistaCasilla(Casilla casilla) {
+        JLabel casillaLabel = casillaVistaMap.get(casilla);
+        if (casillaLabel != null) {
+            // Si hay una ficha en la casilla
+            if (casilla.getOcupadoPor() != null) {
+                Ficha ficha = casilla.getOcupadoPor();
+                JLabel fichaLabel = fichaLabelMap.get(ficha);
+                if (fichaLabel.isVisible() == true) {
+                    System.out.println("si es visible el label de la ficha");
+                }
+                if (fichaLabel != null) {
+                    // Remover la ficha de su casilla anterior
+                    if (fichaLabel.getParent() != null) {
+                        fichaLabel.getParent().remove(fichaLabel);
+                    }
+
+                    // Configurar layout para permitir posicionamiento manual
+                    casillaLabel.setLayout(null);
+
+                    // Configurar tamaño y posición de la ficha dentro de la casilla
+                    fichaLabel.setSize(20, 20); // Tamaño de la ficha
+                    fichaLabel.setLocation(5, 5); // Posición dentro de la casilla
+
+                    // Agregar la ficha a la nueva casilla
+                    casillaLabel.add(fichaLabel);
+                    casillaLabel.revalidate();
+                    casillaLabel.repaint();
+                }
+            } else {
+                // Si la casilla está vacía, simplemente restablece su fondo a blanco
+                casillaLabel.setBackground(Color.WHITE);
+                casillaLabel.revalidate();
+                casillaLabel.repaint();
+            }
+        }
+
+    }
+
+    private void generarTablero() {
+        int contadorCasillas = 1; // Contador para enumerar todas las casillas
+        contadorCasillas = pintarTablero(casillasArriba, confPartida.getCasillaPorAspa(), 2, false, contadorCasillas);
+        contadorCasillas = pintarTablero(casillasAbajo, confPartida.getCasillaPorAspa(), 2, true, contadorCasillas);
+        contadorCasillas = pintarTablero(casillasDer, 2, confPartida.getCasillaPorAspa(), true, contadorCasillas);
+        contadorCasillas = pintarTablero(casillasIzq, 2, confPartida.getCasillaPorAspa(), false, contadorCasillas);
+        pintarTablero(casillasCentrales, 2, 2, true, contadorCasillas);
+    }
+
+    private int pintarTablero(JPanel tablero, int filas, int columnas, boolean invertir, int contadorCasillas) {
+        tablero.setLayout(new GridLayout(filas, columnas));
+        tablero.setPreferredSize(tablero.getSize());
+        tablero.setMinimumSize(tablero.getSize());
+        tablero.setMaximumSize(tablero.getSize());
+
+        for (int i = 1; i <= filas * columnas; i++) {
+            JLabel label = new JLabel(String.valueOf(contadorCasillas), SwingConstants.CENTER); // Etiqueta con el número de casilla
+            label.setBorder(new LineBorder(Color.BLACK, 1));
+            label.setOpaque(true);
+            label.setBackground(Color.WHITE);
+
+            // Colorear las casillas de acuerdo con su posición
+            if (filas * columnas > 6) {
+                if (invertir) {
+                    if (columnas > filas) {
+                        if (i == columnas + 1) {
+                            label.setBackground(Color.YELLOW);
+                        }
+                    } else {
+                        if (i == 1) {
+                            label.setBackground(Color.YELLOW);
+                        }
+                    }
+                } else {
+                    if (columnas > filas) {
+                        if (i == columnas) {
+                            label.setBackground(Color.YELLOW);
+                        }
+                    } else {
+                        if (i == filas * columnas) {
+                            label.setBackground(Color.YELLOW);
+                        }
+                    }
+                }
+
+                if (invertir) {
+                    if (columnas > filas) {
+                        if (i == columnas - 3 || i == columnas * filas - 3) {
+                            label.setBackground(Color.RED);
+                        }
+                    } else {
+                        if (i == filas * columnas - 7 || i == filas * columnas - 6) {
+                            label.setBackground(Color.RED);
+                        }
+                    }
+                } else {
+                    if (columnas > filas) {
+                        if (i == 4 || i == columnas + 4) {
+                            label.setBackground(Color.RED);
+                        }
+                    } else {
+                        if (i == 7 || i == 8) {
+                            label.setBackground(Color.RED);
+                        }
+                    }
+                }
+            }
+
+            tablero.add(label);
+            casillas.add(label); // Añadir el JLabel al listado general de casillas
+            contadorCasillas++; // Incrementar el contador para el siguiente JLabel
+        }
+
+        return contadorCasillas; // Retornar el contador actualizado para la siguiente sección del tablero
+    }
+
+    private void inicializarFichas() {
+        // Inicializar arrays de JLabels para cada jugador
+        fichasBlanco = new JLabel[]{ficha1J1, ficha2J1, ficha3J1, ficha4J1, ficha5J1, ficha6J1};
+        fichasAmarillo = new JLabel[]{ficha1J2, ficha2J2, ficha3J2, ficha4J2, ficha5J2, ficha6J2};
+        fichasNaranja = new JLabel[]{ficha1J3, ficha2J3, ficha3J3, ficha4J3, ficha5J3, ficha6J3};
+        fichasCafe = new JLabel[]{ficha1J4, ficha2J4, ficha3J4, ficha4J4, ficha5J4, ficha6J4};
+    }
+
+    private void actualizarVisibilidadFichas(JLabel[] fichas, int numFichas) {
+        for (int i = 0; i < fichas.length; i++) {
+            fichas[i].setVisible(i < numFichas);
+        }
+    }
+
+    private void asociarFichasConLabels(Jugador jugador, JLabel[] labels) {
+        List<Ficha> fichas = jugador.getFichas();
+
+        // Asociar cada ficha del jugador con su JLabel correspondiente
+        for (int i = 0; i < fichas.size() && i < labels.length; i++) {
+            fichaLabelMap.put(fichas.get(i), labels[i]);
+        }
+    }
+
+    private void vincularFichasConVista(List<Jugador> jugadores) {
+        // Arreglos de JLabel para cada jugador en la vista 
+        // Asociar las fichas de cada jugador con sus correspondientes JLabel
+        if (jugadores.size() >= 1) {
+            asociarFichasConLabels(jugadores.get(0), fichasBlanco);
+        }
+        if (jugadores.size() >= 2) {
+            asociarFichasConLabels(jugadores.get(1), fichasAmarillo);
+        }
+        if (jugadores.size() >= 3) {
+            asociarFichasConLabels(jugadores.get(2), fichasNaranja);
+        }
+        if (jugadores.size() >= 4) {
+            asociarFichasConLabels(jugadores.get(3), fichasCafe);
+        }
+    }
+
     public void mostrarPantalla() {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -696,7 +749,6 @@ public class PartidaFrm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Ficha3Naranja;
     private javax.swing.JButton btnLanzarCañas;
     private javax.swing.JPanel casillasAbajo;
     private javax.swing.JPanel casillasArriba;
@@ -708,29 +760,30 @@ public class PartidaFrm extends javax.swing.JFrame {
     private javax.swing.JLabel caña3;
     private javax.swing.JLabel caña4;
     private javax.swing.JLabel caña5;
-    private javax.swing.JLabel ficha1Amarillo;
-    private javax.swing.JLabel ficha1Blanco;
-    private javax.swing.JLabel ficha1Cafe;
-    private javax.swing.JLabel ficha1Naranja;
-    private javax.swing.JLabel ficha2Amarillo;
-    private javax.swing.JLabel ficha2Blanco;
-    private javax.swing.JLabel ficha2Cafe;
-    private javax.swing.JLabel ficha2Naranja;
-    private javax.swing.JLabel ficha3Amarillo;
-    private javax.swing.JLabel ficha3Blanco;
-    private javax.swing.JLabel ficha3Cafe;
-    private javax.swing.JLabel ficha4Amarillo;
-    private javax.swing.JLabel ficha4Blanco;
-    private javax.swing.JLabel ficha4Cafe;
-    private javax.swing.JLabel ficha4Naranja;
-    private javax.swing.JLabel ficha5Amarillo;
-    private javax.swing.JLabel ficha5Blanco;
-    private javax.swing.JLabel ficha5Cafe;
-    private javax.swing.JLabel ficha5Naranja;
-    private javax.swing.JLabel ficha6Amarillo;
-    private javax.swing.JLabel ficha6Blanco;
-    private javax.swing.JLabel ficha6Cafe;
-    private javax.swing.JLabel ficha6Naranja;
+    private javax.swing.JLabel ficha1J1;
+    private javax.swing.JLabel ficha1J2;
+    private javax.swing.JLabel ficha1J3;
+    private javax.swing.JLabel ficha1J4;
+    private javax.swing.JLabel ficha2J1;
+    private javax.swing.JLabel ficha2J2;
+    private javax.swing.JLabel ficha2J3;
+    private javax.swing.JLabel ficha2J4;
+    private javax.swing.JLabel ficha3J1;
+    private javax.swing.JLabel ficha3J2;
+    private javax.swing.JLabel ficha3J3;
+    private javax.swing.JLabel ficha3J4;
+    private javax.swing.JLabel ficha4J1;
+    private javax.swing.JLabel ficha4J2;
+    private javax.swing.JLabel ficha4J3;
+    private javax.swing.JLabel ficha4J4;
+    private javax.swing.JLabel ficha5J1;
+    private javax.swing.JLabel ficha5J2;
+    private javax.swing.JLabel ficha5J3;
+    private javax.swing.JLabel ficha5J4;
+    private javax.swing.JLabel ficha6J1;
+    private javax.swing.JLabel ficha6J2;
+    private javax.swing.JLabel ficha6J3;
+    private javax.swing.JLabel ficha6J4;
     private javax.swing.JLabel fondoApuestalbl1;
     private javax.swing.JLabel fondoApuestalbl2;
     private javax.swing.JLabel fondoApuestalbl3;

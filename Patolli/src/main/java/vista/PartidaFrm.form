@@ -105,7 +105,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha1Blanco">
+            <Component class="javax.swing.JLabel" name="ficha1J1">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaDos.png"/>
@@ -117,7 +117,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha2Blanco">
+            <Component class="javax.swing.JLabel" name="ficha2J1">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaDos.png"/>
@@ -129,7 +129,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha3Blanco">
+            <Component class="javax.swing.JLabel" name="ficha3J1">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaDos.png"/>
@@ -141,7 +141,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha6Blanco">
+            <Component class="javax.swing.JLabel" name="ficha6J1">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaDos.png"/>
@@ -153,7 +153,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha4Blanco">
+            <Component class="javax.swing.JLabel" name="ficha4J1">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaDos.png"/>
@@ -165,7 +165,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha5Blanco">
+            <Component class="javax.swing.JLabel" name="ficha5J1">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaDos.png"/>
@@ -239,7 +239,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha1Naranja">
+            <Component class="javax.swing.JLabel" name="ficha1J3">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaCuatro.png"/>
@@ -251,7 +251,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha2Naranja">
+            <Component class="javax.swing.JLabel" name="ficha2J3">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaCuatro.png"/>
@@ -263,7 +263,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="Ficha3Naranja">
+            <Component class="javax.swing.JLabel" name="ficha3J3">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaCuatro.png"/>
@@ -275,7 +275,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha4Naranja">
+            <Component class="javax.swing.JLabel" name="ficha4J3">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaCuatro.png"/>
@@ -287,7 +287,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha5Naranja">
+            <Component class="javax.swing.JLabel" name="ficha5J3">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaCuatro.png"/>
@@ -299,7 +299,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha6Naranja">
+            <Component class="javax.swing.JLabel" name="ficha6J3">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaCuatro.png"/>
@@ -373,7 +373,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha1Amarillo">
+            <Component class="javax.swing.JLabel" name="ficha1J2">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaTres.png"/>
@@ -385,7 +385,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha2Amarillo">
+            <Component class="javax.swing.JLabel" name="ficha2J2">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaTres.png"/>
@@ -397,7 +397,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha3Amarillo">
+            <Component class="javax.swing.JLabel" name="ficha3J2">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaTres.png"/>
@@ -409,7 +409,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha6Amarillo">
+            <Component class="javax.swing.JLabel" name="ficha6J2">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaTres.png"/>
@@ -421,7 +421,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha5Amarillo">
+            <Component class="javax.swing.JLabel" name="ficha5J2">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaTres.png"/>
@@ -433,7 +433,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha4Amarillo">
+            <Component class="javax.swing.JLabel" name="ficha4J2">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaTres.png"/>
@@ -502,7 +502,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha1Cafe">
+            <Component class="javax.swing.JLabel" name="ficha1J4">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaUno.png"/>
@@ -514,7 +514,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha2Cafe">
+            <Component class="javax.swing.JLabel" name="ficha2J4">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaUno.png"/>
@@ -526,7 +526,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha3Cafe">
+            <Component class="javax.swing.JLabel" name="ficha3J4">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaUno.png"/>
@@ -538,7 +538,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha6Cafe">
+            <Component class="javax.swing.JLabel" name="ficha6J4">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaUno.png"/>
@@ -550,7 +550,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha5Cafe">
+            <Component class="javax.swing.JLabel" name="ficha5J4">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaUno.png"/>
@@ -562,7 +562,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="ficha4Cafe">
+            <Component class="javax.swing.JLabel" name="ficha4J4">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/img/fichaUno.png"/>
