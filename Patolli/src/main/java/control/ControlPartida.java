@@ -1,9 +1,9 @@
 package control;
 
-import entidades.Casilla;
-import entidades.Ficha;
-import entidades.Juego;
-import entidades.Jugador;
+import dominio.Casilla;
+import dominio.Ficha;
+import dominio.Juego;
+import dominio.Jugador;
 
 /**
  * Clase que implementa el control de la partida del juego, manejando las
@@ -120,13 +120,13 @@ public class ControlPartida implements IControlPartida {
        String tipoInicial = "";
     switch (ficha.getJugador().getColor().toLowerCase()) { // Convertir a minúsculas para mayor consistencia
         case "blanco" ->
-            tipoInicial = "inicialJ1";
+            tipoInicial = "inicialBlanco";
         case "amarillo" ->
-            tipoInicial = "inicialJ2";
+            tipoInicial = "inicialAmarillo";
         case "naranja" ->
-            tipoInicial = "inicialJ3";
+            tipoInicial = "inicialNaranja";
         case "cafe" ->
-            tipoInicial = "inicialJ4";
+            tipoInicial = "inicialCafe";
     }
 
     for (Casilla casilla : partida.getCasillas()) {

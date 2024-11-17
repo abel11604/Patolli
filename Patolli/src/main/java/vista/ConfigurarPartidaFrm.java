@@ -325,7 +325,6 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         establecerCasillas();
         establecerNumFichas();
         establecerApuestas();
-        System.out.println(confPartida.getNumFichas());
         this.dispose();
         nav.mostrarListaDeEspera();
     }//GEN-LAST:event_btnCrearPartidaActionPerformed

@@ -5,9 +5,9 @@
  */
 package control;
 
-import entidades.Ficha;
-import entidades.Juego;
-import entidades.Jugador;
+import dominio.Ficha;
+import dominio.Juego;
+import dominio.Jugador;
 
 /**
  * Interface para el control de una partida en el juego.

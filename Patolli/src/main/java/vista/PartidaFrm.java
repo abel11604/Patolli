@@ -4,11 +4,14 @@ import control.ControlConfigurarPartida;
 import control.ControlPartida;
 import control.IControlConfigurarPartida;
 import control.IControlPartida;
-import entidades.Casilla;
-import entidades.Ficha;
-import entidades.Jugador;
+import dominio.Casilla;
+import dominio.Ficha;
+import dominio.Jugador;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
 /**
@@ -58,6 +62,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         vincularFichasConVista(partida.getPartida().getJugadores());
         vincularCasillasConVista(casillas);
         setApuesta(partida.getPartida().getApuesta());
+
         iniciarTurno();
 
     }
@@ -312,14 +317,14 @@ public class PartidaFrm extends javax.swing.JFrame {
         casillasCentrales.setLayout(casillasCentralesLayout);
         casillasCentralesLayout.setHorizontalGroup(
             casillasCentralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         casillasCentralesLayout.setVerticalGroup(
             casillasCentralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel1.add(casillasCentrales, new org.netbeans.lib.awtextra.AbsoluteConstraints(455, 251, 102, 102));
+        jPanel1.add(casillasCentrales, new org.netbeans.lib.awtextra.AbsoluteConstraints(455, 251, 110, 102));
 
         casillasAbajo.setBackground(new java.awt.Color(0, 51, 102));
         casillasAbajo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -328,14 +333,14 @@ public class PartidaFrm extends javax.swing.JFrame {
         casillasAbajo.setLayout(casillasAbajoLayout);
         casillasAbajoLayout.setHorizontalGroup(
             casillasAbajoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         casillasAbajoLayout.setVerticalGroup(
             casillasAbajoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel1.add(casillasAbajo, new org.netbeans.lib.awtextra.AbsoluteConstraints(455, 359, -1, -1));
+        jPanel1.add(casillasAbajo, new org.netbeans.lib.awtextra.AbsoluteConstraints(455, 359, 110, 200));
 
         casillasIzq.setBackground(new java.awt.Color(0, 51, 102));
         casillasIzq.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -344,14 +349,14 @@ public class PartidaFrm extends javax.swing.JFrame {
         casillasIzq.setLayout(casillasIzqLayout);
         casillasIzqLayout.setHorizontalGroup(
             casillasIzqLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         casillasIzqLayout.setVerticalGroup(
             casillasIzqLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel1.add(casillasIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(253, 251, -1, 102));
+        jPanel1.add(casillasIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(233, 251, 220, 102));
 
         casillasArriba.setBackground(new java.awt.Color(0, 51, 102));
         casillasArriba.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -360,14 +365,14 @@ public class PartidaFrm extends javax.swing.JFrame {
         casillasArriba.setLayout(casillasArribaLayout);
         casillasArribaLayout.setHorizontalGroup(
             casillasArribaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         casillasArribaLayout.setVerticalGroup(
             casillasArribaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel1.add(casillasArriba, new org.netbeans.lib.awtextra.AbsoluteConstraints(455, 49, 102, -1));
+        jPanel1.add(casillasArriba, new org.netbeans.lib.awtextra.AbsoluteConstraints(455, 49, 110, 200));
 
         casillasDer.setBackground(new java.awt.Color(0, 51, 102));
         casillasDer.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -377,14 +382,14 @@ public class PartidaFrm extends javax.swing.JFrame {
         casillasDer.setLayout(casillasDerLayout);
         casillasDerLayout.setHorizontalGroup(
             casillasDerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         casillasDerLayout.setVerticalGroup(
             casillasDerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 98, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel1.add(casillasDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(563, 251, -1, 100));
+        jPanel1.add(casillasDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 250, 220, 100));
 
         jLabel2.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -483,19 +488,40 @@ public class PartidaFrm extends javax.swing.JFrame {
     }
 
     private void btnLanzarCañasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLanzarCañasActionPerformed
-        int resultado = pintarCañas();
-        if (resultado == 1) {
-            partida.reiniciarFicha(turnoActual.getFichas().get(1));
-            actualizarVistaCasilla(turnoActual.getFichas().get(1).getCasillaActual());
-            for (Casilla casilla : partida.getPartida().getCasillas()) {
-                String ocupadaPor = (casilla.getOcupadoPor() != null)
-                        ? casilla.getOcupadoPor().getJugador().getNombre()
-                        : "no ocupado";
-                System.out.println("numC: " + casilla.getNumCasilla() + " tipo: " + casilla.getTipo() + " ocupadaPor: " + ocupadaPor);
-            }
+        btnLanzarCañas.setEnabled(false); // Desactivar el botón al inicio de la acción
 
+        int resultado = pintarCañas(); // Número de casillas a avanzar
+
+        if (resultado != 1) {
+            iluminarFichasMovibles(turnoActual, resultado);
+            return; // No cambiar el turno aquí, lo hará al mover la ficha
         }
-        cambiarTurno();
+
+        // Intentar colocar una ficha en la casilla inicial
+        List<Ficha> fichasJugador = turnoActual.getFichas();
+        Ficha fichaParaIngresar = fichasJugador.stream()
+                .filter(ficha -> ficha.getCasillaActual() == null)
+                .findFirst()
+                .orElse(null);
+
+        String tipoCasillaInicial = "inicial" + turnoActual.getColor();
+        Casilla casillaInicial = partida.getPartida().getCasillas().stream()
+                .filter(casilla -> casilla.getTipo().equalsIgnoreCase(tipoCasillaInicial))
+                .findFirst()
+                .orElse(null);
+
+        if (casillaInicial != null && fichaParaIngresar != null && casillaInicial.getOcupadoPor() == null) {
+            partida.reiniciarFicha(fichaParaIngresar);
+            actualizarVistaCasilla(fichaParaIngresar.getCasillaActual());
+            cambiarTurno(); // Cambio de turno porque la acción termina aquí
+            btnLanzarCañas.setEnabled(true); // Reactivar el botón después del cambio de turno
+            imprimirEstadoCasillas(); // Debugging: Verifica el estado de las casillas
+            return;
+        }
+
+        // Si no se puede colocar la ficha, iluminar las fichas movibles
+        iluminarFichasMovibles(turnoActual, resultado);
+
     }//GEN-LAST:event_btnLanzarCañasActionPerformed
 
     private void pintarFichas() {
@@ -506,6 +532,19 @@ public class PartidaFrm extends javax.swing.JFrame {
         actualizarVisibilidadFichas(fichasAmarillo, numFichas);
         actualizarVisibilidadFichas(fichasNaranja, numFichas);
         actualizarVisibilidadFichas(fichasCafe, numFichas);
+    }
+
+    public void imprimirEstadoCasillas() {
+        System.out.println("---- Estado de las Casillas ----");
+        for (Casilla casilla : partida.getPartida().getCasillas()) {
+            String ocupadaPor = (casilla.getOcupadoPor() != null)
+                    ? casilla.getOcupadoPor().getJugador().getNombre()
+                    : "no ocupado";
+            System.out.println("Casilla: " + casilla.getNumCasilla()
+                    + ", Tipo: " + casilla.getTipo()
+                    + ", Ocupada por: " + ocupadaPor);
+        }
+        System.out.println("--------------------------------");
     }
 
     public static boolean darVerdaderoFalso() {
@@ -553,11 +592,11 @@ public class PartidaFrm extends javax.swing.JFrame {
             case 10:
                 indicesMapeo = new int[]{
                     19, 17, 15, 13, 11, 9, 7, 5, 3, 1, 0, 2, 4, 6, 8,
-                    10, 12, 14, 16, 18, 83,
-                    61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48,
-                    62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 82,
-                    20, 22, 24, 26, 28, 30, 32, 34, 35, 33, 31, 29, 27, 25, 23, 21, 84,
-                    80, 79, 78, 77, 76, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 81
+                    10, 12, 14, 16, 18, 80,
+                    69, 68, 67, 66, 65, 64, 63, 62, 61, 60, 70, 71, 72, 73,
+                    74, 75, 76, 77, 78, 79, 82, 20, 22, 24, 26, 28, 30, 32, 34,
+                    36, 38, 39, 37, 35, 33, 31, 29, 27, 25, 23, 21, 83, 50, 51, 52, 53,
+                    54, 55, 56, 57, 58, 59, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 81
                 };
                 break;
 
@@ -593,9 +632,7 @@ public class PartidaFrm extends javax.swing.JFrame {
             if (casilla.getOcupadoPor() != null) {
                 Ficha ficha = casilla.getOcupadoPor();
                 JLabel fichaLabel = fichaLabelMap.get(ficha);
-                if (fichaLabel.isVisible() == true) {
-                    System.out.println("si es visible el label de la ficha");
-                }
+
                 if (fichaLabel != null) {
                     // Remover la ficha de su casilla anterior
                     if (fichaLabel.getParent() != null) {
@@ -611,15 +648,16 @@ public class PartidaFrm extends javax.swing.JFrame {
 
                     // Agregar la ficha a la nueva casilla
                     casillaLabel.add(fichaLabel);
-                    casillaLabel.revalidate();
-                    casillaLabel.repaint();
                 }
             } else {
                 // Si la casilla está vacía, simplemente restablece su fondo a blanco
                 casillaLabel.setBackground(Color.WHITE);
-                casillaLabel.revalidate();
-                casillaLabel.repaint();
             }
+
+            // Forzar la actualización de la casilla y de toda la interfaz gráfica
+            casillaLabel.revalidate();
+            casillaLabel.repaint();
+            SwingUtilities.updateComponentTreeUI(casillaLabel.getParent());
         }
 
     }
@@ -737,6 +775,63 @@ public class PartidaFrm extends javax.swing.JFrame {
         }
         if (jugadores.size() >= 4) {
             asociarFichasConLabels(jugadores.get(3), fichasCafe);
+        }
+    }
+
+    private void iluminarFichasMovibles(Jugador jugador, int numCasillas) {
+         boolean hayFichasMovibles = false; // Bandera para verificar si hay fichas que se pueden mover
+
+    for (Ficha ficha : jugador.getFichas()) {
+        Casilla casillaActual = ficha.getCasillaActual();
+
+        if (casillaActual != null) {
+            int posicionActual = partida.getPartida().getCasillas().indexOf(casillaActual);
+            int nuevaPosicion = posicionActual + numCasillas;
+
+            if (nuevaPosicion < partida.getPartida().getCasillas().size()) {
+                Casilla casillaDestino = partida.getPartida().getCasillas().get(nuevaPosicion);
+
+                if (casillaDestino.getOcupadoPor() == null || !casillaDestino.getOcupadoPor().getJugador().equals(jugador)) {
+                    JLabel fichaLabel = fichaLabelMap.get(ficha);
+
+                    if (fichaLabel != null) {
+                        hayFichasMovibles = true; // Hay al menos una ficha movible
+
+                        fichaLabel.setOpaque(true);
+                        fichaLabel.setBackground(Color.GREEN);
+
+                        fichaLabel.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent e) {
+                                partida.avanzarCasillas(numCasillas, ficha);
+                                actualizarVistaCasilla(ficha.getCasillaActual());
+                                desiluminarFichas();
+                                cambiarTurno();
+                                btnLanzarCañas.setEnabled(true);
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    // Si no hay fichas movibles, pasar el turno al siguiente jugador
+    if (!hayFichasMovibles) {
+        cambiarTurno();
+        btnLanzarCañas.setEnabled(true);
+    }
+    }
+
+    private void desiluminarFichas() {
+        for (Map.Entry<Ficha, JLabel> entry : fichaLabelMap.entrySet()) {
+            JLabel fichaLabel = entry.getValue();
+            // Restablecer el color original de las fichas
+            fichaLabel.setBackground(null);
+            // Eliminar todos los listeners para evitar clics posteriores
+            for (MouseListener listener : fichaLabel.getMouseListeners()) {
+                fichaLabel.removeMouseListener(listener);
+            }
         }
     }
 

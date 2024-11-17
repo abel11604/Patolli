@@ -6,9 +6,9 @@ package vista;
 
 import control.ControlConfigurarPartida;
 import control.IControlConfigurarPartida;
-import entidades.Casilla;
-import entidades.Ficha;
-import entidades.Jugador;
+import dominio.Casilla;
+import dominio.Ficha;
+import dominio.Jugador;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -258,10 +258,10 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
             jugadores.add(crearJugador(jugadorAmarillolbl.getText(), "Amarillo", confPartida.getFondo()));
 
             if (naranjaPanel.isVisible()) {
-                jugadores.add(crearJugador("Naranja", jugadorNaranjalbl.getText(), confPartida.getFondo()));
+                jugadores.add(crearJugador( jugadorNaranjalbl.getText(),"Naranja", confPartida.getFondo()));
 
                 if (cafePanel.isVisible()) {
-                    jugadores.add(crearJugador("Café", jugadorCafelbl.getText(), confPartida.getFondo()));
+                    jugadores.add(crearJugador( jugadorCafelbl.getText(),"Cafe", confPartida.getFondo()));
                 }
             }
         }
