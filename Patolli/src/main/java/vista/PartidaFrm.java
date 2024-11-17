@@ -778,50 +778,54 @@ public class PartidaFrm extends javax.swing.JFrame {
         }
     }
 
-    private void iluminarFichasMovibles(Jugador jugador, int numCasillas) {
-         boolean hayFichasMovibles = false; // Bandera para verificar si hay fichas que se pueden mover
+private void iluminarFichasMovibles(Jugador jugador, int numCasillas) {
+    boolean hayFichasMovibles = false; // Bandera para verificar si hay fichas que se pueden mover
 
     for (Ficha ficha : jugador.getFichas()) {
         Casilla casillaActual = ficha.getCasillaActual();
 
         if (casillaActual != null) {
             int posicionActual = partida.getPartida().getCasillas().indexOf(casillaActual);
-            int nuevaPosicion = posicionActual + numCasillas;
+            
+            // Calcular la nueva posición usando módulo para asegurar un tablero circular
+            int nuevaPosicion = (posicionActual + numCasillas) % partida.getPartida().getCasillas().size();
 
-            if (nuevaPosicion < partida.getPartida().getCasillas().size()) {
-                Casilla casillaDestino = partida.getPartida().getCasillas().get(nuevaPosicion);
+            Casilla casillaDestino = partida.getPartida().getCasillas().get(nuevaPosicion);
 
-                if (casillaDestino.getOcupadoPor() == null || !casillaDestino.getOcupadoPor().getJugador().equals(jugador)) {
-                    JLabel fichaLabel = fichaLabelMap.get(ficha);
+            // Verificar si la casilla destino no está ocupada por una ficha del mismo jugador
+            if (casillaDestino.getOcupadoPor() == null || !casillaDestino.getOcupadoPor().getJugador().equals(jugador)) {
+                JLabel fichaLabel = fichaLabelMap.get(ficha);
 
-                    if (fichaLabel != null) {
-                        hayFichasMovibles = true; // Hay al menos una ficha movible
+                if (fichaLabel != null) {
+                    hayFichasMovibles = true; // Hay al menos una ficha movible
 
-                        fichaLabel.setOpaque(true);
-                        fichaLabel.setBackground(Color.GREEN);
+                    // Cambiar el color de fondo para mostrar que la ficha es seleccionable
+                    fichaLabel.setOpaque(true);
+                    fichaLabel.setBackground(Color.GREEN);
 
-                        fichaLabel.addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mouseClicked(MouseEvent e) {
-                                partida.avanzarCasillas(numCasillas, ficha);
-                                actualizarVistaCasilla(ficha.getCasillaActual());
-                                desiluminarFichas();
-                                cambiarTurno();
-                                btnLanzarCañas.setEnabled(true);
-                            }
-                        });
-                    }
+                    // Agregar un listener para manejar el clic en la ficha
+                    fichaLabel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            partida.avanzarCasillas(numCasillas, ficha); // Avanzar la ficha
+                            actualizarVistaCasilla(ficha.getCasillaActual());
+                            desiluminarFichas(); // Desiluminar todas las fichas después del movimiento
+                            cambiarTurno(); // Pasar el turno al siguiente jugador
+                            btnLanzarCañas.setEnabled(true); // Reactivar el botón de lanzar cañas
+                        }
+                    });
                 }
             }
         }
     }
 
-    // Si no hay fichas movibles, pasar el turno al siguiente jugador
+    // Si no hay fichas movibles, pasar el turno automáticamente
     if (!hayFichasMovibles) {
         cambiarTurno();
-        btnLanzarCañas.setEnabled(true);
+        btnLanzarCañas.setEnabled(true); // Reactivar el botón para el siguiente jugador
     }
-    }
+}
+
 
     private void desiluminarFichas() {
         for (Map.Entry<Ficha, JLabel> entry : fichaLabelMap.entrySet()) {
