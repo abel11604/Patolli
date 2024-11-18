@@ -40,7 +40,10 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         SpinnerNumberModel cantidadModel = new SpinnerNumberModel(0, 0, null, 100);
         apuestaSpinner.setModel(cantidadModel);
         apuestaSpinner.setEditor(new JSpinner.NumberEditor(apuestaSpinner, "#"));
-
+        JSpinner.DefaultEditor fondoEditor = (JSpinner.DefaultEditor) fondoApuestaSpinner.getEditor();
+        fondoEditor.getTextField().setEditable(false);
+        JSpinner.DefaultEditor apuestaEditor = (JSpinner.DefaultEditor) apuestaSpinner.getEditor();
+        apuestaEditor.getTextField().setEditable(false);
     }
 
     /**
@@ -97,9 +100,9 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-                .addGap(17, 17, 17))
+                .addGap(25, 25, 25)
+                .addComponent(jLabel2)
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 100));
@@ -143,7 +146,7 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Bodoni MT", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Tamaño del tablero(num. de casillas)");
+        jLabel4.setText("TAMAÑO DEL TABLERO (NO. DE CASILLAS)");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 40));
 
         fichaRadioButton2.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N

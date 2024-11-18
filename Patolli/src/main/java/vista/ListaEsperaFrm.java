@@ -64,6 +64,7 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(700, 477));
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 51, 102));
 

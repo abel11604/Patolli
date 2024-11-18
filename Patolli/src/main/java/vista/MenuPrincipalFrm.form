@@ -154,7 +154,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Bienvenido a Patolli, el juego de la suerte de la cultura mesoamericana."/>
+            <Property name="text" type="java.lang.String" value="Bienvenido a Patolli, el juego de la suerte de la cultura prehisp&#xe1;nica."/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">

@@ -104,7 +104,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Bienvenido a Patolli, el juego de la suerte de la cultura mesoamericana.");
+        jLabel3.setText("Bienvenido a Patolli, el juego de la suerte de la cultura prehispánica.");
 
         jLabel4.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -149,17 +149,18 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUnirmeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnirmeActionPerformed
-        // TODO add your handling code here:
+        nav.mostrarUnirsePartida();
+        dispose();
     }//GEN-LAST:event_btnUnirmeActionPerformed
 
     private void btnInstruccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInstruccionesActionPerformed
-          this.dispose();
+        dispose();
         IntruccionesDlg instrucciones = new IntruccionesDlg(this, true);
         instrucciones.setVisible(true);
     }//GEN-LAST:event_btnInstruccionesActionPerformed
 
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
-       this.dispose();
+       dispose();
        nav.QuieroUnasConfiguracioneeees();
     }//GEN-LAST:event_btnCrearPartidaActionPerformed
 

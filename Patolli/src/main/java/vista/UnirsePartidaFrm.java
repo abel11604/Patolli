@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package vista;
 
 /**
@@ -10,11 +6,14 @@ package vista;
  */
 public class UnirsePartidaFrm extends javax.swing.JFrame {
 
+    ControlNavegacion nav;
     /**
      * Creates new form unirsePartidaFrm
      */
     public UnirsePartidaFrm() {
         initComponents();
+        configuraCodigoPartida();
+        this.nav = ControlNavegacion.getInstance();
     }
 
     /**
@@ -26,54 +25,169 @@ public class UnirsePartidaFrm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        panelRound2 = new vista.PanelRound();
+        jLabel3 = new javax.swing.JLabel();
+        txtNombreJugador = new javax.swing.JTextField();
+        panelRound1 = new vista.PanelRound();
+        jLabel1 = new javax.swing.JLabel();
+        txtCodigoPartida = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        btnRegresar = new javax.swing.JButton();
+        btnUnirse = new javax.swing.JButton();
+        lblFondo = new javax.swing.JLabel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        panelRound2.setBackground(new java.awt.Color(0, 51, 102));
+        panelRound2.setRoundBottomLeft(15);
+        panelRound2.setRoundBottomRight(15);
+        panelRound2.setRoundTopLeft(15);
+        panelRound2.setRoundTopRight(15);
+
+        jLabel3.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(213, 198, 86));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("NOMBRE DE JUGADOR");
+
+        txtNombreJugador.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
+        txtNombreJugador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreJugadorActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelRound2Layout = new javax.swing.GroupLayout(panelRound2);
+        panelRound2.setLayout(panelRound2Layout);
+        panelRound2Layout.setHorizontalGroup(
+            panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(panelRound2Layout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addComponent(txtNombreJugador, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(59, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        panelRound2Layout.setVerticalGroup(
+            panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRound2Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtNombreJugador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
+
+        getContentPane().add(panelRound2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 290, 340, -1));
+
+        panelRound1.setBackground(new java.awt.Color(0, 51, 102));
+        panelRound1.setRoundBottomLeft(15);
+        panelRound1.setRoundBottomRight(15);
+        panelRound1.setRoundTopLeft(15);
+        panelRound1.setRoundTopRight(15);
+
+        jLabel1.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(213, 198, 86));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("CÓDIGO DE PARTIDA");
+
+        txtCodigoPartida.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
+        txtCodigoPartida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoPartidaActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelRound1Layout = new javax.swing.GroupLayout(panelRound1);
+        panelRound1.setLayout(panelRound1Layout);
+        panelRound1Layout.setHorizontalGroup(
+            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(panelRound1Layout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addComponent(txtCodigoPartida, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(59, Short.MAX_VALUE))
+        );
+        panelRound1Layout.setVerticalGroup(
+            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRound1Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtCodigoPartida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(panelRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 140, 340, -1));
+
+        jLabel2.setBackground(new java.awt.Color(221, 209, 121));
+        jLabel2.setFont(new java.awt.Font("Bodoni MT", 1, 48)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(213, 198, 86));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("UNIRSE A PARTIDA");
+        jLabel2.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 700, -1));
+
+        btnRegresar.setBackground(new java.awt.Color(213, 198, 86));
+        btnRegresar.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
+        btnRegresar.setText("Regresar");
+        btnRegresar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 450, 140, -1));
+
+        btnUnirse.setBackground(new java.awt.Color(213, 198, 86));
+        btnUnirse.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
+        btnUnirse.setText("Unirse");
+        btnUnirse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(btnUnirse, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 450, 140, -1));
+
+        lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fondoUnirse.png"))); // NOI18N
+        getContentPane().add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, 730, 550));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UnirsePartidaFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UnirsePartidaFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UnirsePartidaFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UnirsePartidaFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void txtCodigoPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoPartidaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodigoPartidaActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new UnirsePartidaFrm().setVisible(true);
+    private void txtNombreJugadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreJugadorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreJugadorActionPerformed
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        nav.mostrarMenu();
+        dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void configuraCodigoPartida() {
+        txtCodigoPartida.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                if (!Character.isDigit(c)) {
+                    evt.consume(); 
+                }
             }
         });
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnUnirse;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel lblFondo;
+    private vista.PanelRound panelRound1;
+    private vista.PanelRound panelRound2;
+    private javax.swing.JTextField txtCodigoPartida;
+    private javax.swing.JTextField txtNombreJugador;
     // End of variables declaration//GEN-END:variables
 }

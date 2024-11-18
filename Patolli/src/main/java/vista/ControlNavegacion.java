@@ -1,13 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package vista;
-
-import vista.ConfigurarPartidaFrm;
-import vista.ListaEsperaFrm;
-import vista.MenuPrincipalFrm;
-import vista.PartidaFrm;
 
 /**
  *
@@ -30,18 +21,22 @@ public class ControlNavegacion {
     }
 
     public void QuieroUnasConfiguracioneeees() {
-       
-            ConfigurarPartidaFrm configurar = new ConfigurarPartidaFrm();
-            configurar.mostrarPantalla();
-        }
-    
-    public void mostrarListaDeEspera(){
-        ListaEsperaFrm listaEspera =new ListaEsperaFrm();
+        ConfigurarPartidaFrm configurar = new ConfigurarPartidaFrm();
+        configurar.mostrarPantalla();
+    }
+
+    public void mostrarListaDeEspera() {
+        ListaEsperaFrm listaEspera = new ListaEsperaFrm();
         listaEspera.mostrarPantalla();
     }
-    
-    public void mostrarPantallaJuego(){
-        PartidaFrm partida=new PartidaFrm();
+
+    public void mostrarPantallaJuego() {
+        PartidaFrm partida = new PartidaFrm();
         partida.mostrarPantalla();
+    }
+    
+    public void mostrarUnirsePartida(){
+        UnirsePartidaFrm unirse = new UnirsePartidaFrm();
+        unirse.setVisible(true);
     }
 }
