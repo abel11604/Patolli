@@ -1,0 +1,12 @@
+dominio\Partida.class
+negocio\PartidaLogicaBO.class
+comunicacion\HandlerActions.class
+dominio\Casilla.class
+dominio\Ficha.class
+comunicacion\ClientHandler.class
+comunicacion\Servidor.class
+negocio\CrearPartidaBO.class
+comunicacion\ClientManager.class
+dominio\Jugador.class
+comunicacion\MessageUtil.class
+negocio\GestionarPartidaBO.class
