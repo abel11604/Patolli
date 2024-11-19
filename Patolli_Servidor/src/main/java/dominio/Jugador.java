@@ -88,4 +88,13 @@ public class Jugador {
     public void setFondoApuesta(int fondoApuesta) {
         this.fondoApuesta = fondoApuesta;
     }
+    
+    public Ficha getFichaById(String idFicha) {
+    for (Ficha ficha : fichas) {
+        if (ficha.getId().equals(idFicha)) {
+            return ficha;
+        }
+    }
+    throw new IllegalArgumentException("No se encontró una ficha con el ID: " + idFicha);
+}
 }

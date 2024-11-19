@@ -6,9 +6,9 @@ package vista;
 
 import control.ControlConfigurarPartida;
 import control.IControlConfigurarPartida;
-import dominio.Casilla;
-import dominio.Ficha;
-import dominio.Jugador;
+import modelo.Casilla;
+import modelo.Ficha;
+import modelo.Jugador;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;

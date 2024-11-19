@@ -11,13 +11,14 @@ import org.msgpack.core.MessagePack;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Map;
+
 /**
  *
  * @author abelc
  */
 public class MessageUtil {
-       
-        public static void enviarMensaje(Socket clientSocket, Map<String, Object> mensajeMap) {
+
+    public static void enviarMensaje(Socket clientSocket, Map<String, Object> mensajeMap) {
         try {
             // Convertir el Map a una cadena JSON usando Jackson
             ObjectMapper objectMapper = new ObjectMapper();

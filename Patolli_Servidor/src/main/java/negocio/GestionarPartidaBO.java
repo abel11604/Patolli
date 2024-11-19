@@ -9,6 +9,8 @@ import dominio.Partida;
 import dominio.Ficha;
 import comunicacion.ClientManager;
 import comunicacion.MessageUtil;
+import enums.EstadosPartida;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -86,7 +88,7 @@ public class GestionarPartidaBO {
         partida.getJugadores().add(nuevoJugador);
 
         ClientManager.addClient(ClientManager.getClientSocket(clientId), clientId, nuevoJugador);
-
+         System.out.println("si me uni we"+nombre+codigoAcceso);
         return Map.of(
                 "accion", "UNIRSE_PARTIDA",
                 "codigoAcceso", codigoAcceso,
@@ -97,54 +99,59 @@ public class GestionarPartidaBO {
     }
 
     /**
- * Inicia una partida cuando el host lo decide.
- *
- * @param data Datos enviados por el cliente en un HashMap (clave-valor).
- * @param clientId Identificador del cliente host que inicia la partida.
- * @return Respuesta indicando que la partida ha iniciado.
- */
-public Map<String, Object> iniciarPartida(Map<String, Object> data, String clientId) {
-    // Validar que el cliente está conectado
-    validarCliente(clientId);
+     * Inicia una partida cuando el host lo decide.
+     *
+     * @param data Datos enviados por el cliente en un HashMap (clave-valor).
+     * @param clientId Identificador del cliente host que inicia la partida.
+     * @return Respuesta indicando que la partida ha iniciado.
+     */
+    public Map<String, Object> iniciarPartida(Map<String, Object> data, String clientId) {
+        // Validar que el cliente está conectado
+        validarCliente(clientId);
 
-    // Extraer datos del mapa
-    String codigoAcceso = (String) data.get("codigoAcceso");
+        // Extraer datos del mapa
+        String codigoAcceso = (String) data.get("codigoAcceso");
 
-    // Validar que la partida existe
-    Partida partida = partidasActivas.get(codigoAcceso);
-    if (partida == null) {
-        throw new IllegalArgumentException("No existe una partida con el código proporcionado.");
+        // Validar que la partida existe
+        Partida partida = partidasActivas.get(codigoAcceso);
+        if (partida == null) {
+            throw new IllegalArgumentException("No existe una partida con el código proporcionado.");
+        }
+
+        // Validar que el cliente es el host
+        Jugador host = partida.getJugadores().get(0); // El primer jugador es el host
+        if (!host.getId().equals(clientId)) {
+            throw new IllegalStateException("Solo el host puede iniciar la partida.");
+        }
+
+        // Cambiar el estado de la partida a activa
+        partida.setEstado(EstadosPartida.ACTIVA);
+
+        // Crear mensaje de notificación para todos los jugadores
+        Map<String, Object> mensaje = Map.of(
+                "accion", "PARTIDA_INICIADA",
+                "codigoAcceso", codigoAcceso,
+                "mensaje", "La partida ha comenzado."
+        );
+
+        // Enviar el mensaje a todos los jugadores
+        for (Jugador jugador : partida.getJugadores()) {
+            Socket clientSocket = ClientManager.getClientSocket(jugador.getId());
+            if (clientSocket != null) {
+                MessageUtil.enviarMensaje(clientSocket, mensaje);
+            } else {
+                System.err.println("No se encontró un socket para el jugador con ID: " + jugador.getId());
+            }
+        }
+
+        // Respuesta para el cliente host
+        return Map.of(
+                "accion", "PARTIDA_INICIADA",
+                "estado", "ACTIVA",
+                "mensaje", "La partida ha sido iniciada exitosamente."
+        );
     }
 
-    // Validar que el cliente es el host
-    Jugador host = partida.getJugadores().get(0); // El primer jugador es el host
-    if (!host.getId().equals(clientId)) {
-        throw new IllegalStateException("Solo el host puede iniciar la partida.");
-    }
-
-    // Cambiar el estado de la partida a activa
-    partida.setEstado(true);
-
-    // Crear mensaje de notificación para todos los jugadores
-    Map<String, Object> mensaje = Map.of(
-        "accion", "PARTIDA_INICIADA",
-        "codigoAcceso", codigoAcceso,
-        "mensaje", "La partida ha comenzado."
-    );
-
-    // Enviar el mensaje a todos los jugadores
-    for (Jugador jugador : partida.getJugadores()) {
-//        MessageUtil.enviarMensaje(jugador.getId(), mensaje);
-    }
-
-    // Respuesta para el cliente host
-    return Map.of(
-        "accion", "PARTIDA_INICIADA",
-        "estado", "ACTIVA",
-        "mensaje", "La partida ha sido iniciada exitosamente."
-    );
-}
-    
     /**
      * Valida si un cliente está conectado al servidor.
      *
@@ -185,8 +192,11 @@ public Map<String, Object> iniciarPartida(Map<String, Object> data, String clien
      */
     private List<Ficha> crearFichas(int numFichas, Jugador jugador) {
         List<Ficha> fichas = new ArrayList<>();
-        for (int i = 0; i < numFichas; i++) {
-            fichas.add(new Ficha(null, jugador));
+        String color = jugador.getColor().toLowerCase(); // Convertir color a minúsculas para consistencia
+
+        for (int i = 1; i <= numFichas; i++) {
+            String idFicha = "f" + i + color.substring(0, 1).toUpperCase() + color.substring(1); // Ej: f1Blanco
+            fichas.add(new Ficha(idFicha, null, jugador));
         }
         return fichas;
     }

@@ -4,6 +4,7 @@
  */
 package dominio;
 
+import enums.EstadosPartida;
 import java.util.List;
 
 /**
@@ -15,17 +16,20 @@ public class Partida {
     private List<Jugador> jugadores;
     private List<Casilla> casillas;
     private int apuesta;
-    private Boolean estado;
+    private EstadosPartida estado;
     private String codigoAcceso;
+    private Jugador turnoActual;
 
     public Partida() {
     }
 
-    public Partida(List<Jugador> jugadores, List<Casilla> casillas, int apuesta, Boolean estado) {
+    public Partida(List<Jugador> jugadores, List<Casilla> casillas, int apuesta, EstadosPartida estado, String codigoAcceso, Jugador turnoActual) {
         this.jugadores = jugadores;
         this.casillas = casillas;
         this.apuesta = apuesta;
         this.estado = estado;
+        this.codigoAcceso = codigoAcceso;
+        this.turnoActual = turnoActual;
     }
 
     public List<Jugador> getJugadores() {
@@ -36,6 +40,14 @@ public class Partida {
         this.jugadores = jugadores;
     }
 
+    public Jugador getTurnoActual() {
+        return turnoActual;
+    }
+
+    public void setTurnoActual(Jugador turnoActual) {
+        this.turnoActual = turnoActual;
+    }
+
     public List<Casilla> getCasillas() {
         return casillas;
     }
@@ -44,13 +56,15 @@ public class Partida {
         this.casillas = casillas;
     }
 
-    public Boolean getEstado() {
+    public EstadosPartida getEstado() {
         return estado;
     }
 
-    public void setEstado(Boolean estado) {
+    public void setEstado(EstadosPartida estado) {
         this.estado = estado;
     }
+
+    
 
     public int getApuesta() {
         return apuesta;
@@ -68,5 +82,4 @@ public class Partida {
         this.codigoAcceso = codigoAcceso;
     }
 
-    
 }

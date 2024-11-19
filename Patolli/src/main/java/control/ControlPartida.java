@@ -1,9 +1,9 @@
 package control;
 
-import dominio.Casilla;
-import dominio.Ficha;
-import dominio.Juego;
-import dominio.Jugador;
+import modelo.Casilla;
+import modelo.Ficha;
+import modelo.Juego;
+import modelo.Jugador;
 
 /**
  * Clase que implementa el control de la partida del juego, manejando las

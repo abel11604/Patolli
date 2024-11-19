@@ -16,6 +16,12 @@ public class Ficha {
     public Ficha() {
     }
 
+    public Ficha(String id, Casilla casillaActual, Jugador jugador) {
+        this.id = id;
+        this.casillaActual = casillaActual;
+        this.jugador = jugador;
+    }
+
     public Ficha(Casilla casillaActual, Jugador jugador) {
         this.casillaActual = casillaActual;
         this.jugador = jugador;
@@ -23,6 +29,14 @@ public class Ficha {
 
     public Casilla getCasillaActual() {
         return casillaActual;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setCasillaActual(Casilla casillaActual) {

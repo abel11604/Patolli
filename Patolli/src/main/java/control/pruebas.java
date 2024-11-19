@@ -4,10 +4,10 @@
  */
 package control;
 
-import dominio.Casilla;
-import dominio.Ficha;
-import dominio.Juego;
-import dominio.Jugador;
+import modelo.Casilla;
+import modelo.Ficha;
+import modelo.Juego;
+import modelo.Jugador;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -4,9 +4,9 @@
  */
 package control;
 
-import dominio.Casilla;
-import dominio.Juego;
-import dominio.Jugador;
+import modelo.Casilla;
+import modelo.Juego;
+import modelo.Jugador;
 import java.util.ArrayList;
 import java.util.List;
 

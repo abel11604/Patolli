@@ -8,6 +8,8 @@ package enums;
  *
  * @author abelc
  */
-public enum AccionesJugador {
-    MOVER_FICHA, UNIRSE_PARTIDA, CREAR_PARTIDA, TIRAR_DADO, REINICIAR_FICHA;
+public enum EstadosPartida {
+    PENDIENTE,
+    ACTIVA,
+    FINALIZADA
 }

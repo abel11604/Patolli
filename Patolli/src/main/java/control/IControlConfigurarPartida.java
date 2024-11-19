@@ -1,7 +1,7 @@
 package control;
 
-import dominio.Juego;
-import dominio.Jugador;
+import modelo.Juego;
+import modelo.Jugador;
 import java.util.List;
 /**
  * Interfaz que define los métodos necesarios para la configuración de una partida.

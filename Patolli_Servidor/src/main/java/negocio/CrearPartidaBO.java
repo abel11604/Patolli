@@ -14,6 +14,7 @@ import java.util.List;
 
 import java.util.UUID;
 import dominio.Partida;
+import enums.EstadosPartida;
 import java.util.Map;
 
 /**
@@ -53,7 +54,7 @@ public class CrearPartidaBO {
         // Configurar la partida
         partida.setApuesta(cantidadAPagar);
         partida.setCasillas(crearCasillas(tamanoTablero));
-        partida.setEstado(true);
+        partida.setEstado(EstadosPartida.PENDIENTE);
 
         // Crear jugador anfitrión
         Jugador host = crearJugador(clientId, nombreHost, fondoApuesta, numFichas);
@@ -64,7 +65,7 @@ public class CrearPartidaBO {
         // Generar código único de acceso
         String codigoAcceso = UUID.randomUUID().toString().replace("-", "").substring(0, 5).toUpperCase();
         partida.setCodigoAcceso(codigoAcceso);
-
+        System.out.println("Si se creo la partida we " + codigoAcceso);
         // Respuesta al cliente
         return Map.of(
                 "accion", "CREAR_PARTIDA",
@@ -81,7 +82,7 @@ public class CrearPartidaBO {
      * @return Lista de casillas configuradas.
      */
     private List<Casilla> crearCasillas(int casillaPorAspa) {
-         List<Casilla> casillas = new ArrayList<>();
+        List<Casilla> casillas = new ArrayList<>();
         int contadorCasilla = 1;
         // Generar las casillas para las cuatro aspas
         if (casillaPorAspa == 8) {
@@ -159,7 +160,7 @@ public class CrearPartidaBO {
      * @return Jugador configurado.
      */
     private Jugador crearJugador(String clientId, String nombre, int fondo, int numFichas) {
-        Jugador jugador = new Jugador(clientId,nombre,"Blanco",fondo);
+        Jugador jugador = new Jugador(clientId, nombre, "Blanco", fondo);
         jugador.setFichas(crearFichas(numFichas, jugador));
         return jugador;
     }
@@ -173,10 +174,21 @@ public class CrearPartidaBO {
      */
     private List<Ficha> crearFichas(int numFichas, Jugador jugador) {
         List<Ficha> fichas = new ArrayList<>();
-        for (int i = 0; i < numFichas; i++) {
-            fichas.add(new Ficha(null, jugador));
+        String color = jugador.getColor().toLowerCase(); // Convertir color a minúsculas para consistencia
+
+        for (int i = 1; i <= numFichas; i++) {
+            String idFicha = "f" + i + color.substring(0, 1).toUpperCase() + color.substring(1); // Ej: f1Blanco
+            fichas.add(new Ficha(idFicha, null, jugador));
         }
         return fichas;
+    }
+
+    public Partida getPartida() {
+        return partida;
+    }
+
+    public void setPartida(Partida partida) {
+        this.partida = partida;
     }
 
 }
