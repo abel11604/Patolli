@@ -113,6 +113,53 @@ public class PartidaLogicaBO {
     }
 
     /**
+     * Reinicia una ficha a su casilla inicial y notifica a todos los jugadores.
+     *
+     * @param data Mapa con los datos enviados por el cliente (idFicha).
+     * @param clientId Identificador del cliente que solicita el reinicio.
+     * @return Mapa con la respuesta sobre el estado del reinicio.
+     */
+    public Map<String, Object> reiniciarFichaPorCliente(Map<String, Object> data, String clientId) {
+        validarCliente(clientId);
+
+        // Extraer datos del mapa
+        String idFicha = (String) data.get("idFicha");
+
+        // Buscar el jugador asociado al clientId
+        Jugador jugador = obtenerJugadorPorId(clientId);
+
+        // Buscar la ficha seleccionada
+        Ficha ficha = jugador.getFichas().stream()
+                .filter(f -> f.getId().equals(idFicha))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró una ficha con el id proporcionado."));
+
+        // Reiniciar la ficha
+        reiniciarFicha(ficha);
+
+        // Crear el mensaje para notificar el reinicio a todos los jugadores
+        Map<String, Object> mensaje = Map.of(
+                "accion", "REINICIAR_FICHA",
+                "jugador", jugador.getNombre(),
+                "idFicha", ficha.getId(),
+                "mensaje", "La ficha ha sido reiniciada a su posición inicial."
+        );
+
+        // Notificar a todos los jugadores en la partida
+        for (Jugador jugadorEnPartida : partida.getJugadores()) {
+            Socket clientSocket = ClientManager.getClientSocket(jugadorEnPartida.getId());
+            if (clientSocket != null) {
+                MessageUtil.enviarMensaje(clientSocket, mensaje);
+            } else {
+                System.err.println("No se encontró un socket para el jugador con ID: " + jugadorEnPartida.getId());
+            }
+        }
+
+        // Retornar el mensaje de éxito al cliente que solicitó el reinicio
+        return mensaje;
+    }
+
+    /**
      * Avanza una ficha un número determinado de casillas.
      *
      * @param numCasillas Número de casillas a avanzar.

@@ -1,7 +1,7 @@
 package control;
 
-import modelo.Juego;
-import modelo.Jugador;
+import modelo.PartidaModelo;
+import modelo.JugadorModelo;
 import java.util.List;
 /**
  * Interfaz que define los métodos necesarios para la configuración de una partida.
@@ -30,16 +30,16 @@ public interface IControlConfigurarPartida {
     /**
      * Obtiene la lista de jugadores configurados para la partida.
      *
-     * @return una lista de objetos {@link Jugador} que representan los jugadores.
+     * @return una lista de objetos {@link JugadorModelo} que representan los jugadores.
      */
-    public List<Jugador> getJugadores();
+    public List<JugadorModelo> getJugadores();
 
     /**
      * Establece la lista de jugadores para la partida.
      *
      * @param jugadores lista de jugadores a asignar en la partida.
      */
-    public void setJugadores(List<Jugador> jugadores);
+    public void setJugadores(List<JugadorModelo> jugadores);
 
     /**
      * Obtiene el número de casillas configuradas por aspa en el tablero.
@@ -58,9 +58,9 @@ public interface IControlConfigurarPartida {
     /**
      * Crea una nueva instancia de un juego configurado según los parámetros actuales.
      *
-     * @return un objeto {@link Juego} con la configuración definida.
+     * @return un objeto {@link PartidaModelo} con la configuración definida.
      */
-    public Juego crearPartida();
+    public PartidaModelo crearPartida();
 
     /**
      * Obtiene la apuesta configurada para la partida.

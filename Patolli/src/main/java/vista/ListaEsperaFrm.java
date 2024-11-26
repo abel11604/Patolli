@@ -4,14 +4,8 @@
  */
 package vista;
 
-import control.ControlConfigurarPartida;
-import control.IControlConfigurarPartida;
-import modelo.Casilla;
-import modelo.Ficha;
-import modelo.Jugador;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JOptionPane;
+import modelo.JugadorModelo;
+import modelo.PartidaModelo;
 
 /**
  *
@@ -20,18 +14,29 @@ import javax.swing.JOptionPane;
 public class ListaEsperaFrm extends javax.swing.JFrame {
 
     private ControlNavegacion nav;
-    private IControlConfigurarPartida confPartida;
+    private PartidaModelo partida;
+    private JugadorModelo jugador;
 
     /**
      * Creates new form ListaEspera
      */
     public ListaEsperaFrm() {
-        this.confPartida = ControlConfigurarPartida.getInstance();
+
         this.nav = ControlNavegacion.getInstance();
+        this.partida = nav.getPartida();
+        this.jugador=nav.getJugador();
         initComponents();
+        jugadorBlancolbl.setText(jugador.getNombre());
         amarilloPanel.setVisible(false);
         naranjaPanel.setVisible(false);
         cafePanel.setVisible(false);
+        btnCrearPartida1.setVisible(false);
+        btnCancelar.setVisible(false);
+        codigoLabel.setText(partida.getCodigoAcceso());
+        if (jugador.getColor().equalsIgnoreCase("Blanco")) {
+            btnCrearPartida1.setVisible(true);
+            btnCancelar.setVisible(true);
+        }
     }
 
     /**
@@ -61,6 +66,8 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
         jugadorBlancolbl = new javax.swing.JLabel();
         jugadorAmarillolbl = new javax.swing.JLabel();
         jugadorNaranjalbl = new javax.swing.JLabel();
+        codigoLabel = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(700, 477));
@@ -191,7 +198,7 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
                 btnEliminarJugadorActionPerformed(evt);
             }
         });
-        jPanel2.add(btnEliminarJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 240, -1, -1));
+        jPanel2.add(btnEliminarJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 270, -1, -1));
 
         btnAgregarJugador.setFont(new java.awt.Font("Bodoni MT", 0, 18)); // NOI18N
         btnAgregarJugador.setText("Agregar jugador");
@@ -201,7 +208,7 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
                 btnAgregarJugadorActionPerformed(evt);
             }
         });
-        jPanel2.add(btnAgregarJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 240, -1, -1));
+        jPanel2.add(btnAgregarJugador, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, -1, -1));
 
         jugadorBlancolbl.setFont(new java.awt.Font("Bodoni MT", 1, 18)); // NOI18N
         jugadorBlancolbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -219,6 +226,14 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
         jugadorNaranjalbl.setText("Jugador 3");
         jugadorNaranjalbl.setVisible(false);
         jPanel2.add(jugadorNaranjalbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(373, 180, 100, -1));
+
+        codigoLabel.setFont(new java.awt.Font("Bodoni MT", 1, 24)); // NOI18N
+        codigoLabel.setText("123");
+        jPanel2.add(codigoLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 220, 90, -1));
+
+        jLabel4.setFont(new java.awt.Font("Bodoni MT", 1, 24)); // NOI18N
+        jLabel4.setText("Codigo:");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, -1, -1));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -252,81 +267,35 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void crearJugadores() {
-        List<Jugador> jugadores = new ArrayList<>();
 
-        if (amarilloPanel.isVisible()) {
-            jugadores.add(crearJugador(jugadorBlancolbl.getText(), "Blanco", confPartida.getFondo()));
-            jugadores.add(crearJugador(jugadorAmarillolbl.getText(), "Amarillo", confPartida.getFondo()));
-
-            if (naranjaPanel.isVisible()) {
-                jugadores.add(crearJugador( jugadorNaranjalbl.getText(),"Naranja", confPartida.getFondo()));
-
-                if (cafePanel.isVisible()) {
-                    jugadores.add(crearJugador( jugadorCafelbl.getText(),"Cafe", confPartida.getFondo()));
-                }
-            }
-        }
-
-        confPartida.setJugadores(jugadores);
     }
 
-    private Jugador crearJugador(String color, String nombre, int fondoApuesta) {
-        Jugador jugador = new Jugador(color, nombre, fondoApuesta); // Constructor de Jugador
-        List<Ficha> fichas = new ArrayList<>();
-
-        for (int i = 0; i < confPartida.getNumFichas(); i++) {
-            Ficha ficha = new Ficha();
-            ficha.setJugador(jugador);
-            fichas.add(ficha);
-        }
-
-        jugador.setFichas(fichas);
-        return jugador;
+    private JugadorModelo crearJugador(String color, String nombre, int fondoApuesta) {
+        return null;
     }
 
     private void btnCrearPartida1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartida1ActionPerformed
-        if (!amarilloPanel.isVisible()) {
-            JOptionPane.showMessageDialog(this, "Debe haber al menos 2 jugadores para comenzar el juego",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
-        if (confPartida.getJugadores().size() < 2) {
-            JOptionPane.showMessageDialog(this, "No hay suficientes jugadores en la lista",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        crearJugadores();
-        
-        System.out.println(confPartida.getJugadores().size());
-        nav.mostrarPantallaJuego();
-        this.dispose();
     }//GEN-LAST:event_btnCrearPartida1ActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        this.dispose();
-        nav.QuieroUnasConfiguracioneeees();
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAgregarJugadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarJugadorActionPerformed
-        List<Jugador> jugadores = confPartida.getJugadores();
 
         if (!amarilloPanel.isVisible() && !naranjaPanel.isVisible() && !cafePanel.isVisible()) {
             amarilloPanel.setVisible(true);
             jugadorAmarillolbl.setVisible(true);
-            jugadores.add(new Jugador());
-            jugadores.add(new Jugador());
+
             lblJugadores.setText("2/4");
         } else if (amarilloPanel.isVisible() && !naranjaPanel.isVisible()) {
             naranjaPanel.setVisible(true);
             jugadorNaranjalbl.setVisible(true);
-            jugadores.add(new Jugador());
             lblJugadores.setText("3/4");
         } else if (amarilloPanel.isVisible() && naranjaPanel.isVisible() && !cafePanel.isVisible()) {
             cafePanel.setVisible(true);
             jugadorCafelbl.setVisible(true);
-            jugadores.add(new Jugador());
             lblJugadores.setText("4/4");
         }
     }//GEN-LAST:event_btnAgregarJugadorActionPerformed
@@ -364,8 +333,10 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
     private javax.swing.JButton btnCrearPartida1;
     private javax.swing.JButton btnEliminarJugador;
     private javax.swing.JPanel cafePanel;
+    private javax.swing.JLabel codigoLabel;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

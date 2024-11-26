@@ -29,7 +29,7 @@ public class PruebasUnirse {
             int puerto = 8080;
 
             // Código de acceso de la partida a la que queremos unirnos
-            String codigoAcceso = "1FCEB"; // Reemplaza con el código de acceso real de la partida
+            String codigoAcceso = "44384"; // Reemplaza con el código de acceso real de la partida
 
             // Crear socket de conexión al servidor
             Socket socket = new Socket(servidorHost, puerto);
@@ -38,7 +38,7 @@ public class PruebasUnirse {
             Map<String, Object> data = Map.of(
                     "accion", "UNIRSE_PARTIDA",
                     "codigoAcceso", codigoAcceso,
-                    "nombre", "Jugador2"
+                    "nombre", "gogogo"
             );
 
             // Serializar el mapa a JSON

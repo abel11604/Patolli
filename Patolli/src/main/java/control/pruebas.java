@@ -4,10 +4,10 @@
  */
 package control;
 
-import modelo.Casilla;
-import modelo.Ficha;
-import modelo.Juego;
-import modelo.Jugador;
+import modelo.CasillaModelo;
+import modelo.FichaModelo;
+import modelo.PartidaModelo;
+import modelo.JugadorModelo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +24,11 @@ public class pruebas {
      */
     public static void main(String[] args) {
 //       List<Jugador> jugadores = new ArrayList<>();
-//jugadores.add(new Jugador("Jugador1", "Blanco", 1000)); // Fondo inicial 1000
-//jugadores.add(new Jugador("Jugador2", "Amarillo", 1000));
+//jugadores.add(new JugadorModelo("Jugador1", "Blanco", 1000)); // Fondo inicial 1000
+//jugadores.add(new JugadorModelo("Jugador2", "Amarillo", 1000));
 //
 // Crear la partida y establecer la lista de jugadores y el monto de apuesta
-//Juego partida = new Juego(jugadores, new ArrayList<>(), 100, true);
+//Juego partida = new PartidaModelo(jugadores, new ArrayList<>(), 100, true);
 //
 // Establecer la partida en ControlPartida
 //ControlPartida control = ControlPartida.getInstance();
@@ -38,7 +38,7 @@ public class pruebas {
 //Jugador jugador = partida.getJugadores().get(0); // Por ejemplo, el primer jugador
 //control.cobrarApuesta(jugador);
 //verifica si se actualiza la partida
-//        for (Jugador j:control.getPartida().getJugadores()) {
+//        for (JugadorModelo j:control.getPartida().getJugadores()) {
 //            System.out.println(j.getFondoApuesta());
 //        }
         // Crear una instancia del controlador
@@ -51,11 +51,11 @@ public class pruebas {
         configurador.setApuesta(20); // Monto de la apuesta
 
         // Crear lista de jugadores y configurarla en el controlador
-        List<Jugador> jugadores = new ArrayList<>();
+        List<JugadorModelo> jugadores = new ArrayList<>();
        //jugador1
-        List<Ficha> fichas = new ArrayList<>();
-        Ficha ficha = new Ficha();
-        Jugador jugador1 = new Jugador();
+        List<FichaModelo> fichas = new ArrayList<>();
+        FichaModelo ficha = new FichaModelo();
+        JugadorModelo jugador1 = new JugadorModelo();
         ficha.setCasillaActual(null);
         jugador1.setColor("Cafe");
         jugador1.setFondoApuesta(100);
@@ -65,9 +65,9 @@ public class pruebas {
         jugador1.setFichas(fichas);
         jugadores.add(jugador1);
         //jugador2
-        List<Ficha> fichas2 = new ArrayList<>();
-        Ficha ficha2 = new Ficha();
-        Jugador jugador2 = new Jugador();
+        List<FichaModelo> fichas2 = new ArrayList<>();
+        FichaModelo ficha2 = new FichaModelo();
+        JugadorModelo jugador2 = new JugadorModelo();
         ficha2.setCasillaActual(null);
         jugador2.setColor("Blanco");
         jugador2.setFondoApuesta(100);
@@ -79,13 +79,13 @@ public class pruebas {
         configurador.setJugadores(jugadores);
         
         // Crear la partida
-        Juego partida = configurador.crearPartida();
+        PartidaModelo partida = configurador.crearPartida();
         ControlPartida c = ControlPartida.getInstance();
         c.setPartida(partida);
         c.reiniciarFicha(jugador1.getFichas().get(0));
 //         Imprimir todas las casillas generadas
 //        System.out.println("Antes de avanzar");
-//        for (Casilla casilla : c.getPartida().getCasillas()) {
+//        for (CasillaModelo casilla : c.getPartida().getCasillas()) {
 //            String ocupadaPor = (casilla.getOcupadoPor() != null)
 //                    ? casilla.getOcupadoPor().getJugador().getNombre()
 //                    : "no ocupado";
@@ -94,7 +94,7 @@ public class pruebas {
 //
 //        c.avanzarCasillas(18, jugador1.getFichas().get(0));
 //        System.out.println("Despues de avanzar");
-//          for (Casilla casilla : c.getPartida().getCasillas()) {
+//          for (CasillaModelo casilla : c.getPartida().getCasillas()) {
 //            String ocupadaPor = (casilla.getOcupadoPor() != null)
 //                    ? casilla.getOcupadoPor().getJugador().getNombre()
 //                    : "no ocupado";
@@ -103,7 +103,7 @@ public class pruebas {
 //        
 //        System.out.println("otro jugador");
 //        c.reiniciarFicha(ficha2);
-//            for (Casilla casilla : c.getPartida().getCasillas()) {
+//            for (CasillaModelo casilla : c.getPartida().getCasillas()) {
 //            String ocupadaPor = (casilla.getOcupadoPor() != null)
 //                    ? casilla.getOcupadoPor().getJugador().getNombre()
 //                    : "no ocupado";
@@ -112,7 +112,7 @@ public class pruebas {
 //            
 //        c.avanzarCasillas(2, ficha2);
 //        System.out.println("mover la ficha 2");
-//            for (Casilla casilla : c.getPartida().getCasillas()) {
+//            for (CasillaModelo casilla : c.getPartida().getCasillas()) {
 //            String ocupadaPor = (casilla.getOcupadoPor() != null)
 //                    ? casilla.getOcupadoPor().getJugador().getNombre()
 //                    : "no ocupado";
@@ -120,7 +120,7 @@ public class pruebas {
 //        }
 //            c.avanzarCasillas(1, ficha);
 //            System.out.println("prueba de reinicio de ficha");
-//                 for (Casilla casilla : c.getPartida().getCasillas()) {
+//                 for (CasillaModelo casilla : c.getPartida().getCasillas()) {
 //            String ocupadaPor = (casilla.getOcupadoPor() != null)
 //                    ? casilla.getOcupadoPor().getJugador().getNombre()
 //                    : "no ocupado";

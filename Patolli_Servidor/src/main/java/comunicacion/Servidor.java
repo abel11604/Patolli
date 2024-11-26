@@ -40,7 +40,7 @@ public class Servidor {
                 System.out.println("Nueva conexión de cliente desde: " + clientSocket.getInetAddress());
 
                 // Generar un clientId único
-                String clientId = "client-" + clientCounter++;
+                String clientId =Integer.toString(clientCounter++);
 
                 ClientManager.addClient(clientSocket, clientId, new Jugador());
 

@@ -6,10 +6,14 @@ comunicacion\MessageUtil.class
 dominio\Partida.class
 negocio\PartidaLogicaBO.class
 comunicacion\HandlerActions.class
+conversores\toJSON.class
+exceptions\PatolliServerException.class
 negocio\CrearPartidaBO.class
 comunicacion\ClientManager.class
 dominio\Jugador.class
 enums\EstadosPartida.class
+pruebas\crearPartida2.class
+pruebas\PruebaMovimientos.class
 pruebas\PruebasCrearPartida.class
 negocio\GestionarPartidaBO.class
 pruebas\PruebasUnirse.class

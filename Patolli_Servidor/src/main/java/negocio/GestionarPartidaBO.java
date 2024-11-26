@@ -9,6 +9,7 @@ import dominio.Partida;
 import dominio.Ficha;
 import comunicacion.ClientManager;
 import comunicacion.MessageUtil;
+import conversores.toJSON;
 import enums.EstadosPartida;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -67,33 +68,70 @@ public class GestionarPartidaBO {
      * @return Respuesta con los detalles de la partida y el jugador.
      */
     public Map<String, Object> unirseAPartida(Map<String, Object> data, String clientId) {
+        // Validar que el cliente esté registrado en el sistema
         validarCliente(clientId);
 
+        // Obtener los datos enviados por el cliente
         String codigoAcceso = (String) data.get("codigoAcceso");
         String nombre = (String) data.get("nombre");
 
+        // Buscar la partida activa por su código de acceso
         Partida partida = partidasActivas.get(codigoAcceso);
         if (partida == null) {
             throw new IllegalArgumentException("No existe una partida con el código proporcionado.");
         }
 
+        // Crear un nuevo jugador
         Jugador nuevoJugador = new Jugador(
                 clientId,
                 nombre,
                 asignarColor(partida),
-                partida.getJugadores().get(0).getFondoApuesta()
+                partida.getJugadores().get(0).getFondoApuesta() // Tomar el fondo inicial de un jugador existente
         );
         nuevoJugador.setFichas(crearFichas(partida.getJugadores().size(), nuevoJugador));
 
+        // Agregar el nuevo jugador a la partida
         partida.getJugadores().add(nuevoJugador);
 
+        // Registrar el cliente en el ClientManager
         ClientManager.addClient(ClientManager.getClientSocket(clientId), clientId, nuevoJugador);
-         System.out.println("si me uni we"+nombre+codigoAcceso);
-        return Map.of(
+
+        // Crear mensaje de notificación para los jugadores existentes
+        Map<String, Object> mensajeNotificacion = Map.of(
+                "accion", "JUGADOR_UNIDO",
+                "nombre", nuevoJugador.getNombre(),
+                "color", nuevoJugador.getColor(),
+                "mensaje", "Un nuevo jugador se ha unido a la partida."
+        );
+
+        for (Jugador jugador : partida.getJugadores()) {
+            if (!jugador.getId().equals(nuevoJugador.getId())) {
+                Socket clientSocket = ClientManager.getClientSocket(jugador.getId());
+                if (clientSocket != null) {
+                    MessageUtil.enviarMensaje(clientSocket, mensajeNotificacion);
+                }
+            }
+        }
+
+        System.out.println("Jugador unido: " + nombre + ", Código de acceso: " + codigoAcceso);
+
+        // Crear una lista con los detalles de todos los jugadores en la partida
+        List<Map<String, Object>> jugadoresExistentes = new ArrayList<>();
+        for (Jugador jugador : partida.getJugadores()) {
+            jugadoresExistentes.add(Map.of(
+                    "id", jugador.getId(),
+                    "nombre", jugador.getNombre(),
+                    "color", jugador.getColor() // Ajustar si es un objeto complejo
+            ));
+        }
+
+        // Respuesta para el cliente que se une
+        return toJSON.dataToJSON(
                 "accion", "UNIRSE_PARTIDA",
                 "codigoAcceso", codigoAcceso,
                 "idJugador", nuevoJugador.getId(),
                 "color", nuevoJugador.getColor(),
+                "jugadores", jugadoresExistentes, // Detalles de todos los jugadores
                 "mensaje", "Te has unido a la partida exitosamente."
         );
     }

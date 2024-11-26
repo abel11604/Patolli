@@ -6,26 +6,36 @@ import java.util.List;
  *
  * @author abelc
  */
-public class Jugador {
+public class JugadorModelo {
+
     private String nombre;
     private String color;
-    private List<Ficha> fichas;
+    private List<FichaModelo> fichas;
     int fondoApuesta;
 
-    public Jugador() {
+    public JugadorModelo() {
     }
 
-    public Jugador(String nombre, String color, List<Ficha> fichas, int fondoApuesta) {
+    public JugadorModelo(String nombre, String color, List<FichaModelo> fichas, int fondoApuesta) {
         this.nombre = nombre;
         this.color = color;
         this.fichas = fichas;
         this.fondoApuesta = fondoApuesta;
     }
 
-    public Jugador(String nombre, String color, int fondoApuesta) {
+    public JugadorModelo(String nombre, int fondoApuesta) {
+        this.nombre = nombre;
+        this.fondoApuesta = fondoApuesta;
+    }
+
+    public JugadorModelo(String nombre, String color, int fondoApuesta) {
         this.nombre = nombre;
         this.color = color;
         this.fondoApuesta = fondoApuesta;
+    }
+
+    public JugadorModelo(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getNombre() {
@@ -44,11 +54,11 @@ public class Jugador {
         this.color = color;
     }
 
-    public List<Ficha> getFichas() {
+    public List<FichaModelo> getFichas() {
         return fichas;
     }
 
-    public void setFichas(List<Ficha> fichas) {
+    public void setFichas(List<FichaModelo> fichas) {
         this.fichas = fichas;
     }
 
@@ -59,5 +69,5 @@ public class Jugador {
     public void setFondoApuesta(int fondoApuesta) {
         this.fondoApuesta = fondoApuesta;
     }
-    
+
 }

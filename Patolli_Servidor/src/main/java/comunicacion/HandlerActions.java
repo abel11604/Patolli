@@ -8,6 +8,7 @@ import dominio.Ficha;
 import dominio.Jugador;
 import dominio.Partida;
 import enums.ResultadoMovimiento;
+import exceptions.PatolliServerException;
 import java.net.Socket;
 import java.util.Map;
 import negocio.CrearPartidaBO;
@@ -19,7 +20,7 @@ import negocio.PartidaLogicaBO;
  * @author abelc
  */
 public class HandlerActions {
-    
+
     private final GestionarPartidaBO gestionarPartidaBO;
 
     /**
@@ -33,7 +34,7 @@ public class HandlerActions {
      * Método principal para manejar las acciones de los clientes.
      *
      * @param clientSocket El socket del cliente que envía la acción.
-     * @param data         El mapa de datos enviado por el cliente.
+     * @param data El mapa de datos enviado por el cliente.
      */
     public void handle(Socket clientSocket, Map<String, Object> data) {
         try {
@@ -45,27 +46,19 @@ public class HandlerActions {
 
             // Identificar y procesar la acción
             switch (accion) {
-                case "CREAR_PARTIDA":
+                case "CREAR_PARTIDA" ->
                     handleCrearPartida(clientSocket, data);
-                    break;
-
-                case "UNIRSE_PARTIDA":
+                case "UNIRSE_PARTIDA" ->
                     handleUnirsePartida(clientSocket, data);
-                    break;
-
-                case "INICIAR_PARTIDA":
+                case "INICIAR_PARTIDA" ->
                     handleIniciarPartida(clientSocket, data);
-                    break;
-
-                case "TIRAR_CAÑA":
+                case "TIRAR_CAÑA" ->
                     handleTirarCaña(clientSocket, data);
-                    break;
-
-                case "MOVER_FICHA":
+                case "MOVER_FICHA" ->
                     handleMoverFicha(clientSocket, data);
-                    break;
-
-                default:
+                case "REINICIAR_FICHA" ->
+                    handleReiniciarFicha(clientSocket, data);
+                default ->
                     throw new IllegalArgumentException("Acción desconocida: " + accion);
             }
         } catch (Exception e) {
@@ -77,12 +70,13 @@ public class HandlerActions {
     /**
      * Maneja la creación de una partida.
      */
-    private void handleCrearPartida(Socket clientSocket, Map<String, Object> data) {
+    private void handleCrearPartida(Socket clientSocket, Map<String, Object> data) throws PatolliServerException {
         String clientId = obtenerClientId(clientSocket);
         CrearPartidaBO crearPartidaBO = new CrearPartidaBO();
-        Map<String, Object> response = crearPartidaBO.crearPartida(data, clientId);
+        Map<String, Object> mensaje = crearPartidaBO.crearPartida(data, clientId);
         gestionarPartidaBO.registrarPartida(crearPartidaBO.getPartida());
-        MessageUtil.enviarMensaje(clientSocket, response);
+        MessageUtil.enviarMensaje(clientSocket, mensaje);
+
     }
 
     /**
@@ -90,8 +84,8 @@ public class HandlerActions {
      */
     private void handleUnirsePartida(Socket clientSocket, Map<String, Object> data) {
         String clientId = obtenerClientId(clientSocket);
-        Map<String, Object> response = gestionarPartidaBO.unirseAPartida(data, clientId);
-        MessageUtil.enviarMensaje(clientSocket, response);
+        Map<String, Object> mensaje = gestionarPartidaBO.unirseAPartida(data, clientId);
+        MessageUtil.enviarMensaje(clientSocket, mensaje);
     }
 
     /**
@@ -99,8 +93,8 @@ public class HandlerActions {
      */
     private void handleIniciarPartida(Socket clientSocket, Map<String, Object> data) {
         String clientId = obtenerClientId(clientSocket);
-        Map<String, Object> response = gestionarPartidaBO.iniciarPartida(data, clientId);
-        MessageUtil.enviarMensaje(clientSocket, response);
+        Map<String, Object> mensaje = gestionarPartidaBO.iniciarPartida(data, clientId);
+        MessageUtil.enviarMensaje(clientSocket, mensaje);
     }
 
     /**
@@ -110,8 +104,8 @@ public class HandlerActions {
         String clientId = obtenerClientId(clientSocket);
         Partida partida = gestionarPartidaBO.obtenerPartida((String) data.get("codigoAcceso"));
         PartidaLogicaBO partidaLogicaBO = new PartidaLogicaBO(partida);
-        Map<String, Object> response = partidaLogicaBO.lanzamientoCañas(clientId);
-        MessageUtil.enviarMensaje(clientSocket, response);
+        Map<String, Object> mensaje = partidaLogicaBO.lanzamientoCañas(clientId);
+        MessageUtil.enviarMensaje(clientSocket, mensaje);
     }
 
     /**
@@ -121,28 +115,20 @@ public class HandlerActions {
         String clientId = obtenerClientId(clientSocket);
         Partida partida = gestionarPartidaBO.obtenerPartida((String) data.get("codigoAcceso"));
         PartidaLogicaBO partidaLogicaBO = new PartidaLogicaBO(partida);
+        Map<String, Object> mensaje = partidaLogicaBO.moverFicha(data, clientId);
+        MessageUtil.enviarMensaje(clientSocket, mensaje);
+    }
 
-        String idFicha = (String) data.get("idFicha");
-        int numCasillas = (int) data.get("numCasillas");
-        Jugador jugador = partidaLogicaBO.obtenerJugadorPorId(clientId);
-        Ficha ficha = jugador.getFichaById(idFicha);
-
-        ResultadoMovimiento resultado = partidaLogicaBO.avanzarCasillas(numCasillas, ficha);
-
-        // Crear mensaje para notificar a todos los jugadores
-        Map<String, Object> mensaje = Map.of(
-                "accion", "MOVER_FICHA",
-                "jugador", jugador.getNombre(),
-                "idFicha", idFicha,
-                "resultado", resultado.name()
-        );
-
-        for (Jugador jugadorEnPartida : partida.getJugadores()) {
-            Socket socketJugador = ClientManager.getClientSocket(jugadorEnPartida.getId());
-            if (socketJugador != null) {
-                MessageUtil.enviarMensaje(socketJugador, mensaje);
-            }
-        }
+    /**
+     * Maneja el reinicio de una ficha solicitada por un cliente.
+     */
+    private void handleReiniciarFicha(Socket clientSocket, Map<String, Object> data) {
+        String clientId = obtenerClientId(clientSocket);
+        String codigoAcceso = (String) data.get("codigoAcceso");
+        Partida partida = gestionarPartidaBO.obtenerPartida(codigoAcceso);
+        PartidaLogicaBO partidaLogicaBO = new PartidaLogicaBO(partida);
+        Map<String, Object> mensaje = partidaLogicaBO.reiniciarFichaPorCliente(data, clientId);
+        MessageUtil.enviarMensaje(clientSocket, mensaje);
     }
 
     /**

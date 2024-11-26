@@ -5,9 +5,9 @@
  */
 package control;
 
-import modelo.Ficha;
-import modelo.Juego;
-import modelo.Jugador;
+import modelo.FichaModelo;
+import modelo.PartidaModelo;
+import modelo.JugadorModelo;
 
 /**
  * Interface para el control de una partida en el juego.
@@ -20,16 +20,16 @@ public interface IControlPartida {
     /**
      * Establece la partida actual.
      *
-     * @param partida La instancia de Juego que representa la partida actual.
+     * @param partida La instancia de PartidaModelo que representa la partida actual.
      */
-    public void setPartida(Juego partida);
+    public void setPartida(PartidaModelo partida);
 
     /**
      * Obtiene la partida actual.
      *
-     * @return La instancia de Juego que representa la partida actual.
+     * @return La instancia de PartidaModelo que representa la partida actual.
      */
-    public Juego getPartida();
+    public PartidaModelo getPartida();
 
     /**
      * Avanza una ficha una cantidad específica de casillas en el tablero,
@@ -38,7 +38,7 @@ public interface IControlPartida {
      * @param numCasillas La cantidad de casillas a avanzar.
      * @param fichaSel La ficha que se va a mover.
      */
-    public void avanzarCasillas(int numCasillas, Ficha fichaSel);
+    public void avanzarCasillas(int numCasillas, FichaModelo fichaSel);
 
     /**
      * Cobra una apuesta al jugador, deduciendo el monto de la apuesta de su fondo de apuestas.
@@ -46,7 +46,7 @@ public interface IControlPartida {
      *
      * @param jugador El jugador al que se le cobrará la apuesta.
      */
-    public void cobrarApuesta(Jugador jugador);
+    public void cobrarApuesta(JugadorModelo jugador);
 
     /**
      * Cobra una apuesta doble al jugador, deduciendo el doble del monto
@@ -55,7 +55,7 @@ public interface IControlPartida {
      *
      * @param jugador El jugador al que se le cobrará la apuesta doble.
      */
-    public void cobrarApuestaDoble(Jugador jugador);
+    public void cobrarApuestaDoble(JugadorModelo jugador);
 
     /**
      * Reinicia la posición de una ficha, colocándola en la casilla inicial
@@ -63,14 +63,14 @@ public interface IControlPartida {
      *
      * @param ficha La ficha que se va a reiniciar.
      */
-    public void reiniciarFicha(Ficha ficha);
+    public void reiniciarFicha(FichaModelo ficha);
 
     /**
      * Elimina una ficha del tablero, removiéndola de su casilla actual.
      *
      * @param ficha La ficha que se va a eliminar.
      */
-    public void eliminarFicha(Ficha ficha);
+    public void eliminarFicha(FichaModelo ficha);
 
     /**
      * Elimina un jugador de la partida, aplicando las reglas necesarias para su
@@ -78,5 +78,5 @@ public interface IControlPartida {
      *
      * @param jugador El jugador que se va a eliminar de la partida.
      */
-    public void eliminarJugador(Jugador jugador);
+    public void eliminarJugador(JugadorModelo jugador);
 }

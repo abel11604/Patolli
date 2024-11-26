@@ -4,9 +4,9 @@
  */
 package control;
 
-import modelo.Casilla;
-import modelo.Juego;
-import modelo.Jugador;
+import modelo.CasillaModelo;
+import modelo.PartidaModelo;
+import modelo.JugadorModelo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class ControlConfigurarPartida implements IControlConfigurarPartida {
 
     private static ControlConfigurarPartida instance; // Instancia Singleton
     private int numFichas; // Número de fichas por jugador
-    private List<Jugador> jugadores; // Lista de jugadores configurados
+    private List<JugadorModelo> jugadores; // Lista de jugadores configurados
     private int casillaPorAspa; // Número de casillas por aspa
     private int fondoApuesta; // Fondo inicial para cada jugador
     private int apuesta; // Apuesta inicial de la partida
@@ -65,7 +65,7 @@ public class ControlConfigurarPartida implements IControlConfigurarPartida {
      * {@inheritDoc}
      */
     @Override
-    public List<Jugador> getJugadores() {
+    public List<JugadorModelo> getJugadores() {
         return jugadores;
     }
 
@@ -73,7 +73,7 @@ public class ControlConfigurarPartida implements IControlConfigurarPartida {
      * {@inheritDoc}
      */
     @Override
-    public void setJugadores(List<Jugador> jugadores) {
+    public void setJugadores(List<JugadorModelo> jugadores) {
         this.jugadores = jugadores;
     }
 
@@ -97,8 +97,9 @@ public class ControlConfigurarPartida implements IControlConfigurarPartida {
      * {@inheritDoc}
      */
     @Override
-    public Juego crearPartida() {
-        return new Juego(jugadores, crearCasillas(), apuesta, true);
+    public PartidaModelo crearPartida() {
+       return new PartidaModelo(jugadores, crearCasillas(), apuesta);
+     
     }
 
     /**
@@ -140,40 +141,40 @@ public class ControlConfigurarPartida implements IControlConfigurarPartida {
      *
      * @return lista de casillas configuradas para la partida.
      */
-    private List<Casilla> crearCasillas() {
-        List<Casilla> casillas = new ArrayList<>();
+    private List<CasillaModelo> crearCasillas() {
+        List<CasillaModelo> casillas = new ArrayList<>();
         int contadorCasilla = 1;
         // Generar las casillas para las cuatro aspas
         if (casillaPorAspa == 8) {
             int casillasPorAspa = 16;
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialBlanco", 5, 12, 8, 9);
-            casillas.add(new Casilla("Central", contadorCasilla++));
+            casillas.add(new CasillaModelo("Central", contadorCasilla++));
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialAmarillo", 5, 12, 8, 9);
-            casillas.add(new Casilla("Central", contadorCasilla++));
+            casillas.add(new CasillaModelo("Central", contadorCasilla++));
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialNaranja", 5, 12, 8, 9);
-            casillas.add(new Casilla("Central", contadorCasilla++));
+            casillas.add(new CasillaModelo("Central", contadorCasilla++));
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialCafe", 5, 12, 8, 9);
-            casillas.add(new Casilla("Central", contadorCasilla++));
+            casillas.add(new CasillaModelo("Central", contadorCasilla++));
         } else if (casillaPorAspa == 10) {
             int casillasPorAspa = 20;
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialBlanco", 7, 14, 10, 11);
-            casillas.add(new Casilla("Central", contadorCasilla++));
+            casillas.add(new CasillaModelo("Central", contadorCasilla++));
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialAmarillo", 7, 14, 10, 11);
-            casillas.add(new Casilla("Central", contadorCasilla++));
+            casillas.add(new CasillaModelo("Central", contadorCasilla++));
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialNaranja", 7, 14, 10, 11);
-            casillas.add(new Casilla("Central", contadorCasilla++));
+            casillas.add(new CasillaModelo("Central", contadorCasilla++));
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialCafe", 7, 14, 10, 11);
-            casillas.add(new Casilla("Central", contadorCasilla++));
+            casillas.add(new CasillaModelo("Central", contadorCasilla++));
         } else if (casillaPorAspa == 14) {
             int casillasPorAspa = 28;
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialBlanco", 11, 18, 14, 15);
-            casillas.add(new Casilla("Central", contadorCasilla++));
+            casillas.add(new CasillaModelo("Central", contadorCasilla++));
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialAmarillo", 11, 18, 14, 15);
-            casillas.add(new Casilla("Central", contadorCasilla++));
+            casillas.add(new CasillaModelo("Central", contadorCasilla++));
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialNaranja", 11, 18, 14, 15);
-            casillas.add(new Casilla("Central", contadorCasilla++));
+            casillas.add(new CasillaModelo("Central", contadorCasilla++));
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialCafe", 11, 18, 14, 15);
-            casillas.add(new Casilla("Central", contadorCasilla++));
+            casillas.add(new CasillaModelo("Central", contadorCasilla++));
         }
 
         return casillas;
@@ -193,17 +194,17 @@ public class ControlConfigurarPartida implements IControlConfigurarPartida {
      * @param dobleTurnoPos2 segunda posición de una casilla de doble turno.
      * @return contador actualizado después de generar el aspa.
      */
-    private int generarCasillasAspa(List<Casilla> casillas, int contadorCasilla, int casillasPorAspa,
+    private int generarCasillasAspa(List<CasillaModelo> casillas, int contadorCasilla, int casillasPorAspa,
             String inicialJugador, int apuestaPos1, int apuestaPos2, int dobleTurnoPos1, int dobleTurnoPos2) {
         for (int i = 1; i <= casillasPorAspa; i++) {
             if (i == 1) {
-                casillas.add(new Casilla(inicialJugador, contadorCasilla)); // Casilla inicial del jugador
+                casillas.add(new CasillaModelo(inicialJugador, contadorCasilla)); // CasillaModelo inicial del jugador
             } else if (i == apuestaPos1 || i == apuestaPos2) {
-                casillas.add(new Casilla("Apuesta", contadorCasilla)); // Casillas de Apuesta
+                casillas.add(new CasillaModelo("Apuesta", contadorCasilla)); // Casillas de Apuesta
             } else if (i == dobleTurnoPos1 || i == dobleTurnoPos2) {
-                casillas.add(new Casilla("DobleTurno", contadorCasilla)); // Casillas de DobleTurno
+                casillas.add(new CasillaModelo("DobleTurno", contadorCasilla)); // Casillas de DobleTurno
             } else {
-                casillas.add(new Casilla("normal", contadorCasilla)); // Casillas normales
+                casillas.add(new CasillaModelo("normal", contadorCasilla)); // Casillas normales
             }
             contadorCasilla++;
         }

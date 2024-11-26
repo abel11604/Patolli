@@ -21,7 +21,7 @@ public class ClientHandler implements Runnable{
 
     private final Socket clientSocket;
     private final HandlerActions handlerActions; // No Singleton, instancia pasada por constructor
-    private final String clientId; // Identificador único del cliente
+    private final String clientId;
 
     public ClientHandler(Socket clientSocket, String clientId, HandlerActions handlerActions) {
         this.clientSocket = clientSocket;

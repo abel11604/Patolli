@@ -1,7 +1,7 @@
 package vista;
 
-import control.ControlConfigurarPartida;
-import control.IControlConfigurarPartida;
+import control.ControlCrearPartida;
+import control.IControlCrearPartida;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
@@ -14,13 +14,13 @@ import javax.swing.SpinnerNumberModel;
 public class ConfigurarPartidaFrm extends javax.swing.JFrame {
 
     ControlNavegacion nav;
-    IControlConfigurarPartida confPartida;
+    IControlCrearPartida confPartida;
 
     /**
      * Creates new form ConfigurarPartidaFrm
      */
     public ConfigurarPartidaFrm() {
-        this.confPartida = ControlConfigurarPartida.getInstance();
+        this.confPartida = ControlCrearPartida.getInstance();
         this.nav = ControlNavegacion.getInstance();
         initComponents();
         casillasRadioButton2.setSelected(true);
@@ -292,7 +292,7 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         int apuesta = (int) apuestaSpinner.getValue();
         int fondo = (int) fondoApuestaSpinner.getValue();
         confPartida.setApuesta(apuesta);
-        confPartida.setFondo(fondo);
+        confPartida.setApuesta(apuesta);
     }
 
 
@@ -310,7 +310,7 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
 
         int apuesta = (int) apuestaSpinner.getValue();
         int fondo = (int) fondoApuestaSpinner.getValue();
-        
+
         if (apuesta == 0 || fondo == 0) {
             JOptionPane.showMessageDialog(this, "Por favor, ingresa tu apuesta y fondo", "Error de apuesta", JOptionPane.ERROR_MESSAGE);
             return;
@@ -319,17 +319,47 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "El fondo de apuesta no puede ser menor que la apuesta a pagar.", "Error de apuesta", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            if(fondo==apuesta){
+            if (fondo == apuesta) {
                 JOptionPane.showMessageDialog(this, "El fondo de apuesta tiene que ser mayor que la apuesta a pagar", "Error de apuesta", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
-        
+
         establecerCasillas();
         establecerNumFichas();
         establecerApuestas();
-        this.dispose();
-        nav.mostrarListaDeEspera();
+        confPartida.crearPartida();
+
+        // Mostrar animación de carga mientras se espera
+        JOptionPane.showMessageDialog(this, "Creando partida... Por favor espera.");
+
+        // Hilo separado para esperar la respuesta del servidor
+        new Thread(() -> {
+            final int TIMEOUT_MS = 10000; // Tiempo máximo de espera en milisegundos (10 segundos)
+            final int SLEEP_MS = 200;     // Intervalo de espera entre comprobaciones (200 ms)
+            int elapsedTime = 0;
+
+            while (confPartida.getPartida().getCodigoAcceso() == null && elapsedTime < TIMEOUT_MS) {
+                try {
+                    Thread.sleep(SLEEP_MS);
+                    elapsedTime += SLEEP_MS;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+
+            if (confPartida.getPartida().getCodigoAcceso() != null) {
+                // Respuesta recibida, continuar flujo
+                nav.setPartida(confPartida.getPartida());
+                nav.setJugador(confPartida.getJugador());
+                this.dispose(); // Cerrar la ventana actual
+                nav.mostrarListaDeEspera();
+            } else {
+                // Timeout, no se recibió respuesta
+                JOptionPane.showMessageDialog(this, "Error: No se pudo crear la partida. Inténtalo nuevamente.", "Error de conexión", JOptionPane.ERROR_MESSAGE);
+            }
+        }).start();
     }//GEN-LAST:event_btnCrearPartidaActionPerformed
 
     private void casillasRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_casillasRadioButton3ActionPerformed

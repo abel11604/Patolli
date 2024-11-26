@@ -4,16 +4,16 @@ package modelo;
  *
  * @author abelc
  */
-public class Casilla {
+public class CasillaModelo {
 
     private String tipo;
-    private Ficha ocupadoPor;
+    private FichaModelo ocupadoPor;
     private int numCasilla;
 
-    public Casilla() {
+    public CasillaModelo() {
     }
 
-    public Casilla(String tipo, int numCasilla) {
+    public CasillaModelo(String tipo, int numCasilla) {
         this.tipo = tipo;
         this.ocupadoPor = null;
         this.numCasilla = numCasilla;
@@ -28,11 +28,11 @@ public class Casilla {
         this.tipo = tipo;
     }
 
-    public Ficha getOcupadoPor() {
+    public FichaModelo getOcupadoPor() {
         return ocupadoPor;
     }
 
-    public void setOcupadoPor(Ficha ocupadoPor) {
+    public void setOcupadoPor(FichaModelo ocupadoPor) {
         this.ocupadoPor = ocupadoPor;
     }
 

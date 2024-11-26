@@ -6,16 +6,14 @@ package negocio;
 
 import dominio.Casilla;
 import dominio.Ficha;
-
 import dominio.Jugador;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import java.util.UUID;
 import dominio.Partida;
 import enums.EstadosPartida;
+import exceptions.PatolliServerException;
 import java.util.Map;
+import java.util.Random;
 
 /**
  *
@@ -38,10 +36,10 @@ public class CrearPartidaBO {
      * @return Respuesta para el cliente con la información de la partida
      * creada.
      */
-    public Map<String, Object> crearPartida(Map<String, Object> data, String clientId) {
+    public Map<String, Object> crearPartida(Map<String, Object> data, String clientId) throws PatolliServerException {
         // Validar datos y cliente
         if (clientId == null || clientId.isEmpty()) {
-            throw new IllegalArgumentException("El cliente no está identificado.");
+            throw new PatolliServerException("El cliente no está identificado.");
         }
 
         // Extraer datos del cliente
@@ -63,9 +61,17 @@ public class CrearPartidaBO {
         partida.setJugadores(jugadores);
 
         // Generar código único de acceso
-        String codigoAcceso = UUID.randomUUID().toString().replace("-", "").substring(0, 5).toUpperCase();
+        String codigoAcceso = generarCodigoNumerico(5);
         partida.setCodigoAcceso(codigoAcceso);
         System.out.println("Si se creo la partida we " + codigoAcceso);
+        
+        System.out.println("Partida servidor");
+        for (Casilla casilla : partida.getCasillas()) {
+            String ocupadaPor = (casilla.getOcupadoPor() != null)
+                    ? casilla.getOcupadoPor().getJugador().getNombre()
+                    : "no ocupado";
+            System.out.println("numC: " + casilla.getNumCasilla() + " tipo: " + casilla.getTipo() + " ocupadaPor: " + ocupadaPor);
+        }
         // Respuesta al cliente
         return Map.of(
                 "accion", "CREAR_PARTIDA",
@@ -81,11 +87,11 @@ public class CrearPartidaBO {
      * @param tamanoTablero Número de casillas por aspa (8, 10, 14).
      * @return Lista de casillas configuradas.
      */
-    private List<Casilla> crearCasillas(int casillaPorAspa) {
+    private List<Casilla> crearCasillas(int casillasTotales) {
         List<Casilla> casillas = new ArrayList<>();
         int contadorCasilla = 1;
         // Generar las casillas para las cuatro aspas
-        if (casillaPorAspa == 8) {
+        if (casillasTotales == 68) {
             int casillasPorAspa = 16;
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialBlanco", 5, 12, 8, 9);
             casillas.add(new Casilla("Central", contadorCasilla++));
@@ -95,7 +101,7 @@ public class CrearPartidaBO {
             casillas.add(new Casilla("Central", contadorCasilla++));
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialCafe", 5, 12, 8, 9);
             casillas.add(new Casilla("Central", contadorCasilla++));
-        } else if (casillaPorAspa == 10) {
+        } else if (casillasTotales == 84) {
             int casillasPorAspa = 20;
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialBlanco", 7, 14, 10, 11);
             casillas.add(new Casilla("Central", contadorCasilla++));
@@ -105,7 +111,7 @@ public class CrearPartidaBO {
             casillas.add(new Casilla("Central", contadorCasilla++));
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialCafe", 7, 14, 10, 11);
             casillas.add(new Casilla("Central", contadorCasilla++));
-        } else if (casillaPorAspa == 14) {
+        } else if (casillasTotales == 116) {
             int casillasPorAspa = 28;
             contadorCasilla = generarCasillasAspa(casillas, contadorCasilla, casillasPorAspa, "inicialBlanco", 11, 18, 14, 15);
             casillas.add(new Casilla("Central", contadorCasilla++));
@@ -191,4 +197,16 @@ public class CrearPartidaBO {
         this.partida = partida;
     }
 
+    private String generarCodigoNumerico(int longitud) {
+        Random random = new Random();
+        StringBuilder codigo = new StringBuilder();
+
+        for (int i = 0; i < longitud; i++) {
+            // Generar un número aleatorio entre 0 y 9
+            int digito = random.nextInt(10);
+            codigo.append(digito);
+        }
+
+        return codigo.toString();
+    }
 }

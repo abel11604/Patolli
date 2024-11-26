@@ -4,31 +4,38 @@
  */
 package vista;
 
+import control.ControlCrearPartida;
+import control.IControlCrearPartida;
 import javax.swing.JOptionPane;
+import modelo.JugadorModelo;
 
 /**
  *
  * @author abelc
  */
 public class MenuPrincipalFrm extends javax.swing.JFrame {
-     private ControlNavegacion nav;
+
+    private ControlNavegacion nav;
+    private IControlCrearPartida controlCrear;
+
     /**
      * Creates new form menuPrincipalFrm
      */
     public MenuPrincipalFrm() {
-        this.nav=ControlNavegacion.getInstance();
+        this.nav = ControlNavegacion.getInstance();
+        this.controlCrear = ControlCrearPartida.getInstance();
         initComponents();
-        
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                
+
                 String[] botones = {"Sí", "No"};
-                
+
                 int opcion = JOptionPane.showOptionDialog(null, "¿Estás seguro de que quieres cerrar la aplicación?",
-                "Confirmar salida", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
-                null, botones, botones[0]);
+                        "Confirmar salida", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                        null, botones, botones[0]);
 
                 if (opcion == 0) {
                     System.exit(0);
@@ -160,21 +167,28 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInstruccionesActionPerformed
 
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
-       dispose();
-       nav.QuieroUnasConfiguracioneeees();
+
+        String nombreJugador = JOptionPane.showInputDialog(this, "Ingresa tu nombre:", "Nombre del jugador", JOptionPane.PLAIN_MESSAGE);
+        
+        if (nombreJugador == null || nombreJugador.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío. Por favor, ingrésalo.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JugadorModelo jugador = new JugadorModelo(nombreJugador);
+        controlCrear.setJugador(jugador);
+        dispose();
+        nav.QuieroUnasConfiguracioneeees();
     }//GEN-LAST:event_btnCrearPartidaActionPerformed
 
-    
-    public void mostrarPantalla(){
-      java.awt.EventQueue.invokeLater(new Runnable() {
+    public void mostrarPantalla() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MenuPrincipalFrm().setVisible(true);
             }
         });
     }
-    
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrearPartida;
     private javax.swing.JButton btnInstrucciones;
