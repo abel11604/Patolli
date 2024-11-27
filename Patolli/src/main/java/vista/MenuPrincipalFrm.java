@@ -23,7 +23,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
      */
     public MenuPrincipalFrm() {
         this.nav = ControlNavegacion.getInstance();
-        this.controlCrear = ControlCrearPartida.getInstance();
+
         initComponents();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -167,9 +167,9 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInstruccionesActionPerformed
 
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
-
+        this.controlCrear = ControlCrearPartida.getInstance();
         String nombreJugador = JOptionPane.showInputDialog(this, "Ingresa tu nombre:", "Nombre del jugador", JOptionPane.PLAIN_MESSAGE);
-        
+
         if (nombreJugador == null || nombreJugador.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío. Por favor, ingrésalo.", "Error", JOptionPane.ERROR_MESSAGE);
             return;

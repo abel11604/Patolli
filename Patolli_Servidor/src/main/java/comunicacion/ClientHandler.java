@@ -6,6 +6,7 @@ package comunicacion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Jugador;
+import exceptions.PatolliServerException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -17,7 +18,7 @@ import org.msgpack.core.MessageUnpacker;
  *
  * @author abelc
  */
-public class ClientHandler implements Runnable{
+public class ClientHandler implements Runnable {
 
     private final Socket clientSocket;
     private final HandlerActions handlerActions; // No Singleton, instancia pasada por constructor
@@ -31,8 +32,7 @@ public class ClientHandler implements Runnable{
 
     @Override
     public void run() {
-        try (InputStream inputStream = clientSocket.getInputStream();
-             MessageUnpacker unpacker = MessagePack.newDefaultUnpacker(inputStream)) {
+        try (InputStream inputStream = clientSocket.getInputStream(); MessageUnpacker unpacker = MessagePack.newDefaultUnpacker(inputStream)) {
 
             // Agregar cliente a ClientManager
             ClientManager.addClient(clientSocket, clientId, new Jugador());
@@ -44,12 +44,19 @@ public class ClientHandler implements Runnable{
                     Map<String, Object> data = new ObjectMapper().readValue(json, Map.class);
                     data.put("clientId", clientId); // Añadir clientId al mensaje
 
-                    // Delegar la acción al HandlerActions
-                    handlerActions.handle(clientSocket, data);
+                    try {
+                        // Delegar la acción al HandlerActions
+                        handlerActions.handle(clientSocket, data);
+                    } catch (Exception ex) {
+                        // Manejo general de excepciones inesperadas
+                        System.err.printf("Error inesperado en el cliente %s: %s%n", clientId, ex.getMessage());
+                    }
+                    // Manejo controlado de PatolliServerException
+
                 }
             }
-        } catch (Exception e) {
-            System.err.println("Error en el cliente " + clientId + ": " + e.getMessage());
+        } catch (IOException e) {
+            System.err.printf("Error de conexión con el cliente %s: %s%n", clientId, e.getMessage());
         } finally {
             cerrarConexion();
         }

@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.SwingUtilities;
+import modelo.JugadorModelo;
 import modelo.PartidaModelo;
 import org.msgpack.core.MessagePack;
 import org.msgpack.core.MessagePacker;
@@ -147,7 +148,15 @@ public class ClientConnection {
         data.put("numFichas", partida.getJugadores().get(0).getFichas().size());
         data.put("fondoApuesta", partida.getJugadores().get(0).getFondoApuesta());
         data.put("cantidadAPagar", partida.getApuesta());
-        data.put("nombre", partida.getJugadores().get(0).getNombre());
+        data.put("nombreHost", partida.getJugadores().get(0).getNombre());
+        sendMessage(data);
+    }
+
+    public void unirseAPartida(String codigoAcceso, JugadorModelo jugadorAUnirse) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("accion", "UNIRSE_PARTIDA");
+        data.put("codigoAcceso", codigoAcceso);
+        data.put("nombre", jugadorAUnirse.getNombre());
         sendMessage(data);
     }
 

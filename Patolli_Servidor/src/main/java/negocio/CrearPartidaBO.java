@@ -56,6 +56,7 @@ public class CrearPartidaBO {
 
         // Crear jugador anfitrión
         Jugador host = crearJugador(clientId, nombreHost, fondoApuesta, numFichas);
+        
         List<Jugador> jugadores = new ArrayList<>();
         jugadores.add(host);
         partida.setJugadores(jugadores);

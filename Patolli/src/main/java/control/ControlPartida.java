@@ -17,6 +17,7 @@ public class ControlPartida implements IControlPartida {
 
     private PartidaModelo partida;
     private static ControlPartida instance;
+    
 
     /**
      * Obtiene la instancia única de ControlPartida (Singleton).

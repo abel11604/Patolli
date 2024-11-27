@@ -1,16 +1,25 @@
 package vista;
 
+import control.ControlUnirseAPartida;
+import control.IControlUnirseAPartida;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import modelo.JugadorModelo;
+
 /**
  *
  * @author abelc
  */
 public class UnirsePartidaFrm extends javax.swing.JFrame {
 
+    IControlUnirseAPartida unirse;
     ControlNavegacion nav;
+
     /**
      * Creates new form unirsePartidaFrm
      */
     public UnirsePartidaFrm() {
+        this.unirse = ControlUnirseAPartida.getInstance();
         initComponents();
         configuraCodigoPartida();
         this.nav = ControlNavegacion.getInstance();
@@ -143,6 +152,11 @@ public class UnirsePartidaFrm extends javax.swing.JFrame {
         btnUnirse.setFont(new java.awt.Font("Bodoni MT", 0, 24)); // NOI18N
         btnUnirse.setText("Unirse");
         btnUnirse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUnirse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnirseActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnUnirse, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 450, 140, -1));
 
         lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fondoUnirse.png"))); // NOI18N
@@ -165,13 +179,73 @@ public class UnirsePartidaFrm extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+    private void btnUnirseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnirseActionPerformed
+        // Validar que los campos no estén vacíos
+    String nombreJugador = txtNombreJugador.getText().trim();
+    String codigoAcceso = txtCodigoPartida.getText().trim();
+
+    if (nombreJugador.isEmpty() || codigoAcceso.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        return; // No continuar si los campos están vacíos
+    }
+
+    // Crear el jugador y enviar la solicitud al servidor
+    JugadorModelo jugador = new JugadorModelo(nombreJugador);
+    unirse.setJugador(jugador);
+    unirse.UnirseAPartida(codigoAcceso, jugador);
+
+    // Hacer un seguimiento del proceso en un hilo separado
+    new Thread(() -> {
+        final int TIMEOUT_MS = 10000; // Tiempo máximo de espera en milisegundos (10 segundos)
+        final int SLEEP_MS = 200;     // Intervalo de espera entre comprobaciones (200 ms)
+        int elapsedTime = 0;
+
+        String errorMessage = null;
+
+        while (unirse.getPartida().getCodigoAcceso() == null && elapsedTime < TIMEOUT_MS) {
+            try {
+                Thread.sleep(SLEEP_MS);
+                elapsedTime += SLEEP_MS;
+
+                // Si hay un mensaje de error del servidor, capturarlo
+                if (unirse.getJugador().getColor() == null && unirse.getPartida().getCodigoAcceso() == null) {
+                    errorMessage = unirse.getErrorMessage(); // Método para obtener el mensaje de error
+                    if (errorMessage != null) {
+                        break; // Salir del bucle si hay un error
+                    }
+                }
+            } catch (InterruptedException e) {
+                errorMessage = "Error interno durante la espera. Por favor, intente nuevamente.";
+                break;
+            }
+        }
+
+        // Mostrar el mensaje de error o proceder si la respuesta es válida
+        if (errorMessage != null) {
+            final String messageToShow = errorMessage;
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this, messageToShow, "Error", JOptionPane.ERROR_MESSAGE));
+        } else if (unirse.getPartida().getCodigoAcceso() != null) {
+            // Respuesta recibida, continuar flujo
+            unirse.generarPartida();
+            nav.setPartida(unirse.getPartida());
+            nav.setJugador(unirse.getJugador());
+            SwingUtilities.invokeLater(this::dispose); // Cerrar la ventana actual
+            nav.mostrarListaDeEspera();
+        } else {
+            // Timeout, sin respuesta válida
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this, "Tiempo de espera agotado. No se pudo unirse a la partida.", "Error", JOptionPane.ERROR_MESSAGE));
+        }
+    }).start();
+
+    }//GEN-LAST:event_btnUnirseActionPerformed
+
     private void configuraCodigoPartida() {
         txtCodigoPartida.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 char c = evt.getKeyChar();
                 if (!Character.isDigit(c)) {
-                    evt.consume(); 
+                    evt.consume();
                 }
             }
         });

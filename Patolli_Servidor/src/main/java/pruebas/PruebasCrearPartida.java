@@ -69,7 +69,7 @@ public class PruebasCrearPartida {
             // Ejemplo de enviar datos al servidor (Crear partida)
             Map<String, Object> crearPartida = Map.of(
                     "accion", "CREAR_PARTIDA",
-                    "tamanoTablero", 10,
+                    "tamanoTablero", 68,
                     "numFichas", 4,
                     "fondoApuesta", 1000,
                     "cantidadAPagar", 100,

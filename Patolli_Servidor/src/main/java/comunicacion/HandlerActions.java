@@ -11,6 +11,8 @@ import enums.ResultadoMovimiento;
 import exceptions.PatolliServerException;
 import java.net.Socket;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import negocio.CrearPartidaBO;
 import negocio.GestionarPartidaBO;
 import negocio.PartidaLogicaBO;
@@ -35,16 +37,15 @@ public class HandlerActions {
      *
      * @param clientSocket El socket del cliente que envía la acción.
      * @param data El mapa de datos enviado por el cliente.
+     * @throws exceptions.PatolliServerException
      */
     public void handle(Socket clientSocket, Map<String, Object> data) {
         try {
-            // Validar la acción solicitada
             String accion = (String) data.get("accion");
             if (accion == null || accion.isEmpty()) {
                 throw new IllegalArgumentException("La acción solicitada no es válida.");
             }
 
-            // Identificar y procesar la acción
             switch (accion) {
                 case "CREAR_PARTIDA" ->
                     handleCrearPartida(clientSocket, data);
@@ -61,21 +62,26 @@ public class HandlerActions {
                 default ->
                     throw new IllegalArgumentException("Acción desconocida: " + accion);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            enviarError(clientSocket, e.getMessage());
+        } catch (Exception ex) {
+            System.err.printf("Error inesperado: %s%n", ex.getMessage());
+            enviarError(clientSocket, "Error interno en el servidor.");
         }
     }
 
     /**
      * Maneja la creación de una partida.
      */
-    private void handleCrearPartida(Socket clientSocket, Map<String, Object> data) throws PatolliServerException {
-        String clientId = obtenerClientId(clientSocket);
-        CrearPartidaBO crearPartidaBO = new CrearPartidaBO();
-        Map<String, Object> mensaje = crearPartidaBO.crearPartida(data, clientId);
-        gestionarPartidaBO.registrarPartida(crearPartidaBO.getPartida());
-        MessageUtil.enviarMensaje(clientSocket, mensaje);
+    private void handleCrearPartida(Socket clientSocket, Map<String, Object> data)  {
+        try {
+            String clientId = obtenerClientId(clientSocket);
+            CrearPartidaBO crearPartidaBO = new CrearPartidaBO();
+            Map<String, Object> mensaje = crearPartidaBO.crearPartida(data, clientId);
+            gestionarPartidaBO.registrarPartida(crearPartidaBO.getPartida());
+            MessageUtil.enviarMensaje(clientSocket, mensaje);
+        } catch (PatolliServerException ex) {
+              System.out.printf("Error en crear la partida: %s%n", ex.getMessage());
+            enviarError(clientSocket, ex.getMessage());
+        }
 
     }
 
@@ -83,9 +89,16 @@ public class HandlerActions {
      * Maneja la unión a una partida existente.
      */
     private void handleUnirsePartida(Socket clientSocket, Map<String, Object> data) {
-        String clientId = obtenerClientId(clientSocket);
-        Map<String, Object> mensaje = gestionarPartidaBO.unirseAPartida(data, clientId);
-        MessageUtil.enviarMensaje(clientSocket, mensaje);
+
+        try {
+            String clientId = obtenerClientId(clientSocket);
+            Map<String, Object> mensaje = gestionarPartidaBO.unirseAPartida(data, clientId);
+            MessageUtil.enviarMensaje(clientSocket, mensaje);
+        } catch (PatolliServerException ex) {
+            System.out.printf("Error en unirse a partida: %s%n", ex.getMessage());
+            enviarError(clientSocket, ex.getMessage());
+        }
+
     }
 
     /**

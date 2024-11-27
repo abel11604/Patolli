@@ -11,6 +11,7 @@ import comunicacion.ClientManager;
 import comunicacion.MessageUtil;
 import conversores.toJSON;
 import enums.EstadosPartida;
+import exceptions.PatolliServerException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,37 +67,79 @@ public class GestionarPartidaBO {
      * @param data Datos enviados por el cliente en un HashMap (clave-valor).
      * @param clientId Identificador del cliente que se une.
      * @return Respuesta con los detalles de la partida y el jugador.
+     * @throws PatolliServerException Si ocurre algún problema durante el
+     * proceso.
      */
-    public Map<String, Object> unirseAPartida(Map<String, Object> data, String clientId) {
-        // Validar que el cliente esté registrado en el sistema
-        validarCliente(clientId);
+    public Map<String, Object> unirseAPartida(Map<String, Object> data, String clientId) throws PatolliServerException {
+        validarCliente(clientId); // Validación inicial del cliente
 
-        // Obtener los datos enviados por el cliente
         String codigoAcceso = (String) data.get("codigoAcceso");
         String nombre = (String) data.get("nombre");
 
-        // Buscar la partida activa por su código de acceso
-        Partida partida = partidasActivas.get(codigoAcceso);
-        if (partida == null) {
-            throw new IllegalArgumentException("No existe una partida con el código proporcionado.");
+        // Validaciones de entrada
+        if (codigoAcceso == null || codigoAcceso.isEmpty()) {
+            throw new PatolliServerException("El código de acceso no puede estar vacío.");
+        }
+        if (nombre == null || nombre.isEmpty()) {
+            throw new PatolliServerException("El nombre no puede estar vacío.");
         }
 
-        // Crear un nuevo jugador
+        // Buscar partida por código de acceso
+        Partida partida = partidasActivas.get(codigoAcceso);
+        if (partida == null) {
+            throw new PatolliServerException("No existe una partida con el código proporcionado.");
+        }
+
+        // Validar si la partida ya tiene 4 jugadores
+        if (partida.getJugadores().size() >= 4) {
+            throw new PatolliServerException("La partida ya está completa. No se pueden unir más jugadores.");
+        }
+
+        // Validar si el estado de la partida es ACTIVA
+        if ("ACTIVA".equalsIgnoreCase(partida.getEstado().name())) {
+            throw new PatolliServerException("No puedes unirte a una partida que ya está en progreso.");
+        }
+
+        // Validar nombre de jugador único
+        if (partida.getJugadores().stream().anyMatch(jugador -> jugador.getNombre().equalsIgnoreCase(nombre))) {
+            throw new PatolliServerException("El nombre del jugador ya está en uso en esta partida.");
+        }
+
+        // Validar existencia de un jugador base
+        Jugador jugadorBase = partida.getJugadores().isEmpty() ? null : partida.getJugadores().get(0);
+        if (jugadorBase == null) {
+            throw new PatolliServerException("No se puede unir un jugador a una partida sin jugadores iniciales.");
+        }
+
+        // Crear y configurar el nuevo jugador
+        Jugador nuevoJugador = crearNuevoJugador(clientId, nombre, partida, jugadorBase);
+
+        // Agregar jugador a la partida y registrar cliente
+        partida.getJugadores().add(nuevoJugador);
+        ClientManager.addClient(ClientManager.getClientSocket(clientId), clientId, nuevoJugador);
+
+        // Notificar a los jugadores existentes
+        notificarJugadores(partida, nuevoJugador);
+
+        // Log detallado
+        System.out.printf("Jugador unido: %s, Código de acceso: %s, ID: %s%n", nombre, codigoAcceso, clientId);
+
+        // Responder con detalles de la partida
+        return crearRespuestaUnirsePartida(partida, nuevoJugador, jugadorBase);
+    }
+
+    private Jugador crearNuevoJugador(String clientId, String nombre, Partida partida, Jugador jugadorBase) {
         Jugador nuevoJugador = new Jugador(
                 clientId,
                 nombre,
                 asignarColor(partida),
-                partida.getJugadores().get(0).getFondoApuesta() // Tomar el fondo inicial de un jugador existente
+                jugadorBase.getFondoApuesta()
         );
-        nuevoJugador.setFichas(crearFichas(partida.getJugadores().size(), nuevoJugador));
+        nuevoJugador.setFichas(crearFichas(jugadorBase.getFichas().size(), nuevoJugador));
+        return nuevoJugador;
+    }
 
-        // Agregar el nuevo jugador a la partida
-        partida.getJugadores().add(nuevoJugador);
-
-        // Registrar el cliente en el ClientManager
-        ClientManager.addClient(ClientManager.getClientSocket(clientId), clientId, nuevoJugador);
-
-        // Crear mensaje de notificación para los jugadores existentes
+    private void notificarJugadores(Partida partida, Jugador nuevoJugador) {
         Map<String, Object> mensajeNotificacion = Map.of(
                 "accion", "JUGADOR_UNIDO",
                 "nombre", nuevoJugador.getNombre(),
@@ -106,32 +149,44 @@ public class GestionarPartidaBO {
 
         for (Jugador jugador : partida.getJugadores()) {
             if (!jugador.getId().equals(nuevoJugador.getId())) {
-                Socket clientSocket = ClientManager.getClientSocket(jugador.getId());
-                if (clientSocket != null) {
-                    MessageUtil.enviarMensaje(clientSocket, mensajeNotificacion);
+                try {
+                    Socket clientSocket = ClientManager.getClientSocket(jugador.getId());
+                    if (clientSocket != null) {
+                        MessageUtil.enviarMensaje(clientSocket, mensajeNotificacion);
+                    }
+                } catch (Exception e) {
+                    System.err.printf("Error notificando a jugador %s: %s%n", jugador.getNombre(), e.getMessage());
                 }
             }
         }
+    }
 
-        System.out.println("Jugador unido: " + nombre + ", Código de acceso: " + codigoAcceso);
-
-        // Crear una lista con los detalles de todos los jugadores en la partida
+    private Map<String, Object> crearRespuestaUnirsePartida(Partida partida, Jugador nuevoJugador, Jugador jugadorBase) {
         List<Map<String, Object>> jugadoresExistentes = new ArrayList<>();
         for (Jugador jugador : partida.getJugadores()) {
             jugadoresExistentes.add(Map.of(
                     "id", jugador.getId(),
                     "nombre", jugador.getNombre(),
-                    "color", jugador.getColor() // Ajustar si es un objeto complejo
+                    "color", jugador.getColor(),
+                    "fondoApuesta", jugador.getFondoApuesta()
             ));
         }
 
-        // Respuesta para el cliente que se une
+        Map<String, Object> detallesPartida = Map.of(
+                "codigoAcceso", partida.getCodigoAcceso(),
+                "numCasillas", partida.getCasillas().size(),
+                "jugadores", jugadoresExistentes,
+                "numFichas", jugadorBase.getFichas().size(),
+                "cantidadAPagar", partida.getApuesta()
+        );
+
         return toJSON.dataToJSON(
                 "accion", "UNIRSE_PARTIDA",
-                "codigoAcceso", codigoAcceso,
+                "codigoAcceso", partida.getCodigoAcceso(),
                 "idJugador", nuevoJugador.getId(),
                 "color", nuevoJugador.getColor(),
-                "jugadores", jugadoresExistentes, // Detalles de todos los jugadores
+                "fondoApuesta", nuevoJugador.getFondoApuesta(),
+                "partida", detallesPartida,
                 "mensaje", "Te has unido a la partida exitosamente."
         );
     }
