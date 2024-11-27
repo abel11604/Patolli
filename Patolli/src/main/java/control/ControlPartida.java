@@ -1,9 +1,9 @@
 package control;
 
-import dominio.Casilla;
-import dominio.Ficha;
-import dominio.Juego;
-import dominio.Jugador;
+import modelo.CasillaModelo;
+import modelo.FichaModelo;
+import modelo.PartidaModelo;
+import modelo.JugadorModelo;
 
 /**
  * Clase que implementa el control de la partida del juego, manejando las
@@ -15,8 +15,9 @@ import dominio.Jugador;
  */
 public class ControlPartida implements IControlPartida {
 
-    private Juego partida;
+    private PartidaModelo partida;
     private static ControlPartida instance;
+    
 
     /**
      * Obtiene la instancia única de ControlPartida (Singleton).
@@ -34,7 +35,7 @@ public class ControlPartida implements IControlPartida {
      * {@inheritDoc}
      */
     @Override
-    public void setPartida(Juego partida) {
+    public void setPartida(PartidaModelo partida) {
         this.partida = partida;
     }
 
@@ -42,7 +43,7 @@ public class ControlPartida implements IControlPartida {
      * {@inheritDoc}
      */
     @Override
-    public Juego getPartida() {
+    public PartidaModelo getPartida() {
         return partida;
     }
 
@@ -50,9 +51,9 @@ public class ControlPartida implements IControlPartida {
      * {@inheritDoc}
      */
     @Override
-    public void avanzarCasillas(int numCasillas, Ficha fichaSel) {
+    public void avanzarCasillas(int numCasillas, FichaModelo fichaSel) {
        // Obtener la casilla actual de la ficha
-    Casilla casillaActual = fichaSel.getCasillaActual();
+    CasillaModelo casillaActual = fichaSel.getCasillaActual();
 
     // Encontrar la posición actual de la casilla en la lista de casillas
     int posicionActual = partida.getCasillas().indexOf(casillaActual);
@@ -66,7 +67,7 @@ public class ControlPartida implements IControlPartida {
     }
 
     // Obtener la casilla de destino
-    Casilla casillaDestino = partida.getCasillas().get(nuevaPosicion);
+    CasillaModelo casillaDestino = partida.getCasillas().get(nuevaPosicion);
 
     // Manejar el caso si la casilla de destino está ocupada y es de tipo "Central"
     if (casillaDestino.getOcupadoPor() != null && casillaDestino.getTipo().equalsIgnoreCase("Central")) {
@@ -92,7 +93,7 @@ public class ControlPartida implements IControlPartida {
      * {@inheritDoc}
      */
     @Override
-    public void cobrarApuesta(Jugador jugador) {
+    public void cobrarApuesta(JugadorModelo jugador) {
          if (jugador.getFondoApuesta() >= partida.getApuesta()) {
             jugador.setFondoApuesta(jugador.getFondoApuesta() - partida.getApuesta());
         } else {
@@ -104,7 +105,7 @@ public class ControlPartida implements IControlPartida {
      * {@inheritDoc}
      */
     @Override
-    public void cobrarApuestaDoble(Jugador jugador) {
+    public void cobrarApuestaDoble(JugadorModelo jugador) {
              if (jugador.getFondoApuesta() >= 2 * partida.getApuesta()) {
             jugador.setFondoApuesta(jugador.getFondoApuesta() - 2 * partida.getApuesta());
         } else {
@@ -116,7 +117,7 @@ public class ControlPartida implements IControlPartida {
      * {@inheritDoc}
      */
     @Override
-    public void reiniciarFicha(Ficha ficha) {
+    public void reiniciarFicha(FichaModelo ficha) {
        String tipoInicial = "";
     switch (ficha.getJugador().getColor().toLowerCase()) { // Convertir a minúsculas para mayor consistencia
         case "blanco" ->
@@ -129,7 +130,7 @@ public class ControlPartida implements IControlPartida {
             tipoInicial = "inicialCafe";
     }
 
-    for (Casilla casilla : partida.getCasillas()) {
+    for (CasillaModelo casilla : partida.getCasillas()) {
         if (casilla.getTipo().equalsIgnoreCase(tipoInicial)) { // Comparación sin distinción de mayúsculas y minúsculas
             casilla.setOcupadoPor(ficha);
             ficha.setCasillaActual(casilla);
@@ -142,7 +143,7 @@ public class ControlPartida implements IControlPartida {
      * {@inheritDoc}
      */
     @Override
-    public void eliminarFicha(Ficha ficha) {
+    public void eliminarFicha(FichaModelo ficha) {
         ficha.getJugador().getFichas().remove(ficha);
         //Si el jugador se queda sin fichas, se elimina del juego
         if (ficha.getJugador().getFichas().isEmpty()) {
@@ -154,9 +155,9 @@ public class ControlPartida implements IControlPartida {
      * {@inheritDoc}
      */
     @Override
-    public void eliminarJugador(Jugador jugador) {
+    public void eliminarJugador(JugadorModelo jugador) {
         partida.getJugadores().remove(jugador);
-        for (Ficha ficha : jugador.getFichas()) {
+        for (FichaModelo ficha : jugador.getFichas()) {
             partida.getCasillas().get(ficha.getCasillaActual().getNumCasilla()).setOcupadoPor(null);
         }
     }

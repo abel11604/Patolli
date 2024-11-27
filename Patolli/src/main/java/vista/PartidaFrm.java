@@ -1,12 +1,10 @@
 package vista;
 
-import control.ControlConfigurarPartida;
 import control.ControlPartida;
-import control.IControlConfigurarPartida;
 import control.IControlPartida;
-import dominio.Casilla;
-import dominio.Ficha;
-import dominio.Jugador;
+import modelo.CasillaModelo;
+import modelo.FichaModelo;
+import modelo.JugadorModelo;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
@@ -17,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -31,23 +28,25 @@ import javax.swing.border.LineBorder;
 public class PartidaFrm extends javax.swing.JFrame {
 
     private List<JLabel> casillas;
-    private IControlConfigurarPartida confPartida;
     private IControlPartida partida;
-    private Jugador turnoActual;
-    private Map<Casilla, JLabel> casillaVistaMap = new HashMap<>();
+    private JugadorModelo turnoActual;
+    private Map<CasillaModelo, JLabel> casillaVistaMap = new HashMap<>();
     private JLabel[] fichasBlanco;
     private JLabel[] fichasAmarillo;
     private JLabel[] fichasNaranja;
     private JLabel[] fichasCafe;
-    private Map<Ficha, JLabel> fichaLabelMap = new HashMap<>();
+    private Map<FichaModelo, JLabel> fichaLabelMap = new HashMap<>();
+    private ControlNavegacion nav;
+    private JugadorModelo jugador;
 
     /**
      * Creates new form PartidaFrm
      */
     public PartidaFrm() {
-        this.confPartida = ControlConfigurarPartida.getInstance();
         this.partida = ControlPartida.getInstance();
-        partida.setPartida(confPartida.crearPartida());
+        this.nav = ControlNavegacion.getInstance();
+        this.partida.setPartida(nav.getPartida());
+        this.jugador = nav.getJugador();
         initComponents();
         // Ocultar todos los paneles al inicio
         panelJ1.setVisible(false);
@@ -421,13 +420,13 @@ public class PartidaFrm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void iniciarTurno() {
-        List<Jugador> jugadores = confPartida.getJugadores();
+        List<JugadorModelo> jugadores = partida.getPartida().getJugadores();
         turnoActual = jugadores.get(0); // Inicializar con el primer jugador al iniciar el juego
         actualizarEtiquetaTurno();
     }
 
     public void cambiarTurno() {
-        List<Jugador> jugadores = confPartida.getJugadores();
+        List<JugadorModelo> jugadores = partida.getPartida().getJugadores();
 
         // Encontrar el índice del jugador actual y mover al siguiente jugador de manera cíclica
         int indiceActual = jugadores.indexOf(turnoActual);
@@ -454,18 +453,18 @@ public class PartidaFrm extends javax.swing.JFrame {
     public void actualizarFondoApuesta() {
         JLabel[] etiquetasFondoApuesta = {fondoApuestalbl1, fondoApuestalbl2, fondoApuestalbl3, fondoApuestalbl4};
 
-        List<Jugador> jugadores = partida.getPartida().getJugadores();
+        List<JugadorModelo> jugadores = partida.getPartida().getJugadores();
 
         // Recorrer los jugadores y actualizar el texto de su respectiva etiqueta
         for (int i = 0; i < jugadores.size(); i++) {
-            Jugador jugador = jugadores.get(i);
+            JugadorModelo jugador = jugadores.get(i);
             etiquetasFondoApuesta[i].setText("Fondo de apuesta: " + jugador.getFondoApuesta());
         }
     }
 
     private void pintarJugadores() {
         // Obtener los jugadores configurados
-        List<Jugador> jugadores = partida.getPartida().getJugadores();
+        List<JugadorModelo> jugadores = partida.getPartida().getJugadores();
 
         // Arreglos de etiquetas y paneles
         JLabel[] etiquetasJugadores = {jugadorBlanco, jugadorAmarillo, jugadorNaranja, jugadorCafe};
@@ -475,7 +474,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         // Recorrer los jugadores y actualizar etiquetas y visibilidad de paneles
         for (int i = 0; i < panels.length; i++) {
             if (i < jugadores.size()) {
-                Jugador jugador = jugadores.get(i);
+                JugadorModelo jugador = jugadores.get(i);
                 panels[i].setVisible(true); // Mostrar panel del jugador
                 etiquetasJugadores[i].setText(jugador.getNombre()); // Actualizar el nombre del jugador
                 fondoApuestaLabels[i].setText("Fondo de apuesta: " + jugador.getFondoApuesta()); // Actualizar el fondo de apuesta
@@ -498,14 +497,14 @@ public class PartidaFrm extends javax.swing.JFrame {
         }
 
         // Intentar colocar una ficha en la casilla inicial
-        List<Ficha> fichasJugador = turnoActual.getFichas();
-        Ficha fichaParaIngresar = fichasJugador.stream()
+        List<FichaModelo> fichasJugador = turnoActual.getFichas();
+        FichaModelo fichaParaIngresar = fichasJugador.stream()
                 .filter(ficha -> ficha.getCasillaActual() == null)
                 .findFirst()
                 .orElse(null);
 
         String tipoCasillaInicial = "inicial" + turnoActual.getColor();
-        Casilla casillaInicial = partida.getPartida().getCasillas().stream()
+        CasillaModelo casillaInicial = partida.getPartida().getCasillas().stream()
                 .filter(casilla -> casilla.getTipo().equalsIgnoreCase(tipoCasillaInicial))
                 .findFirst()
                 .orElse(null);
@@ -524,7 +523,7 @@ public class PartidaFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLanzarCañasActionPerformed
 
     private void pintarFichas() {
-        int numFichas = confPartida.getNumFichas();
+        int numFichas = partida.getPartida().getJugadores().get(0).getFichas().size();
 
         // Actualizar fichas para cada jugador según el número de fichas configurado
         actualizarVisibilidadFichas(fichasBlanco, numFichas);
@@ -535,7 +534,7 @@ public class PartidaFrm extends javax.swing.JFrame {
 
     public void imprimirEstadoCasillas() {
         System.out.println("---- Estado de las Casillas ----");
-        for (Casilla casilla : partida.getPartida().getCasillas()) {
+        for (CasillaModelo casilla : partida.getPartida().getCasillas()) {
             String ocupadaPor = (casilla.getOcupadoPor() != null)
                     ? casilla.getOcupadoPor().getJugador().getNombre()
                     : "no ocupado";
@@ -570,8 +569,8 @@ public class PartidaFrm extends javax.swing.JFrame {
     }
 
     public void vincularCasillasConVista(List<JLabel> casillasVista) {
-        List<Casilla> casillasModelo = partida.getPartida().getCasillas();
-        int casillasPorAspa = confPartida.getCasillaPorAspa();
+        List<CasillaModelo> casillasModelo = partida.getPartida().getCasillas();
+        int casillasPorAspa = getCasillasPorAspa();
 
         int[] indicesMapeo;
         switch (casillasPorAspa) {
@@ -624,12 +623,12 @@ public class PartidaFrm extends javax.swing.JFrame {
         }
     }
 
-    public void actualizarVistaCasilla(Casilla casilla) {
+    public void actualizarVistaCasilla(CasillaModelo casilla) {
         JLabel casillaLabel = casillaVistaMap.get(casilla);
         if (casillaLabel != null) {
             // Si hay una ficha en la casilla
             if (casilla.getOcupadoPor() != null) {
-                Ficha ficha = casilla.getOcupadoPor();
+                FichaModelo ficha = casilla.getOcupadoPor();
                 JLabel fichaLabel = fichaLabelMap.get(ficha);
 
                 if (fichaLabel != null) {
@@ -661,12 +660,32 @@ public class PartidaFrm extends javax.swing.JFrame {
 
     }
 
+    private int getCasillasPorAspa() {
+        int casillasPorAspa;
+
+        // Determinar casillas por aspa según el tamaño del tablero
+        switch (partida.getPartida().getCasillas().size()) {
+            case 68 ->
+                casillasPorAspa = 8;
+            case 84 ->
+                casillasPorAspa = 10;
+            case 116 ->
+                casillasPorAspa = 14;
+            default -> {
+                throw new IllegalArgumentException("Tamaño del tablero no soportado: " + partida.getPartida().getCasillas().size());
+            }
+        }
+        return casillasPorAspa;
+    }
+
     private void generarTablero() {
-        int contadorCasillas = 1; // Contador para enumerar todas las casillas
-        contadorCasillas = pintarTablero(casillasArriba, confPartida.getCasillaPorAspa(), 2, false, contadorCasillas);
-        contadorCasillas = pintarTablero(casillasAbajo, confPartida.getCasillaPorAspa(), 2, true, contadorCasillas);
-        contadorCasillas = pintarTablero(casillasDer, 2, confPartida.getCasillaPorAspa(), true, contadorCasillas);
-        contadorCasillas = pintarTablero(casillasIzq, 2, confPartida.getCasillaPorAspa(), false, contadorCasillas);
+        int casillasPorAspa = getCasillasPorAspa();
+        int contadorCasillas = 1;
+        contadorCasillas = pintarTablero(casillasArriba, casillasPorAspa, 2, false, contadorCasillas);
+        contadorCasillas = pintarTablero(casillasAbajo, casillasPorAspa, 2, true, contadorCasillas);
+        contadorCasillas = pintarTablero(casillasDer, 2, casillasPorAspa, true, contadorCasillas);
+        contadorCasillas = pintarTablero(casillasIzq, 2, casillasPorAspa, false, contadorCasillas);
+
         pintarTablero(casillasCentrales, 2, 2, true, contadorCasillas);
     }
 
@@ -751,8 +770,8 @@ public class PartidaFrm extends javax.swing.JFrame {
         }
     }
 
-    private void asociarFichasConLabels(Jugador jugador, JLabel[] labels) {
-        List<Ficha> fichas = jugador.getFichas();
+    private void asociarFichasConLabels(JugadorModelo jugador, JLabel[] labels) {
+        List<FichaModelo> fichas = jugador.getFichas();
 
         // Asociar cada ficha del jugador con su JLabel correspondiente
         for (int i = 0; i < fichas.size() && i < labels.length; i++) {
@@ -760,7 +779,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         }
     }
 
-    private void vincularFichasConVista(List<Jugador> jugadores) {
+    private void vincularFichasConVista(List<JugadorModelo> jugadores) {
         // Arreglos de JLabel para cada jugador en la vista 
         // Asociar las fichas de cada jugador con sus correspondientes JLabel
         if (jugadores.size() >= 1) {
@@ -777,57 +796,56 @@ public class PartidaFrm extends javax.swing.JFrame {
         }
     }
 
-private void iluminarFichasMovibles(Jugador jugador, int numCasillas) {
-    boolean hayFichasMovibles = false; // Bandera para verificar si hay fichas que se pueden mover
+    private void iluminarFichasMovibles(JugadorModelo jugador, int numCasillas) {
+        boolean hayFichasMovibles = false; // Bandera para verificar si hay fichas que se pueden mover
 
-    for (Ficha ficha : jugador.getFichas()) {
-        Casilla casillaActual = ficha.getCasillaActual();
+        for (FichaModelo ficha : jugador.getFichas()) {
+            CasillaModelo casillaActual = ficha.getCasillaActual();
 
-        if (casillaActual != null) {
-            int posicionActual = partida.getPartida().getCasillas().indexOf(casillaActual);
-            
-            // Calcular la nueva posición usando módulo para asegurar un tablero circular
-            int nuevaPosicion = (posicionActual + numCasillas) % partida.getPartida().getCasillas().size();
+            if (casillaActual != null) {
+                int posicionActual = partida.getPartida().getCasillas().indexOf(casillaActual);
 
-            Casilla casillaDestino = partida.getPartida().getCasillas().get(nuevaPosicion);
+                // Calcular la nueva posición usando módulo para asegurar un tablero circular
+                int nuevaPosicion = (posicionActual + numCasillas) % partida.getPartida().getCasillas().size();
 
-            // Verificar si la casilla destino no está ocupada por una ficha del mismo jugador
-            if (casillaDestino.getOcupadoPor() == null || !casillaDestino.getOcupadoPor().getJugador().equals(jugador)) {
-                JLabel fichaLabel = fichaLabelMap.get(ficha);
+                CasillaModelo casillaDestino = partida.getPartida().getCasillas().get(nuevaPosicion);
 
-                if (fichaLabel != null) {
-                    hayFichasMovibles = true; // Hay al menos una ficha movible
+                // Verificar si la casilla destino no está ocupada por una ficha del mismo jugador
+                if (casillaDestino.getOcupadoPor() == null || !casillaDestino.getOcupadoPor().getJugador().equals(jugador)) {
+                    JLabel fichaLabel = fichaLabelMap.get(ficha);
 
-                    // Cambiar el color de fondo para mostrar que la ficha es seleccionable
-                    fichaLabel.setOpaque(true);
-                    fichaLabel.setBackground(Color.GREEN);
+                    if (fichaLabel != null) {
+                        hayFichasMovibles = true; // Hay al menos una ficha movible
 
-                    // Agregar un listener para manejar el clic en la ficha
-                    fichaLabel.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            partida.avanzarCasillas(numCasillas, ficha); // Avanzar la ficha
-                            actualizarVistaCasilla(ficha.getCasillaActual());
-                            desiluminarFichas(); // Desiluminar todas las fichas después del movimiento
-                            cambiarTurno(); // Pasar el turno al siguiente jugador
-                            btnLanzarCañas.setEnabled(true); // Reactivar el botón de lanzar cañas
-                        }
-                    });
+                        // Cambiar el color de fondo para mostrar que la ficha es seleccionable
+                        fichaLabel.setOpaque(true);
+                        fichaLabel.setBackground(Color.GREEN);
+
+                        // Agregar un listener para manejar el clic en la ficha
+                        fichaLabel.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseClicked(MouseEvent e) {
+                                partida.avanzarCasillas(numCasillas, ficha); // Avanzar la ficha
+                                actualizarVistaCasilla(ficha.getCasillaActual());
+                                desiluminarFichas(); // Desiluminar todas las fichas después del movimiento
+                                cambiarTurno(); // Pasar el turno al siguiente jugador
+                                btnLanzarCañas.setEnabled(true); // Reactivar el botón de lanzar cañas
+                            }
+                        });
+                    }
                 }
             }
         }
-    }
 
-    // Si no hay fichas movibles, pasar el turno automáticamente
-    if (!hayFichasMovibles) {
-        cambiarTurno();
-        btnLanzarCañas.setEnabled(true); // Reactivar el botón para el siguiente jugador
+        // Si no hay fichas movibles, pasar el turno automáticamente
+        if (!hayFichasMovibles) {
+            cambiarTurno();
+            btnLanzarCañas.setEnabled(true); // Reactivar el botón para el siguiente jugador
+        }
     }
-}
-
 
     private void desiluminarFichas() {
-        for (Map.Entry<Ficha, JLabel> entry : fichaLabelMap.entrySet()) {
+        for (Map.Entry<FichaModelo, JLabel> entry : fichaLabelMap.entrySet()) {
             JLabel fichaLabel = entry.getValue();
             // Restablecer el color original de las fichas
             fichaLabel.setBackground(null);
