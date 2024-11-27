@@ -38,7 +38,7 @@ public class ControlNavegacion {
         PartidaFrm partida = new PartidaFrm();
         partida.mostrarPantalla();
     }
-    
+
     public void mostrarUnirsePartida(){
         UnirsePartidaFrm unirse = new UnirsePartidaFrm();
         unirse.setVisible(true);
@@ -59,6 +59,6 @@ public class ControlNavegacion {
     public void setJugador(JugadorModelo jugador) {
         this.jugador = jugador;
     }
-    
-    
+
+
 }

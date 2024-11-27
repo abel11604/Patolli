@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package vista;
 
 import control.ControlCrearPartida;
@@ -161,9 +157,8 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUnirmeActionPerformed
 
     private void btnInstruccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInstruccionesActionPerformed
+        nav.mostrarInstrucciones();
         dispose();
-        IntruccionesDlg instrucciones = new IntruccionesDlg(this, true);
-        instrucciones.setVisible(true);
     }//GEN-LAST:event_btnInstruccionesActionPerformed
 
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
