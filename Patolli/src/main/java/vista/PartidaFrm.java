@@ -64,7 +64,6 @@ public class PartidaFrm extends javax.swing.JFrame {
         setApuesta(partida.getPartida().getApuesta());
 
         iniciarTurno();
-
     }
 
     /**
@@ -522,7 +521,6 @@ public class PartidaFrm extends javax.swing.JFrame {
 
         // Si no se puede colocar la ficha, iluminar las fichas movibles
         iluminarFichasMovibles(turnoActual, resultado);
-
     }//GEN-LAST:event_btnLanzarCañasActionPerformed
 
     private void pintarFichas() {

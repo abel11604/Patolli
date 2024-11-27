@@ -39,4 +39,11 @@ public class ControlNavegacion {
         UnirsePartidaFrm unirse = new UnirsePartidaFrm();
         unirse.setVisible(true);
     }
+    
+    public void mostrarInstrucciones(){
+        InstruccionesDlg instrucciones = new InstruccionesDlg();
+        instrucciones.setVisible(true);
+    }
+    
+    
 }

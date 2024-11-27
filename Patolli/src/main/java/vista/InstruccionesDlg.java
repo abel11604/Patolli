@@ -8,12 +8,12 @@ package vista;
  *
  * @author adria
  */
-public class IntruccionesDlg extends javax.swing.JDialog {
+public class InstruccionesDlg extends javax.swing.JDialog {
     ControlNavegacion nav;
     /**
      * Creates new form IntruccionesDlg
      */
-    public IntruccionesDlg(java.awt.Frame parent, boolean modal) {
+    public InstruccionesDlg() {
         initComponents();
         this.nav = ControlNavegacion.getInstance();
         anterior.setVisible(false);
@@ -275,13 +275,6 @@ public class IntruccionesDlg extends javax.swing.JDialog {
     jLabel16.setVisible(true);
     }//GEN-LAST:event_anteriorMouseClicked
 
-    public void mostrarPantalla() {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PartidaFrm().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel anterior;
