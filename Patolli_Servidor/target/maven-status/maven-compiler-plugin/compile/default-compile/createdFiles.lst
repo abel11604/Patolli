@@ -6,7 +6,6 @@ comunicacion\MessageUtil.class
 dominio\Partida.class
 negocio\PartidaLogicaBO.class
 comunicacion\HandlerActions.class
-conversores\toJSON.class
 exceptions\PatolliServerException.class
 negocio\CrearPartidaBO.class
 comunicacion\ClientManager.class

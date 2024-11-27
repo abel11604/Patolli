@@ -32,11 +32,21 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
         this.jugador = nav.getJugador();
         initComponents();
         inicializarPantalla();
-           ClientConnection.getInstance().setMessageListener(message -> {
-        if (message.get("accion").equals("JUGADOR_UNIDO")) {
-            SwingUtilities.invokeLater(() -> procesarNuevoJugador(message));
-        }
-    });
+        ClientConnection.getInstance().setMessageListener(message -> {
+            String accion = (String) message.get("accion");
+            if (accion == null) {
+                return;
+            }
+
+            SwingUtilities.invokeLater(() -> {
+                switch (accion) {
+                    case "JUGADOR_UNIDO" ->
+                        procesarNuevoJugador(message);
+                    case "PARTIDA_INICIADA" ->
+                        procesarPartidaIniciada(message);
+                }
+            });
+        });
     }
 
     /**
@@ -245,7 +255,7 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
 
 
     private void btnIniciarPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarPartidaActionPerformed
-
+        ClientConnection.getInstance().iniciarPartida(partida.getCodigoAcceso());
     }//GEN-LAST:event_btnIniciarPartidaActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -319,6 +329,15 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
             // Actualizar la interfaz para reflejar el cambio
             cargarJugadores();
         }
+    }
+
+    public void procesarPartidaIniciada(Map<String, Object> mensajeNotificacion) {
+        // Mostrar el mensaje recibido (opcional)
+        System.out.println("Partida iniciada: " + mensajeNotificacion);
+
+        // Cambiar a la pantalla del juego
+        nav.mostrarPantallaJuego();
+        dispose(); // Cerrar la ventana actual
     }
 
     public void mostrarPantalla() {

@@ -12,8 +12,8 @@ import modelo.JugadorModelo;
  */
 public class UnirsePartidaFrm extends javax.swing.JFrame {
 
-    IControlUnirseAPartida unirse;
-    ControlNavegacion nav;
+    private IControlUnirseAPartida unirse;
+    private ControlNavegacion nav;
 
     /**
      * Creates new form unirsePartidaFrm

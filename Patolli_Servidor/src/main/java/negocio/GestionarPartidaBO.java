@@ -9,7 +9,6 @@ import dominio.Partida;
 import dominio.Ficha;
 import comunicacion.ClientManager;
 import comunicacion.MessageUtil;
-import conversores.toJSON;
 import enums.EstadosPartida;
 import exceptions.PatolliServerException;
 import java.net.Socket;
@@ -180,7 +179,7 @@ public class GestionarPartidaBO {
                 "cantidadAPagar", partida.getApuesta()
         );
 
-        return toJSON.dataToJSON(
+        return Map.of(
                 "accion", "UNIRSE_PARTIDA",
                 "codigoAcceso", partida.getCodigoAcceso(),
                 "idJugador", nuevoJugador.getId(),

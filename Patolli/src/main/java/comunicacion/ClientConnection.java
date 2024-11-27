@@ -160,6 +160,14 @@ public class ClientConnection {
         sendMessage(data);
     }
 
+    public void iniciarPartida(String codigoAcceso) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("accion", "INICIAR_PARTIDA");
+        data.put("codigoAcceso", codigoAcceso);
+
+        sendMessage(data);
+    }
+
     /**
      * Establece el oyente de mensajes para los mensajes entrantes del servidor.
      *
