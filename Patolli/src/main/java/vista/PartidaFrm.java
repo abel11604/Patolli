@@ -40,7 +40,6 @@ public class PartidaFrm extends javax.swing.JFrame {
     private Map<FichaModelo, JLabel> fichaLabelMap = new HashMap<>();
     private ControlNavegacion nav;
     private JugadorModelo jugador;
-    private PartidaModelo partidaModelo;
 
     /**
      * Creates new form PartidaFrm
@@ -50,6 +49,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         this.nav = ControlNavegacion.getInstance();
         this.partida.setPartida(nav.getPartida());
         this.jugador = nav.getJugador();
+        System.out.println("jugador" + jugador.getNombre());
         initComponents();
         // Ocultar todos los paneles al inicio
         panelJ1.setVisible(false);
@@ -64,11 +64,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         vincularFichasConVista(partida.getPartida().getJugadores());
         vincularCasillasConVista(casillas);
         setApuesta(partida.getPartida().getApuesta());
-
         actualizarFondoApuesta();
-        iniciarTurno();
-        
-
         iniciarTurno();
         ClientConnection.getInstance().setMessageListener(message -> {
             System.out.println("Mensaje recibido del servidor: " + message);
@@ -83,8 +79,11 @@ public class PartidaFrm extends javax.swing.JFrame {
                         procesarTiroCañas(message);
 
                     case "REINICIAR_FICHA" ->
-                        procesarReinicioCaña(message);
-                    
+                        procesarReinicioFicha(message);
+
+                    case "CAMBIAR_TURNO" ->
+                        procesarCambioTurno((String) message.get("turno"));
+
                 }
             });
         });
@@ -444,7 +443,6 @@ public class PartidaFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    
     public void iniciarTurno() {
         List<JugadorModelo> jugadores = partida.getPartida().getJugadores();
         turnoActual = jugadores.get(0); // Inicializar con el primer jugador al iniciar el juego
@@ -454,36 +452,21 @@ public class PartidaFrm extends javax.swing.JFrame {
 
         actualizarEtiquetaTurno();
     }
-    
-    private void procesarCambioTurno(String nombreJugador) {
 
+    private void procesarCambioTurno(String nombreJugador) {
+        System.out.println("hola "+nombreJugador);
         if (nombreJugador != null) {
-            for (JugadorModelo jugador : partida.getPartida().getJugadores()) {
-                if (jugador.getNombre().equalsIgnoreCase(nombreJugador)) {
-                    turnoActual = jugador;
-                    return;
+            for (JugadorModelo jugadorTurno : partida.getPartida().getJugadores()) {
+                if (jugadorTurno.getNombre().equalsIgnoreCase(nombreJugador)) {
+                    turnoActual = jugadorTurno; // Actualiza el turno actual
+                    System.out.println("segun cambio "+turnoActual.getNombre());
+                    break;
                 }
             }
-            
-            lblTurno.setText("" + turnoActual.getNombre()); // Actualiza la etiqueta del turno
 
-            if (jugador.getNombre().equalsIgnoreCase(turnoActual.getNombre())) {
-                btnLanzarCañas.setEnabled(true);
-            } else {
-                btnLanzarCañas.setEnabled(false);
-            }
+            actualizarEtiquetaTurno(); // Actualiza el nombre en la vista
+            actualizarEstadoBotonLanzarCañas(); // Activa/desactiva el botón
         }
-    }
-
-    public void cambiarTurno() {
-        List<JugadorModelo> jugadores = partida.getPartida().getJugadores();
-
-        int indiceActual = jugadores.indexOf(turnoActual);
-        int siguienteIndice = (indiceActual + 1) % jugadores.size();
-        turnoActual = jugadores.get(siguienteIndice);
-
-        actualizarEstadoBotonLanzarCañas();
-        actualizarEtiquetaTurno();
     }
 
     private void actualizarEtiquetaTurno() {
@@ -498,9 +481,9 @@ public class PartidaFrm extends javax.swing.JFrame {
         int apuesta = partida.getPartida().getApuesta();
         lblApuesta.setText("" + apuesta);
     }
-    
+
     public void actualizarFondoApuesta() {
-        JLabel[] etiquetasFondoApuesta = {fondoApuestalbl1, fondoApuestalbl2, fondoApuestalbl3, fondoApuestalbl4};     
+        JLabel[] etiquetasFondoApuesta = {fondoApuestalbl1, fondoApuestalbl2, fondoApuestalbl3, fondoApuestalbl4};
         List<JugadorModelo> jugadores = partida.getPartida().getJugadores();
 
         for (int i = 0; i < etiquetasFondoApuesta.length; i++) {
@@ -523,10 +506,10 @@ public class PartidaFrm extends javax.swing.JFrame {
         // Recorrer los jugadores y actualizar etiquetas y visibilidad de paneles
         for (int i = 0; i < panels.length; i++) {
             if (i < jugadores.size()) {
-                JugadorModelo jugador = jugadores.get(i);
+                JugadorModelo jugadorPintar = jugadores.get(i);
                 panels[i].setVisible(true); // Mostrar panel del jugador
-                etiquetasJugadores[i].setText(jugador.getNombre()); // Actualizar el nombre del jugador
-                fondoApuestaLabels[i].setText("Fondo de apuesta: " + jugador.getFondoApuesta()); // Actualizar el fondo de apuesta
+                etiquetasJugadores[i].setText(jugadorPintar.getNombre()); // Actualizar el nombre del jugador
+                fondoApuestaLabels[i].setText("Fondo de apuesta: " + jugadorPintar.getFondoApuesta()); // Actualizar el fondo de apuesta
                 fondoApuestaLabels[i].setVisible(true); // Asegurarse de que la etiqueta de fondo esté visible
             } else {
                 panels[i].setVisible(false); // Ocultar panel si no hay jugador
@@ -588,11 +571,13 @@ public class PartidaFrm extends javax.swing.JFrame {
 
         // Si el jugador actual es el jugador que lanzó, procesa el avance
         if (jugador.getNombre().equalsIgnoreCase((String) message.get("jugador"))) {
+
+            System.out.println("hola entre al if" + jugador.getNombre());
             int casillasAvanzar = (int) message.get("resultado");
             procesarMovimientoJugador(casillasAvanzar);
         }
 
-        System.out.println("Cañas actualizadas para el jugador: " + message.get("jugador"));
+        System.out.println("Cañas actualizadas para el jugador: " + jugador.getNombre());
     }
 
     private void procesarMovimientoJugador(int casillasAvanzar) {
@@ -619,9 +604,7 @@ public class PartidaFrm extends javax.swing.JFrame {
             partida.reiniciarFicha(fichaParaIngresar);
             actualizarVistaCasilla(fichaParaIngresar.getCasillaActual());
             ClientConnection.getInstance().reinciarFicha(partida.getPartida().getCodigoAcceso(), fichaParaIngresar.getId());
-            cambiarTurno(); // Cambio de turno porque la acción termina aquí
-            btnLanzarCañas.setEnabled(true); // Reactivar el botón después del cambio de turno
-            imprimirEstadoCasillas(); // Debugging: Verifica el estado de las casillas
+            //imprimirEstadoCasillas(); // Debugging: Verifica el estado de las casillas
             return;
         }
 
@@ -629,7 +612,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         iluminarFichasMovibles(turnoActual, casillasAvanzar);
     }
 
-    public void procesarReinicioCaña(Map<String, Object> message) {
+    public void procesarReinicioFicha(Map<String, Object> message) {
         // Obtener los datos del mensaje
         String nombreJugador = (String) message.get("jugador");
         String idFicha = (String) message.get("idFicha");
@@ -637,6 +620,7 @@ public class PartidaFrm extends javax.swing.JFrame {
 
         // Verificar si el mensaje corresponde al jugador actual
         if (jugador.getNombre().equalsIgnoreCase(nombreJugador)) {
+            procesarCambioTurno(turno);
             return; // No realizar el reinicio en la pantalla del jugador que ejecutó la acción
         }
 
@@ -660,10 +644,8 @@ public class PartidaFrm extends javax.swing.JFrame {
 
         // Reiniciar la ficha y actualizar la vista
         partida.reiniciarFicha(fichaReiniciar); // Reinicia la ficha en el modelo
-        
         actualizarVistaCasilla(fichaReiniciar.getCasillaActual()); // Actualiza la vista correspondiente
         procesarCambioTurno(turno);
-        imprimirEstadoCasillas(); // 
 
     }
 
@@ -906,7 +888,6 @@ public class PartidaFrm extends javax.swing.JFrame {
 
                 // Calcular la nueva posición usando módulo para asegurar un tablero circular
                 int nuevaPosicion = (posicionActual + numCasillas) % partida.getPartida().getCasillas().size();
-
                 CasillaModelo casillaDestino = partida.getPartida().getCasillas().get(nuevaPosicion);
 
                 // Verificar si la casilla destino no está ocupada por una ficha del mismo jugador
@@ -915,19 +896,24 @@ public class PartidaFrm extends javax.swing.JFrame {
 
                     if (fichaLabel != null) {
                         hayFichasMovibles = true; // Hay al menos una ficha movible
+                        btnLanzarCañas.setEnabled(false); // Deshabilitar el botón si hay fichas movibles
 
                         // Cambiar el color de fondo para mostrar que la ficha es seleccionable
                         fichaLabel.setOpaque(true);
                         fichaLabel.setBackground(Color.GREEN);
 
-                        // Agregar un listener para manejar el clic en la ficha
+                        // Limpiar listeners existentes para evitar duplicados
+                        for (MouseListener listener : fichaLabel.getMouseListeners()) {
+                            fichaLabel.removeMouseListener(listener);
+                        }
+
+                        // Agregar un nuevo listener para manejar el clic en la ficha
                         fichaLabel.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mouseClicked(MouseEvent e) {
                                 partida.avanzarCasillas(numCasillas, ficha); // Avanzar la ficha
                                 actualizarVistaCasilla(ficha.getCasillaActual());
                                 desiluminarFichas(); // Desiluminar todas las fichas después del movimiento
-                                cambiarTurno(); // Pasar el turno al siguiente jugador
                                 btnLanzarCañas.setEnabled(true); // Reactivar el botón de lanzar cañas
                             }
                         });
@@ -938,7 +924,7 @@ public class PartidaFrm extends javax.swing.JFrame {
 
         // Si no hay fichas movibles, pasar el turno automáticamente
         if (!hayFichasMovibles) {
-            cambiarTurno();
+            ClientConnection.getInstance().cambiarTurno(partida.getPartida().getCodigoAcceso());
             btnLanzarCañas.setEnabled(true); // Reactivar el botón para el siguiente jugador
         }
     }
@@ -956,9 +942,6 @@ public class PartidaFrm extends javax.swing.JFrame {
     }
 
     private void actualizarEstadoBotonLanzarCañas() {
-        System.out.println("jugador: " + jugador.getNombre());
-        System.out.println("Turno" + turnoActual.getNombre());
-
         if (jugador.getNombre().equalsIgnoreCase(turnoActual.getNombre())) {
             btnLanzarCañas.setEnabled(true); // Habilitar el botón para el jugador en turno
         } else {

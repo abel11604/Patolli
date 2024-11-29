@@ -30,7 +30,6 @@ public class PartidaLogicaBO {
 
     public PartidaLogicaBO(Partida partida) {
         this.partida = partida;
-        determinarTurno();
     }
 
     /**
@@ -128,7 +127,7 @@ public class PartidaLogicaBO {
      * @return Mapa con la respuesta sobre el estado del reinicio.
      */
     public Map<String, Object> reiniciarFichaPorCliente(Map<String, Object> data, String clientId) {
-        System.out.println("Turno: "+partida.getTurnoActual());
+        System.out.println("Turno: " + partida.getTurnoActual());
         validarCliente(clientId);
 
         // Extraer datos del mapa
@@ -146,8 +145,7 @@ public class PartidaLogicaBO {
         // Reiniciar la ficha
         reiniciarFicha(ficha);
         determinarTurno();
-        System.out.println("Turno: "+partida.getTurnoActual());
-
+        System.out.println("Turno: " + partida.getTurnoActual());
 
         // Crear el mensaje para notificar el reinicio a todos los jugadores
         Map<String, Object> mensaje = Map.of(
@@ -160,13 +158,14 @@ public class PartidaLogicaBO {
 
         // Notificar a todos los jugadores en la partida
         for (Jugador jugadorEnPartida : partida.getJugadores()) {
-            Socket clientSocket = ClientManager.getClientSocket(jugadorEnPartida.getId());
-            if (clientSocket != null) {
-                MessageUtil.enviarMensaje(clientSocket, mensaje);
-            } else {
-                System.err.println("No se encontró un socket para el jugador con ID: " + jugadorEnPartida.getId());
+            if (!jugadorEnPartida.getId().equals(clientId)) { // Excluir al jugador actual
+                Socket clientSocket = ClientManager.getClientSocket(jugadorEnPartida.getId());
+                if (clientSocket != null) {
+                    MessageUtil.enviarMensaje(clientSocket, mensaje);
+                }
             }
         }
+
         System.out.println("Partida servidor");
         for (Casilla casilla : partida.getCasillas()) {
             String ocupadaPor = (casilla.getOcupadoPor() != null)
@@ -174,6 +173,32 @@ public class PartidaLogicaBO {
                     : "no ocupado";
             System.out.println("numC: " + casilla.getNumCasilla() + " tipo: " + casilla.getTipo() + " ocupadaPor: " + ocupadaPor);
         }
+        // Retornar el mensaje de éxito al cliente que solicitó el reinicio
+        return mensaje;
+    }
+
+    public Map<String, Object> cambiarTurno(String clientId) {
+        System.out.println("Turnoantes: " + partida.getTurnoActual());
+        validarCliente(clientId);
+
+        determinarTurno();
+        System.out.println("Turnodespues: " + partida.getTurnoActual());
+
+        // Crear el mensaje para notificar el reinicio a todos los jugadores
+        Map<String, Object> mensaje = Map.of(
+                "accion", "CAMBIAR_TURNO",
+                "turno", partida.getTurnoActual().getNombre()
+        );
+
+        for (Jugador jugadorEnPartida : partida.getJugadores()) {
+            if (!jugadorEnPartida.getId().equals(clientId)) { // Excluir al jugador actual
+                Socket clientSocket = ClientManager.getClientSocket(jugadorEnPartida.getId());
+                if (clientSocket != null) {
+                    MessageUtil.enviarMensaje(clientSocket, mensaje);
+                }
+            }
+        }
+
         // Retornar el mensaje de éxito al cliente que solicitó el reinicio
         return mensaje;
     }
@@ -311,9 +336,9 @@ public class PartidaLogicaBO {
     public Jugador determinarTurno() {
         List<Jugador> jugadores = partida.getJugadores();
         int indiceActual = jugadores.indexOf(partida.getTurnoActual());
-        int siguienteIndice = (indiceActual + 1) % jugadores.size();
+        int siguienteIndice = (indiceActual + 1) % jugadores.size(); // Comportamiento cíclico
         Jugador siguienteJugador = jugadores.get(siguienteIndice);
-        partida.setTurnoActual(siguienteJugador);
+        partida.setTurnoActual(siguienteJugador); // Actualiza el turno
         return siguienteJugador;
     }
 
@@ -404,15 +429,17 @@ public class PartidaLogicaBO {
         }
         throw new IllegalArgumentException("No se encontró un jugador con el nombre proporcionado");
     }
-    
-    public void asignarTurnoInicial() {
-        List<Jugador> jugadores = partida.getJugadores(); // Obtener la lista de jugadores
 
-        if (jugadores.isEmpty()) {
-            throw new IllegalStateException("No hay jugadores en la partida para asignar el turno inicial.");
+    public void inicializarTurnoSiEsNecesario() {
+        if (partida.getTurnoActual() == null) {
+            asignarTurnoInicial();
         }
+    }
 
-        Jugador primerJugador = jugadores.get(0); // Obtener el primer jugador de la lista
-        partida.setTurnoActual(primerJugador); // Asignar el turno al primer jugador
+    public void asignarTurnoInicial() {
+        List<Jugador> jugadores = partida.getJugadores();
+
+        Jugador primerJugador = jugadores.get(0);
+        partida.setTurnoActual(primerJugador);
     }
 }

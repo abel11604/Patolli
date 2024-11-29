@@ -19,6 +19,7 @@ public class Partida {
     private EstadosPartida estado;
     private String codigoAcceso;
     private Jugador turnoActual;
+   
 
     public Partida() {
     }

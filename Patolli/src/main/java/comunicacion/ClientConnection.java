@@ -183,11 +183,10 @@ public class ClientConnection {
         sendMessage(data);
     }
     
-    public void cambiarTurno(String codigoPartida, String client) {
+    public void cambiarTurno(String codigoPartida) {
         Map<String, Object> data = new HashMap<>();
-        data.put("accion", "CAMBIO_TURNO");
+        data.put("accion", "CAMBIAR_TURNO");
         data.put("codigoAcceso", codigoPartida);
-        data.put("turnoActual", client); // El nombre del jugador o indicador del turno actual
         sendMessage(data);
     }
     

@@ -59,6 +59,8 @@ public class HandlerActions {
                     handleMoverFicha(clientSocket, data);
                 case "REINICIAR_FICHA" ->
                     handleReiniciarFicha(clientSocket, data);
+                case "CAMBIAR_TURNO" ->
+                    handleCambiarTurno(clientSocket, data);
                 default ->
                     throw new IllegalArgumentException("Acción desconocida: " + accion);
             }
@@ -71,15 +73,16 @@ public class HandlerActions {
     /**
      * Maneja la creación de una partida.
      */
-    private void handleCrearPartida(Socket clientSocket, Map<String, Object> data)  {
+    private void handleCrearPartida(Socket clientSocket, Map<String, Object> data) {
         try {
             String clientId = obtenerClientId(clientSocket);
             CrearPartidaBO crearPartidaBO = new CrearPartidaBO();
             Map<String, Object> mensaje = crearPartidaBO.crearPartida(data, clientId);
             gestionarPartidaBO.registrarPartida(crearPartidaBO.getPartida());
+
             MessageUtil.enviarMensaje(clientSocket, mensaje);
         } catch (PatolliServerException ex) {
-              System.out.printf("Error en crear la partida: %s%n", ex.getMessage());
+            System.out.printf("Error en crear la partida: %s%n", ex.getMessage());
             enviarError(clientSocket, ex.getMessage());
         }
 
@@ -115,6 +118,7 @@ public class HandlerActions {
         String clientId = obtenerClientId(clientSocket);
         Partida partida = gestionarPartidaBO.obtenerPartida((String) data.get("codigoAcceso"));
         PartidaLogicaBO partidaLogicaBO = new PartidaLogicaBO(partida);
+        partidaLogicaBO.inicializarTurnoSiEsNecesario();
         Map<String, Object> mensaje = partidaLogicaBO.lanzamientoCañas(clientId);
         MessageUtil.enviarMensaje(clientSocket, mensaje);
     }
@@ -152,7 +156,15 @@ public class HandlerActions {
         );
         MessageUtil.enviarMensaje(clientSocket, mensaje);
     }
-    
+
+    private void handleCambiarTurno(Socket clientSocket, Map<String, Object> data) {
+        String clientId = obtenerClientId(clientSocket);
+        Partida partida = gestionarPartidaBO.obtenerPartida((String) data.get("codigoAcceso"));
+        PartidaLogicaBO partidaLogicaBO = new PartidaLogicaBO(partida);
+        Map<String, Object> mensaje = partidaLogicaBO.cambiarTurno(clientId);
+        MessageUtil.enviarMensaje(clientSocket, mensaje);
+    }
+
     /**
      * Obtiene el identificador único del cliente a partir de su socket.
      */
