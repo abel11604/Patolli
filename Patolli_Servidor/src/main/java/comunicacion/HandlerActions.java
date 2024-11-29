@@ -89,7 +89,6 @@ public class HandlerActions {
      * Maneja la unión a una partida existente.
      */
     private void handleUnirsePartida(Socket clientSocket, Map<String, Object> data) {
-
         try {
             String clientId = obtenerClientId(clientSocket);
             Map<String, Object> mensaje = gestionarPartidaBO.unirseAPartida(data, clientId);
@@ -98,7 +97,6 @@ public class HandlerActions {
             System.out.printf("Error en unirse a partida: %s%n", ex.getMessage());
             enviarError(clientSocket, ex.getMessage());
         }
-
     }
 
     /**

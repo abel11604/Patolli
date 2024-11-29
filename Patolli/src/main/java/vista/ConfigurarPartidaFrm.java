@@ -292,9 +292,8 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         int apuesta = (int) apuestaSpinner.getValue();
         int fondo = (int) fondoApuestaSpinner.getValue();
         confPartida.setApuesta(apuesta);
-        confPartida.setApuesta(apuesta);
+        confPartida.setFondo(fondo);
     }
-
 
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
 

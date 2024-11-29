@@ -62,7 +62,7 @@ public class CrearPartidaBO {
         partida.setJugadores(jugadores);
 
         // Generar código único de acceso
-        String codigoAcceso = generarCodigoNumerico(5);
+        String codigoAcceso = generarCodigoNumerico(4);
         partida.setCodigoAcceso(codigoAcceso);
         System.out.println("Si se creo la partida we " + codigoAcceso);
         

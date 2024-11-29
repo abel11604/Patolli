@@ -17,8 +17,8 @@ public class ClientManager {
 
     // Mapa para almacenar el socket y su clientId
     private static Map<Socket, String> clientToIdMap = new ConcurrentHashMap<>();
-    private static Map<String, Socket> idToClientMap = new ConcurrentHashMap<>();
-    private static Map<String, Jugador> clientIdToJugadorMap = new ConcurrentHashMap<>();
+    static Map<String, Socket> idToClientMap = new ConcurrentHashMap<>();
+    static Map<String, Jugador> clientIdToJugadorMap = new ConcurrentHashMap<>();
 
     // Método para agregar un cliente y asociar su clientId con un Jugador
     public static void addClient(Socket clientSocket, String clientId, Jugador jugador) {

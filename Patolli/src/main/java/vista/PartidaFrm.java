@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
+import modelo.PartidaModelo;
 
 /**
  *
@@ -38,6 +39,7 @@ public class PartidaFrm extends javax.swing.JFrame {
     private Map<FichaModelo, JLabel> fichaLabelMap = new HashMap<>();
     private ControlNavegacion nav;
     private JugadorModelo jugador;
+    private PartidaModelo partidaModelo;
 
     /**
      * Creates new form PartidaFrm
@@ -61,8 +63,9 @@ public class PartidaFrm extends javax.swing.JFrame {
         vincularFichasConVista(partida.getPartida().getJugadores());
         vincularCasillasConVista(casillas);
         setApuesta(partida.getPartida().getApuesta());
-
+        actualizarFondoApuesta();
         iniciarTurno();
+        
     }
 
     /**
@@ -419,10 +422,14 @@ public class PartidaFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    
     public void iniciarTurno() {
         List<JugadorModelo> jugadores = partida.getPartida().getJugadores();
         turnoActual = jugadores.get(0); // Inicializar con el primer jugador al iniciar el juego
         actualizarEtiquetaTurno();
+//        if(!turnoActual.getNombre().equals(lblTurno.getText())){
+//            btnLanzarCañas.setEnabled(false);
+//        }
     }
 
     public void cambiarTurno() {
@@ -449,16 +456,16 @@ public class PartidaFrm extends javax.swing.JFrame {
         int apuesta = partida.getPartida().getApuesta();
         lblApuesta.setText("" + apuesta);
     }
-
+    
     public void actualizarFondoApuesta() {
-        JLabel[] etiquetasFondoApuesta = {fondoApuestalbl1, fondoApuestalbl2, fondoApuestalbl3, fondoApuestalbl4};
-
+        JLabel[] etiquetasFondoApuesta = {fondoApuestalbl1, fondoApuestalbl2, fondoApuestalbl3, fondoApuestalbl4};     
         List<JugadorModelo> jugadores = partida.getPartida().getJugadores();
 
-        // Recorrer los jugadores y actualizar el texto de su respectiva etiqueta
-        for (int i = 0; i < jugadores.size(); i++) {
-            JugadorModelo jugador = jugadores.get(i);
-            etiquetasFondoApuesta[i].setText("Fondo de apuesta: " + jugador.getFondoApuesta());
+        for (int i = 0; i < etiquetasFondoApuesta.length; i++) {
+            if (i < jugadores.size()) {
+                int fondoJugador = jugadores.get(i).getFondoApuesta();
+                etiquetasFondoApuesta[i].setText("Fondo de apuesta: " + fondoJugador);
+            }
         }
     }
 

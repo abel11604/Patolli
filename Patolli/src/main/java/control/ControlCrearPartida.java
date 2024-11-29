@@ -89,13 +89,13 @@ public class ControlCrearPartida implements IControlCrearPartida {
     public void crearPartida() {
         asignarHost();
         this.partida.setApuesta(apuesta);
+        this.partida.setFondo(fondoApuesta);
         this.partida.setCasillas(CasillasFactory.crearCasillas(casillaPorAspa));
         this.partida.setJugadores(jugadores);
         cliente.crearPartida(partida);
     }
 
     private void asignarHost() {
-
         hostPartida.setColor("Blanco");
         hostPartida.setFondoApuesta(fondoApuesta);
         hostPartida.setFichas(FichaFactory.generarFichas(numFichas, hostPartida));

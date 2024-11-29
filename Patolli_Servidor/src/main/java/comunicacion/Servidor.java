@@ -8,6 +8,10 @@ import dominio.Jugador;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,11 +28,18 @@ public class Servidor {
     private final ExecutorService threadPool;
     private final HandlerActions handlerActions; 
     private int clientCounter;
+    
+    private final List<Jugador> jugadores; 
+    private Jugador turnoActual;
+    private final List<Socket> clientSockets; // Lista de sockets de los clientes
+
 
     public Servidor() {
         this.threadPool = Executors.newFixedThreadPool(MAX_HILOS); 
         this.handlerActions = new HandlerActions();
         this.clientCounter = 1; 
+        this.jugadores = new ArrayList<>();
+        this.clientSockets = new ArrayList<>();
     }
 
     public void iniciar() {
@@ -40,11 +51,16 @@ public class Servidor {
                 System.out.println("Nueva conexión de cliente desde: " + clientSocket.getInetAddress());
 
                 // Generar un clientId único
-                String clientId =Integer.toString(clientCounter++);
+                String clientId = Integer.toString(clientCounter++);
 
-                ClientManager.addClient(clientSocket, clientId, new Jugador());
+                // Crear un nuevo jugador y añadirlo a la lista de jugadores
+                Jugador nuevoJugador = new Jugador(clientId, "Jugador " + clientId, "Color" + clientId, 100); // Fondo de apuesta de ejemplo
+                jugadores.add(nuevoJugador);
 
-                
+                clientSockets.add(clientSocket);
+
+                ClientManager.addClient(clientSocket, clientId, nuevoJugador);
+
                 threadPool.execute(new ClientHandler(clientSocket, clientId, handlerActions));
             }
         } catch (IOException e) {
@@ -68,6 +84,8 @@ public class Servidor {
         Servidor servidor = new Servidor();
         servidor.iniciar();
     }
+    
+    
 }
 
 

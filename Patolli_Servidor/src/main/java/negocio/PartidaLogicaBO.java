@@ -81,15 +81,14 @@ public class PartidaLogicaBO {
 
         // Retornar el resultado al cliente que realizó el movimiento
         return mensaje;
-
     }
 
-    public Map<String, Object> lanzamientoCañas(String clientId) {
-        validarCliente(clientId);
+    public Map<String, Object> lanzamientoCañas(String idClient) {
+        validarCliente(idClient); 
 
         // Verificar si el cliente tiene el turno
-        Jugador jugador = obtenerJugadorPorId(clientId);
-
+        Jugador jugador = obtenerJugadorPorId(idClient);
+        
         int casillasAvanzar = tirarCañas();
 
         // Crear un mensaje para notificar a todos los jugadores
@@ -365,5 +364,14 @@ public class PartidaLogicaBO {
             }
         }
         throw new IllegalArgumentException("No se encontró un jugador con el clientId proporcionado.");
+    }
+    
+    public Jugador obtenerJugadorPorNombre(String nombre){
+        for(Jugador jugador : partida.getJugadores()){
+            if(jugador.getNombre().equalsIgnoreCase(nombre)){
+                return jugador;
+            }
+        }
+        throw new IllegalArgumentException("No se encontró un jugador con el nombre proporcionado");
     }
 }

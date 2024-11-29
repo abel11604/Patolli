@@ -215,6 +215,11 @@ public class GestionarPartidaBO {
         if (!host.getId().equals(clientId)) {
             throw new IllegalStateException("Solo el host puede iniciar la partida.");
         }
+        
+        // Validar que haya más de 1 jugador en la partida
+        if (partida.getJugadores().size() < 2) {
+            throw new IllegalStateException("Debe haber al menos 2 jugadores para iniciar la partida");
+        }
 
         // Cambiar el estado de la partida a activa
         partida.setEstado(EstadosPartida.ACTIVA);

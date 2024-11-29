@@ -7,6 +7,8 @@ package comunicacion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Jugador;
 import exceptions.PatolliServerException;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -24,7 +26,7 @@ public class ClientHandler implements Runnable {
     private final HandlerActions handlerActions; // No Singleton, instancia pasada por constructor
     private final String clientId;
 
-    public ClientHandler(Socket clientSocket, String clientId, HandlerActions handlerActions) {
+    public ClientHandler(Socket clientSocket, String clientId, HandlerActions handlerActions){
         this.clientSocket = clientSocket;
         this.handlerActions = handlerActions; // Instancia específica de HandlerActions
         this.clientId = clientId;

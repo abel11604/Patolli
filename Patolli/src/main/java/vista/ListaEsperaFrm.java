@@ -8,6 +8,7 @@ import comunicacion.ClientConnection;
 import factory.FichaFactory;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import modelo.JugadorModelo;
 import modelo.PartidaModelo;
@@ -255,6 +256,10 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
 
 
     private void btnIniciarPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarPartidaActionPerformed
+        if(partida.getJugadores().size()<2){
+            JOptionPane.showMessageDialog(this, "Debe de haber al menos 2 jugadores para iniciar la partida", 
+                    "Cantidad jugadores", JOptionPane.ERROR_MESSAGE);
+        }
         ClientConnection.getInstance().iniciarPartida(partida.getCodigoAcceso());
     }//GEN-LAST:event_btnIniciarPartidaActionPerformed
 
@@ -346,7 +351,6 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
                 new ListaEsperaFrm().setVisible(true);
             }
         });
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

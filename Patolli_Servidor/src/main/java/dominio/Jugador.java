@@ -17,6 +17,7 @@ public class Jugador {
     private String color;
     private List<Ficha> fichas;
     int fondoApuesta;
+    private boolean esTurno;
 
     public Jugador() {
     }
@@ -87,6 +88,14 @@ public class Jugador {
 
     public void setFondoApuesta(int fondoApuesta) {
         this.fondoApuesta = fondoApuesta;
+    }
+
+    public boolean isEsTurno() {
+        return esTurno;
+    }
+
+    public void setEsTurno(boolean esTurno) {
+        this.esTurno = esTurno;
     }
     
     public Ficha getFichaById(String idFicha) {
