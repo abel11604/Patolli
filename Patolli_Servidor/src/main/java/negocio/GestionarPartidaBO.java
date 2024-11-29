@@ -204,14 +204,13 @@ public class GestionarPartidaBO {
         // Extraer datos del mapa
         String codigoAcceso = (String) data.get("codigoAcceso");
 
-        // Validar que la partida existe
         Partida partida = partidasActivas.get(codigoAcceso);
         if (partida == null) {
             throw new IllegalArgumentException("No existe una partida con el código proporcionado.");
         }
 
         // Validar que el cliente es el host
-        Jugador host = partida.getJugadores().get(0); // El primer jugador es el host
+        Jugador host = partida.getJugadores().get(0);
         if (!host.getId().equals(clientId)) {
             throw new IllegalStateException("Solo el host puede iniciar la partida.");
         }
@@ -219,20 +218,22 @@ public class GestionarPartidaBO {
         // Cambiar el estado de la partida a activa
         partida.setEstado(EstadosPartida.ACTIVA);
 
-        // Crear mensaje de notificación para todos los jugadores
+        // Crear mensaje de notificación para todos los jugadores menos el host
         Map<String, Object> mensaje = Map.of(
                 "accion", "PARTIDA_INICIADA",
                 "codigoAcceso", codigoAcceso,
                 "mensaje", "La partida ha comenzado."
         );
 
-        // Enviar el mensaje a todos los jugadores
+        // Enviar el mensaje a todos los jugadores excepto al host
         for (Jugador jugador : partida.getJugadores()) {
-            Socket clientSocket = ClientManager.getClientSocket(jugador.getId());
-            if (clientSocket != null) {
-                MessageUtil.enviarMensaje(clientSocket, mensaje);
-            } else {
-                System.err.println("No se encontró un socket para el jugador con ID: " + jugador.getId());
+            if (!jugador.getId().equals(clientId)) { // Omitir al host
+                Socket clientSocket = ClientManager.getClientSocket(jugador.getId());
+                if (clientSocket != null) {
+                    MessageUtil.enviarMensaje(clientSocket, mensaje);
+                } else {
+                    System.err.println("No se encontró un socket para el jugador con ID: " + jugador.getId());
+                }
             }
         }
 

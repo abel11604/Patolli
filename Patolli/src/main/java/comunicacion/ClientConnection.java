@@ -168,6 +168,21 @@ public class ClientConnection {
         sendMessage(data);
     }
 
+    public void lanzarCaña(String codigoPartida) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("accion", "TIRAR_CAÑA");
+        data.put("codigoAcceso", codigoPartida);
+        sendMessage(data);
+    }
+
+    public void reinciarFicha(String codigoAcceso, String fichaId) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("accion", "REINICIAR_FICHA");
+        data.put("codigoAcceso", codigoAcceso);
+        data.put("idFicha", fichaId);
+        sendMessage(data);
+    }
+
     /**
      * Establece el oyente de mensajes para los mensajes entrantes del servidor.
      *

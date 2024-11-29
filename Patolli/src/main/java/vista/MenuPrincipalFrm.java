@@ -157,7 +157,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUnirmeActionPerformed
 
     private void btnInstruccionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInstruccionesActionPerformed
-        nav.mostrarInstrucciones();
+        //nav.mostrarInstrucciones();
         dispose();
     }//GEN-LAST:event_btnInstruccionesActionPerformed
 

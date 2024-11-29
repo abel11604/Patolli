@@ -90,25 +90,32 @@ public class PartidaLogicaBO {
         // Verificar si el cliente tiene el turno
         Jugador jugador = obtenerJugadorPorId(clientId);
 
-        int casillasAvanzar = tirarCañas();
+        // Realizar el lanzamiento de cañas
+        Map<String, Object> resultadoCañas = tirarCañas();
+        int casillasAvanzar = (int) resultadoCañas.get("casillasAvanzar");
+        boolean[] estadoCañas = (boolean[]) resultadoCañas.get("cañas");
 
         // Crear un mensaje para notificar a todos los jugadores
         Map<String, Object> mensaje = Map.of(
                 "accion", "TIRAR_CAÑA",
                 "jugador", jugador.getNombre(),
-                "resultado", casillasAvanzar
+                "resultado", casillasAvanzar,
+                "estadoCañas", estadoCañas // Incluye el estado de las cañas en el mensaje
         );
 
-        // Notificar a todos los jugadores en la partida
+        // Notificar a todos los jugadores excepto al actual
         for (Jugador jugadorEnPartida : partida.getJugadores()) {
-            Socket clientSocket = ClientManager.getClientSocket(jugadorEnPartida.getId());
-            if (clientSocket != null) {
-                MessageUtil.enviarMensaje(clientSocket, mensaje);
-            } else {
-                System.err.println("No se encontró un socket para el jugador con ID: " + jugadorEnPartida.getId());
+            if (!jugadorEnPartida.getId().equals(clientId)) { // Excluir al jugador actual
+                Socket clientSocket = ClientManager.getClientSocket(jugadorEnPartida.getId());
+                if (clientSocket != null) {
+                    MessageUtil.enviarMensaje(clientSocket, mensaje);
+                } else {
+                    System.err.println("No se encontró un socket para el jugador con ID: " + jugadorEnPartida.getId());
+                }
             }
         }
 
+        // Retornar el mensaje solo para el jugador actual
         return mensaje;
     }
 
@@ -154,7 +161,13 @@ public class PartidaLogicaBO {
                 System.err.println("No se encontró un socket para el jugador con ID: " + jugadorEnPartida.getId());
             }
         }
-
+        System.out.println("Partida servidor");
+        for (Casilla casilla : partida.getCasillas()) {
+            String ocupadaPor = (casilla.getOcupadoPor() != null)
+                    ? casilla.getOcupadoPor().getJugador().getNombre()
+                    : "no ocupado";
+            System.out.println("numC: " + casilla.getNumCasilla() + " tipo: " + casilla.getTipo() + " ocupadaPor: " + ocupadaPor);
+        }
         // Retornar el mensaje de éxito al cliente que solicitó el reinicio
         return mensaje;
     }
@@ -306,21 +319,26 @@ public class PartidaLogicaBO {
      * Simula el lanzamiento de 5 cañas y calcula el número de casillas a
      * avanzar.
      *
-     * @return Número de casillas a avanzar según las cañas marcadas.
+     * @return Un mapa que contiene el número de casillas a avanzar y el estado
+     * de cada caña.
      */
-    public int tirarCañas() {
+    public Map<String, Object> tirarCañas() {
         Random random = new Random();
         int casillasAvanzar = 0;
+        boolean[] cañas = new boolean[5]; // Array para guardar el estado de las 5 cañas
 
-        for (int i = 0; i < 5; i++) { // Itera por las 5 cañas
-            boolean esMarcada = random.nextBoolean(); // true si está marcada
-            if (esMarcada) {
+        for (int i = 0; i < 5; i++) {
+            cañas[i] = random.nextBoolean(); // true si la caña está marcada
+            if (cañas[i]) {
                 casillasAvanzar++; // Incrementa por cada caña marcada
             }
         }
 
-        // Devuelve el número de cañas marcadas como las casillas a avanzar
-        return casillasAvanzar;
+        // Devuelve un mapa con el número de casillas a avanzar y el estado de las cañas
+        return Map.of(
+                "casillasAvanzar", casillasAvanzar,
+                "cañas", cañas
+        );
     }
 
     /**
