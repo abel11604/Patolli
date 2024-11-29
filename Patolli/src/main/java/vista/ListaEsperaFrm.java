@@ -339,10 +339,10 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
     public void procesarPartidaIniciada(Map<String, Object> mensajeNotificacion) {
         // Mostrar el mensaje recibido (opcional)
         System.out.println("Partida iniciada: " + mensajeNotificacion);
-
+        dispose(); // Cerrar la ventana actual
         // Cambiar a la pantalla del juego
         nav.mostrarPantallaJuego();
-        dispose(); // Cerrar la ventana actual
+        
     }
 
     public void mostrarPantalla() {

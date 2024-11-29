@@ -1,5 +1,6 @@
 package vista;
 
+import comunicacion.ClientConnection;
 import control.ControlPartida;
 import control.IControlPartida;
 import modelo.CasillaModelo;
@@ -63,9 +64,31 @@ public class PartidaFrm extends javax.swing.JFrame {
         vincularFichasConVista(partida.getPartida().getJugadores());
         vincularCasillasConVista(casillas);
         setApuesta(partida.getPartida().getApuesta());
+
         actualizarFondoApuesta();
         iniciarTurno();
         
+
+        iniciarTurno();
+        ClientConnection.getInstance().setMessageListener(message -> {
+            System.out.println("Mensaje recibido del servidor: " + message);
+            String accion = (String) message.get("accion");
+            if (accion == null) {
+                return;
+            }
+
+            SwingUtilities.invokeLater(() -> {
+                switch (accion) {
+                    case "TIRAR_CAÑA" ->
+                        procesarTiroCañas(message);
+
+                    case "REINICIAR_FICHA" ->
+                        procesarReinicioCaña(message);
+                }
+            });
+        });
+
+
     }
 
     /**
@@ -426,6 +449,9 @@ public class PartidaFrm extends javax.swing.JFrame {
     public void iniciarTurno() {
         List<JugadorModelo> jugadores = partida.getPartida().getJugadores();
         turnoActual = jugadores.get(0); // Inicializar con el primer jugador al iniciar el juego
+
+        // Configurar el estado del botón según el turno
+        actualizarEstadoBotonLanzarCañas();
         actualizarEtiquetaTurno();
 //        if(!turnoActual.getNombre().equals(lblTurno.getText())){
 //            btnLanzarCañas.setEnabled(false);
@@ -435,12 +461,11 @@ public class PartidaFrm extends javax.swing.JFrame {
     public void cambiarTurno() {
         List<JugadorModelo> jugadores = partida.getPartida().getJugadores();
 
-        // Encontrar el índice del jugador actual y mover al siguiente jugador de manera cíclica
         int indiceActual = jugadores.indexOf(turnoActual);
         int siguienteIndice = (indiceActual + 1) % jugadores.size();
         turnoActual = jugadores.get(siguienteIndice);
 
-        // Actualizar la etiqueta de turno
+        actualizarEstadoBotonLanzarCañas();
         actualizarEtiquetaTurno();
     }
 
@@ -494,40 +519,12 @@ public class PartidaFrm extends javax.swing.JFrame {
     }
 
     private void btnLanzarCañasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLanzarCañasActionPerformed
-        btnLanzarCañas.setEnabled(false); // Desactivar el botón al inicio de la acción
-
-        int resultado = pintarCañas(); // Número de casillas a avanzar
-
-        if (resultado != 1) {
-            iluminarFichasMovibles(turnoActual, resultado);
-            return; // No cambiar el turno aquí, lo hará al mover la ficha
-        }
-
-        // Intentar colocar una ficha en la casilla inicial
-        List<FichaModelo> fichasJugador = turnoActual.getFichas();
-        FichaModelo fichaParaIngresar = fichasJugador.stream()
-                .filter(ficha -> ficha.getCasillaActual() == null)
-                .findFirst()
-                .orElse(null);
-
-        String tipoCasillaInicial = "inicial" + turnoActual.getColor();
-        CasillaModelo casillaInicial = partida.getPartida().getCasillas().stream()
-                .filter(casilla -> casilla.getTipo().equalsIgnoreCase(tipoCasillaInicial))
-                .findFirst()
-                .orElse(null);
-
-        if (casillaInicial != null && fichaParaIngresar != null && casillaInicial.getOcupadoPor() == null) {
-            partida.reiniciarFicha(fichaParaIngresar);
-            actualizarVistaCasilla(fichaParaIngresar.getCasillaActual());
-            cambiarTurno(); // Cambio de turno porque la acción termina aquí
-            btnLanzarCañas.setEnabled(true); // Reactivar el botón después del cambio de turno
-            imprimirEstadoCasillas(); // Debugging: Verifica el estado de las casillas
-            return;
-        }
-
-        // Si no se puede colocar la ficha, iluminar las fichas movibles
-        iluminarFichasMovibles(turnoActual, resultado);
+        lanzarCañas();
     }//GEN-LAST:event_btnLanzarCañasActionPerformed
+
+    private void lanzarCañas() {
+        ClientConnection.getInstance().lanzarCaña(partida.getPartida().getCodigoAcceso());
+    }
 
     private void pintarFichas() {
         int numFichas = partida.getPartida().getJugadores().get(0).getFichas().size();
@@ -552,27 +549,102 @@ public class PartidaFrm extends javax.swing.JFrame {
         System.out.println("--------------------------------");
     }
 
-    public static boolean darVerdaderoFalso() {
-        Random random = new Random();
-        int numeroAleatorio = random.nextInt(100);
-        return numeroAleatorio < 50;
-    }
+    private void procesarTiroCañas(Map<String, Object> message) {
+        // Obtener los datos del mensaje como lista
+        List<Boolean> estadoCañasList = (List<Boolean>) message.get("estadoCañas");
 
-    private int pintarCañas() {
-        int casillasAvanzar = 0;
+        // Convertir la lista en un array de boolean
+        boolean[] estadoCañas = new boolean[estadoCañasList.size()];
+        for (int i = 0; i < estadoCañasList.size(); i++) {
+            estadoCañas[i] = estadoCañasList.get(i);
+        }
+
+        // Actualizar los íconos de las cañas según el estado recibido
         JLabel[] cañas = {caña1, caña2, caña3, caña4, caña5};
-        for (JLabel caña : cañas) {
-            boolean resultado = darVerdaderoFalso();
-            if (resultado) {
-                caña.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/punto.png")));
-                casillasAvanzar++; // Incrementa el contador si es true
+        for (int i = 0; i < estadoCañas.length; i++) {
+            if (estadoCañas[i]) {
+                cañas[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/punto.png")));
             } else {
-                caña.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cañaLisa.png")));
+                cañas[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cañaLisa.png")));
             }
         }
 
-        System.out.println("Casillas a avanzar: " + casillasAvanzar);
-        return casillasAvanzar;
+        // Si el jugador actual es el jugador que lanzó, procesa el avance
+        if (jugador.getNombre().equalsIgnoreCase((String) message.get("jugador"))) {
+            int casillasAvanzar = (int) message.get("resultado");
+            procesarMovimientoJugador(casillasAvanzar);
+        }
+
+        System.out.println("Cañas actualizadas para el jugador: " + message.get("jugador"));
+    }
+
+    private void procesarMovimientoJugador(int casillasAvanzar) {
+        // Manejar el avance de las casillas
+        if (casillasAvanzar != 1) {
+            iluminarFichasMovibles(turnoActual, casillasAvanzar);
+            return; // No cambiar el turno aquí, lo hará al mover la ficha
+        }
+
+        // Intentar colocar una ficha en la casilla inicial
+        List<FichaModelo> fichasJugador = turnoActual.getFichas();
+        FichaModelo fichaParaIngresar = fichasJugador.stream()
+                .filter(ficha -> ficha.getCasillaActual() == null)
+                .findFirst()
+                .orElse(null);
+
+        String tipoCasillaInicial = "inicial" + turnoActual.getColor();
+        CasillaModelo casillaInicial = partida.getPartida().getCasillas().stream()
+                .filter(casilla -> casilla.getTipo().equalsIgnoreCase(tipoCasillaInicial))
+                .findFirst()
+                .orElse(null);
+
+        if (casillaInicial != null && fichaParaIngresar != null && casillaInicial.getOcupadoPor() == null) {
+            partida.reiniciarFicha(fichaParaIngresar);
+            actualizarVistaCasilla(fichaParaIngresar.getCasillaActual());
+            ClientConnection.getInstance().reinciarFicha(partida.getPartida().getCodigoAcceso(), fichaParaIngresar.getId());
+            cambiarTurno(); // Cambio de turno porque la acción termina aquí
+            btnLanzarCañas.setEnabled(true); // Reactivar el botón después del cambio de turno
+            imprimirEstadoCasillas(); // Debugging: Verifica el estado de las casillas
+            return;
+        }
+
+        // Si no se puede colocar la ficha, iluminar las fichas movibles
+        iluminarFichasMovibles(turnoActual, casillasAvanzar);
+    }
+
+    public void procesarReinicioCaña(Map<String, Object> message) {
+        // Obtener los datos del mensaje
+        String nombreJugador = (String) message.get("jugador");
+        String idFicha = (String) message.get("idFicha");
+
+        // Verificar si el mensaje corresponde al jugador actual
+        if (jugador.getNombre().equalsIgnoreCase(nombreJugador)) {
+            return; // No realizar el reinicio en la pantalla del jugador que ejecutó la acción
+        }
+
+        // Buscar la ficha en la lista de jugadores
+        FichaModelo fichaReiniciar = null;
+        for (JugadorModelo jugadorModelo : partida.getPartida().getJugadores()) {
+            fichaReiniciar = jugadorModelo.getFichas().stream()
+                    .filter(f -> f.getId().equals(idFicha))
+                    .findFirst()
+                    .orElse(null);
+
+            if (fichaReiniciar != null) {
+                break; // Salir del bucle si se encontró la ficha
+            }
+        }
+
+        if (fichaReiniciar == null) {
+            System.err.println("No se encontró la ficha con el ID proporcionado: " + idFicha);
+            return; // No se puede continuar sin una ficha válida
+        }
+
+        // Reiniciar la ficha y actualizar la vista
+        partida.reiniciarFicha(fichaReiniciar); // Reinicia la ficha en el modelo
+        actualizarVistaCasilla(fichaReiniciar.getCasillaActual()); // Actualiza la vista correspondiente
+        imprimirEstadoCasillas(); // 
+
     }
 
     public void vincularCasillasConVista(List<JLabel> casillasVista) {
@@ -860,6 +932,17 @@ public class PartidaFrm extends javax.swing.JFrame {
             for (MouseListener listener : fichaLabel.getMouseListeners()) {
                 fichaLabel.removeMouseListener(listener);
             }
+        }
+    }
+
+    private void actualizarEstadoBotonLanzarCañas() {
+        System.out.println("jugador: " + jugador.getNombre());
+        System.out.println("Turno" + turnoActual.getNombre());
+
+        if (jugador.getNombre().equalsIgnoreCase(turnoActual.getNombre())) {
+            btnLanzarCañas.setEnabled(true); // Habilitar el botón para el jugador en turno
+        } else {
+            btnLanzarCañas.setEnabled(false); // Deshabilitar el botón para los demás jugadores
         }
     }
 

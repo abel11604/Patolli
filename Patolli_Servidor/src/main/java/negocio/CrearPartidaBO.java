@@ -66,13 +66,7 @@ public class CrearPartidaBO {
         partida.setCodigoAcceso(codigoAcceso);
         System.out.println("Si se creo la partida we " + codigoAcceso);
         
-        System.out.println("Partida servidor");
-        for (Casilla casilla : partida.getCasillas()) {
-            String ocupadaPor = (casilla.getOcupadoPor() != null)
-                    ? casilla.getOcupadoPor().getJugador().getNombre()
-                    : "no ocupado";
-            System.out.println("numC: " + casilla.getNumCasilla() + " tipo: " + casilla.getTipo() + " ocupadaPor: " + ocupadaPor);
-        }
+     
         // Respuesta al cliente
         return Map.of(
                 "accion", "CREAR_PARTIDA",
