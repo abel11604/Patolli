@@ -152,7 +152,7 @@ public class HandlerActions {
         );
         MessageUtil.enviarMensaje(clientSocket, mensaje);
     }
-
+    
     /**
      * Obtiene el identificador único del cliente a partir de su socket.
      */

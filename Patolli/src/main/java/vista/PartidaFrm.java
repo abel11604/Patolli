@@ -84,11 +84,10 @@ public class PartidaFrm extends javax.swing.JFrame {
 
                     case "REINICIAR_FICHA" ->
                         procesarReinicioCaña(message);
+                    
                 }
             });
         });
-
-
     }
 
     /**
@@ -452,10 +451,28 @@ public class PartidaFrm extends javax.swing.JFrame {
 
         // Configurar el estado del botón según el turno
         actualizarEstadoBotonLanzarCañas();
+
         actualizarEtiquetaTurno();
-//        if(!turnoActual.getNombre().equals(lblTurno.getText())){
-//            btnLanzarCañas.setEnabled(false);
-//        }
+    }
+    
+    private void procesarCambioTurno(String nombreJugador) {
+
+        if (nombreJugador != null) {
+            for (JugadorModelo jugador : partida.getPartida().getJugadores()) {
+                if (jugador.getNombre().equalsIgnoreCase(nombreJugador)) {
+                    turnoActual = jugador;
+                    return;
+                }
+            }
+            
+            lblTurno.setText("" + turnoActual.getNombre()); // Actualiza la etiqueta del turno
+
+            if (jugador.getNombre().equalsIgnoreCase(turnoActual.getNombre())) {
+                btnLanzarCañas.setEnabled(true);
+            } else {
+                btnLanzarCañas.setEnabled(false);
+            }
+        }
     }
 
     public void cambiarTurno() {
@@ -616,6 +633,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         // Obtener los datos del mensaje
         String nombreJugador = (String) message.get("jugador");
         String idFicha = (String) message.get("idFicha");
+        String turno = (String) message.get("turno");
 
         // Verificar si el mensaje corresponde al jugador actual
         if (jugador.getNombre().equalsIgnoreCase(nombreJugador)) {
@@ -642,7 +660,9 @@ public class PartidaFrm extends javax.swing.JFrame {
 
         // Reiniciar la ficha y actualizar la vista
         partida.reiniciarFicha(fichaReiniciar); // Reinicia la ficha en el modelo
+        
         actualizarVistaCasilla(fichaReiniciar.getCasillaActual()); // Actualiza la vista correspondiente
+        procesarCambioTurno(turno);
         imprimirEstadoCasillas(); // 
 
     }

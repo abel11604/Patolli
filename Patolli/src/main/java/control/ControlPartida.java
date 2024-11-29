@@ -161,5 +161,5 @@ public class ControlPartida implements IControlPartida {
             partida.getCasillas().get(ficha.getCasillaActual().getNumCasilla()).setOcupadoPor(null);
         }
     }
-
+    
 }

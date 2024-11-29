@@ -30,6 +30,7 @@ public class PartidaLogicaBO {
 
     public PartidaLogicaBO(Partida partida) {
         this.partida = partida;
+        determinarTurno();
     }
 
     /**
@@ -63,6 +64,7 @@ public class PartidaLogicaBO {
         // Crear mensaje de notificación para todos los jugadores
         Map<String, Object> mensaje = Map.of(
                 "accion", "MOVER_FICHA",
+                "turno", partida.getTurnoActual().getNombre(),
                 "jugador", jugador.getNombre(),
                 "idFicha", fichaSel.getId(),
                 "numCasillas", numCasillas,
@@ -126,6 +128,7 @@ public class PartidaLogicaBO {
      * @return Mapa con la respuesta sobre el estado del reinicio.
      */
     public Map<String, Object> reiniciarFichaPorCliente(Map<String, Object> data, String clientId) {
+        System.out.println("Turno: "+partida.getTurnoActual());
         validarCliente(clientId);
 
         // Extraer datos del mapa
@@ -142,10 +145,14 @@ public class PartidaLogicaBO {
 
         // Reiniciar la ficha
         reiniciarFicha(ficha);
+        determinarTurno();
+        System.out.println("Turno: "+partida.getTurnoActual());
+
 
         // Crear el mensaje para notificar el reinicio a todos los jugadores
         Map<String, Object> mensaje = Map.of(
                 "accion", "REINICIAR_FICHA",
+                "turno", partida.getTurnoActual().getNombre(),
                 "jugador", jugador.getNombre(),
                 "idFicha", ficha.getId(),
                 "mensaje", "La ficha ha sido reiniciada a su posición inicial."
@@ -189,9 +196,11 @@ public class PartidaLogicaBO {
         if (casillaDestino.getOcupadoPor() != null) {
             if (casillaDestino.getTipo().equalsIgnoreCase("Central")) {
                 eliminarFicha(casillaDestino.getOcupadoPor());
+                determinarTurno();
                 return ResultadoMovimiento.FICHA_ELIMINADA;
             } else {
                 reiniciarFicha(fichaSel);
+                determinarTurno();
                 return ResultadoMovimiento.FICHA_REINICIADA;
             }
         }
@@ -208,11 +217,14 @@ public class PartidaLogicaBO {
 
             case "apuesta":
                 if (!cobrarApuesta(fichaSel.getJugador())) {
+                    determinarTurno();
                     return ResultadoMovimiento.JUGADOR_ELIMINADO; // El jugador no pudo pagar y fue eliminado
                 }
+                determinarTurno();
                 return ResultadoMovimiento.CAIDA_EN_CASILLA_APUESTA;
 
             default:
+                determinarTurno();
                 return ResultadoMovimiento.MOVIMIENTO_EXITOSO;
         }
     }
@@ -391,5 +403,16 @@ public class PartidaLogicaBO {
             }
         }
         throw new IllegalArgumentException("No se encontró un jugador con el nombre proporcionado");
+    }
+    
+    public void asignarTurnoInicial() {
+        List<Jugador> jugadores = partida.getJugadores(); // Obtener la lista de jugadores
+
+        if (jugadores.isEmpty()) {
+            throw new IllegalStateException("No hay jugadores en la partida para asignar el turno inicial.");
+        }
+
+        Jugador primerJugador = jugadores.get(0); // Obtener el primer jugador de la lista
+        partida.setTurnoActual(primerJugador); // Asignar el turno al primer jugador
     }
 }
