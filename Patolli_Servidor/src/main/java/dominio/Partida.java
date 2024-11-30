@@ -19,7 +19,7 @@ public class Partida {
     private EstadosPartida estado;
     private String codigoAcceso;
     private Jugador turnoActual;
-   
+    private Jugador ganador;
 
     public Partida() {
     }
@@ -65,8 +65,6 @@ public class Partida {
         this.estado = estado;
     }
 
-    
-
     public int getApuesta() {
         return apuesta;
     }
@@ -81,6 +79,14 @@ public class Partida {
 
     public void setCodigoAcceso(String codigoAcceso) {
         this.codigoAcceso = codigoAcceso;
+    }
+
+    public Jugador getGanador() {
+        return ganador;
+    }
+
+    public void setGanador(Jugador ganador) {
+        this.ganador = ganador;
     }
 
 }

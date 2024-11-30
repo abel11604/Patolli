@@ -190,6 +190,15 @@ public class ClientConnection {
         sendMessage(data);
     }
     
+     public void moverFicha(String codigoPartida,String idFicha,int numCasillas) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("accion", "MOVER_FICHA");
+        data.put("codigoAcceso", codigoPartida);
+        data.put("idFicha", idFicha);
+        data.put("numCasillas", numCasillas);
+        sendMessage(data);
+    }
+    
     /**
      * Establece el oyente de mensajes para los mensajes entrantes del servidor.
      *

@@ -34,7 +34,7 @@ public class ConfigurarPartidaFrm extends javax.swing.JFrame {
         grupoFichas.add(fichaRadioButton2);
         grupoFichas.add(fichaRadioButton4);
         grupoFichas.add(fichaRadioButton6);
-        SpinnerNumberModel fondoModel = new SpinnerNumberModel(0, 0, null, 50);
+        SpinnerNumberModel fondoModel = new SpinnerNumberModel(0, 0, null, 100);
         fondoApuestaSpinner.setModel(fondoModel);
         fondoApuestaSpinner.setEditor(new JSpinner.NumberEditor(fondoApuestaSpinner, "#"));
         SpinnerNumberModel cantidadModel = new SpinnerNumberModel(0, 0, null, 100);

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -83,7 +84,8 @@ public class PartidaFrm extends javax.swing.JFrame {
 
                     case "CAMBIAR_TURNO" ->
                         procesarCambioTurno((String) message.get("turno"));
-
+                    case "MOVER_FICHA" ->
+                        procesarMovimiento(message);
                 }
             });
         });
@@ -453,13 +455,120 @@ public class PartidaFrm extends javax.swing.JFrame {
         actualizarEtiquetaTurno();
     }
 
+    public void procesarMovimiento(Map<String, Object> message) {
+        FichaModelo fichaMover = null;
+        FichaModelo fichaEnDestino = null;
+        JugadorModelo jugadorL = null;
+
+        // Buscar el jugador y la ficha que realizará el movimiento
+        for (JugadorModelo jugador : partida.getPartida().getJugadores()) {
+            if (jugador.getNombre().equalsIgnoreCase((String) message.get("jugador"))) {
+                jugadorL = jugador;
+                for (FichaModelo ficha : jugador.getFichas()) {
+                    if (ficha.getId().equalsIgnoreCase((String) message.get("idFicha"))) {
+                        fichaMover = ficha;
+                        break; // Salir del bucle de fichas
+                    }
+                }
+                break; // Salir del bucle de jugadores
+            }
+        }
+
+        if (fichaMover == null) {
+            System.err.println("No se encontró la ficha para el movimiento.");
+            return;
+        }
+
+        // Identificar la ficha en la casilla de destino
+        int numCasillas = (int) message.get("numCasillas");
+        CasillaModelo casillaActual = fichaMover.getCasillaActual();
+        int posicionActual = partida.getPartida().getCasillas().indexOf(casillaActual);
+        int nuevaPosicion = (posicionActual + numCasillas) % partida.getPartida().getCasillas().size();
+        CasillaModelo casillaDestino = partida.getPartida().getCasillas().get(nuevaPosicion);
+
+        if (casillaDestino.getOcupadoPor() != null) {
+            fichaEnDestino = casillaDestino.getOcupadoPor();
+        }
+
+        // Extraer datos del mensaje
+        String resultado = (String) message.get("resultado");
+        String descripcion = (String) message.get("descripcion");
+        String turno = (String) message.get("turno");
+
+        // Actualizar la vista antes de avanzar
+        if (fichaEnDestino != null && resultado.equals("FICHA_ELIMINADA")) {
+            // Eliminar la ficha en destino de la vista
+            actualizarVistaCasilla(casillaDestino);
+        }
+
+        // Mover la ficha en el modelo
+        partida.avanzarCasillas(numCasillas, fichaMover);
+
+        // Actualizar la vista de la casilla después del movimiento
+        actualizarVistaCasilla(fichaMover.getCasillaActual());
+
+        // Mostrar mensaje descriptivo si no es un movimiento exitoso
+        if (!resultado.equalsIgnoreCase("MOVIMIENTO_EXITOSO")) {
+            JOptionPane.showMessageDialog(this, descripcion);
+        }
+
+        // Reflejar el estado según el resultado
+        switch (resultado) {
+            case "FICHA_ELIMINADA":
+                partida.eliminarFicha(fichaEnDestino); // Eliminar la ficha de la lógica del modelo
+                pintarJugadores(); // Actualizar la vista de jugadores
+                break;
+
+            case "FICHA_REINICIADA":
+                actualizarVistaCasilla(fichaMover.getCasillaActual());
+                break;
+
+            case "CAIDA_EN_CASILLA_APUESTA":
+                partida.cobrarApuesta(jugadorL);
+                actualizarFondoApuesta();
+                break;
+
+            case "JUGADOR_ELIMINADO":
+                partida.eliminarJugador(jugadorL);
+                pintarJugadores();
+                if (jugador.getNombre().equalsIgnoreCase(jugadorL.getNombre())) {
+                    JOptionPane.showMessageDialog(this, "Has sido eliminado");
+                    this.dispose();
+                }
+                break;
+
+            case "JUGADOR_GANADOR":
+                JOptionPane.showMessageDialog(this, fichaMover.getJugador().getNombre() + " ha ganado la partida.");
+                this.dispose();
+                nav.mostrarMenu();
+                break;
+
+            case "PARTIDA_TERMINADA":
+                JOptionPane.showMessageDialog(this, (String) message.get("ganador") + " ha ganado la partida.");
+                this.dispose();
+                nav.mostrarMenu();
+                break;
+
+            default:
+                // Para TURNO_EXTRA o no hay acción adicional
+                break;
+        }
+
+        // Cambiar turno si no es TURNO_EXTRA
+        if (!"TURNO_EXTRA".equals(resultado)) {
+            procesarCambioTurno(turno);
+        }
+
+        imprimirEstadoCasillas();
+    }
+
     private void procesarCambioTurno(String nombreJugador) {
-        System.out.println("hola "+nombreJugador);
+        System.out.println("hola " + nombreJugador);
         if (nombreJugador != null) {
             for (JugadorModelo jugadorTurno : partida.getPartida().getJugadores()) {
                 if (jugadorTurno.getNombre().equalsIgnoreCase(nombreJugador)) {
                     turnoActual = jugadorTurno; // Actualiza el turno actual
-                    System.out.println("segun cambio "+turnoActual.getNombre());
+                    System.out.println("segun cambio " + turnoActual.getNombre());
                     break;
                 }
             }
@@ -911,8 +1020,7 @@ public class PartidaFrm extends javax.swing.JFrame {
                         fichaLabel.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mouseClicked(MouseEvent e) {
-                                partida.avanzarCasillas(numCasillas, ficha); // Avanzar la ficha
-                                actualizarVistaCasilla(ficha.getCasillaActual());
+                                ClientConnection.getInstance().moverFicha(partida.getPartida().getCodigoAcceso(), ficha.getId(), numCasillas);
                                 desiluminarFichas(); // Desiluminar todas las fichas después del movimiento
                                 btnLanzarCañas.setEnabled(true); // Reactivar el botón de lanzar cañas
                             }

@@ -60,26 +60,48 @@ public class PartidaLogicaBO {
         // Aplicar la lógica del movimiento
         ResultadoMovimiento resultadoMovimiento = avanzarCasillas(numCasillas, fichaSel);
 
+        // Verificar si hay un ganador tras el movimiento
+        Jugador ganador = null;
+        if (partida.getJugadores().size() == 1) {
+            ganador = partida.getJugadores().get(0); // El último jugador restante
+        }
+
+        // Generar un mensaje descriptivo basado en el resultado del movimiento
+        String descripcionMovimiento = generarDescripcionMovimiento(jugador, resultadoMovimiento, numCasillas);
+
         // Crear mensaje de notificación para todos los jugadores
-        Map<String, Object> mensaje = Map.of(
-                "accion", "MOVER_FICHA",
-                "turno", partida.getTurnoActual().getNombre(),
-                "jugador", jugador.getNombre(),
-                "idFicha", fichaSel.getId(),
-                "numCasillas", numCasillas,
-                "resultado", resultadoMovimiento.name()
-        );
+        Map<String, Object> mensaje = new HashMap<>();
+        mensaje.put("accion", "MOVER_FICHA");
+        mensaje.put("turno", partida.getTurnoActual().getNombre());
+        mensaje.put("jugador", jugador.getNombre());
+        mensaje.put("idFicha", fichaSel.getId());
+        mensaje.put("numCasillas", numCasillas);
+        mensaje.put("resultado", resultadoMovimiento.name());
+        mensaje.put("descripcion", descripcionMovimiento);
+
+        // Si hay un ganador, añadir su nombre al mensaje
+        if (ganador != null) {
+            mensaje.put("ganador", ganador.getNombre());
+        }
 
         // Notificar a todos los jugadores en la partida
         for (Jugador jugadorEnPartida : partida.getJugadores()) {
-            Socket clientSocket = ClientManager.getClientSocket(jugadorEnPartida.getId());
-            if (clientSocket != null) {
-                MessageUtil.enviarMensaje(clientSocket, mensaje);
-            } else {
-                System.err.println("No se encontró un socket para el jugador con ID: " + jugadorEnPartida.getId());
+            if (!jugadorEnPartida.getId().equals(clientId)) { // Excluir al jugador actual
+                Socket clientSocket = ClientManager.getClientSocket(jugadorEnPartida.getId());
+                if (clientSocket != null) {
+                    MessageUtil.enviarMensaje(clientSocket, mensaje);
+                } else {
+                    System.err.println("No se encontró un socket para el jugador con ID: " + jugadorEnPartida.getId());
+                }
             }
         }
-
+        System.out.println("Partida servidor");
+        for (Casilla casilla : partida.getCasillas()) {
+            String ocupadaPor = (casilla.getOcupadoPor() != null)
+                    ? casilla.getOcupadoPor().getJugador().getNombre()
+                    : "no ocupado";
+            System.out.println("numC: " + casilla.getNumCasilla() + " tipo: " + casilla.getTipo() + " ocupadaPor: " + ocupadaPor);
+        }
         // Retornar el resultado al cliente que realizó el movimiento
         return mensaje;
     }
@@ -166,13 +188,6 @@ public class PartidaLogicaBO {
             }
         }
 
-        System.out.println("Partida servidor");
-        for (Casilla casilla : partida.getCasillas()) {
-            String ocupadaPor = (casilla.getOcupadoPor() != null)
-                    ? casilla.getOcupadoPor().getJugador().getNombre()
-                    : "no ocupado";
-            System.out.println("numC: " + casilla.getNumCasilla() + " tipo: " + casilla.getTipo() + " ocupadaPor: " + ocupadaPor);
-        }
         // Retornar el mensaje de éxito al cliente que solicitó el reinicio
         return mensaje;
     }
@@ -221,6 +236,9 @@ public class PartidaLogicaBO {
         if (casillaDestino.getOcupadoPor() != null) {
             if (casillaDestino.getTipo().equalsIgnoreCase("Central")) {
                 eliminarFicha(casillaDestino.getOcupadoPor());
+                if (partida.getJugadores().size() == 1) {
+                    return ResultadoMovimiento.PARTIDA_TERMINADA;
+                }
                 determinarTurno();
                 return ResultadoMovimiento.FICHA_ELIMINADA;
             } else {
@@ -235,6 +253,15 @@ public class PartidaLogicaBO {
         fichaSel.setCasillaActual(casillaDestino);
         casillaDestino.setOcupadoPor(fichaSel);
 
+        // Verificar si la ficha alcanzó una casilla ganadora
+        if (esCasillaGanadora(fichaSel, casillaDestino)) {
+            eliminarJugador(fichaSel.getJugador());
+            if (partida.getJugadores().size() == 1) {
+                return ResultadoMovimiento.PARTIDA_TERMINADA; // Indicar que la partida ha terminado
+            }
+            return ResultadoMovimiento.JUGADOR_GANADOR; // Indicar que un jugador ha ganado
+        }
+
         // Verificar tipo de casilla de destino
         switch (casillaDestino.getTipo().toLowerCase()) {
             case "dobleturno":
@@ -242,6 +269,9 @@ public class PartidaLogicaBO {
 
             case "apuesta":
                 if (!cobrarApuesta(fichaSel.getJugador())) {
+                    if (partida.getJugadores().size() == 1) {
+                        return ResultadoMovimiento.PARTIDA_TERMINADA;
+                    }
                     determinarTurno();
                     return ResultadoMovimiento.JUGADOR_ELIMINADO; // El jugador no pudo pagar y fue eliminado
                 }
@@ -252,6 +282,37 @@ public class PartidaLogicaBO {
                 determinarTurno();
                 return ResultadoMovimiento.MOVIMIENTO_EXITOSO;
         }
+    }
+
+    /**
+     * Determina si una ficha ha alcanzado una casilla ganadora.
+     *
+     * @param ficha Ficha que se está verificando.
+     * @param casillaDestino Casilla en la que está la ficha.
+     * @return true si la ficha ha alcanzado una casilla ganadora, false en caso
+     * contrario.
+     */
+    private boolean esCasillaGanadora(Ficha ficha, Casilla casillaDestino) {
+        String tipoCasillaGanadora = "";
+
+        switch (ficha.getJugador().getColor().toLowerCase()) {
+            case "blanco":
+                tipoCasillaGanadora = "inicialnaranja";
+                break;
+            case "naranja":
+                tipoCasillaGanadora = "inicialblanco";
+                break;
+            case "amarillo":
+                tipoCasillaGanadora = "inicialcafe";
+                break;
+            case "cafe":
+                tipoCasillaGanadora = "inicialamarillo";
+                break;
+            default:
+                return false; // No hay comportamiento definido para colores desconocidos
+        }
+
+        return casillaDestino.getTipo().equalsIgnoreCase(tipoCasillaGanadora);
     }
 
     /**
@@ -267,24 +328,11 @@ public class PartidaLogicaBO {
             return true;
         } else {
             eliminarJugador(jugador);
-            return false;
-        }
-    }
-
-    /**
-     * Cobra una apuesta doble al jugador.
-     *
-     * @param jugador Jugador que debe pagar la apuesta.
-     * @return true si se pudo cobrar la apuesta, false si fue eliminado.
-     */
-    public boolean cobrarApuestaDoble(Jugador jugador) {
-        int apuestaDoble = partida.getApuesta() * 2;
-        if (jugador.getFondoApuesta() >= apuestaDoble) {
-            jugador.setFondoApuesta(jugador.getFondoApuesta() - apuestaDoble);
-            return true;
-        } else {
-            eliminarJugador(jugador);
-            return false;
+            if (partida.getJugadores().size() == 1) {
+                // La partida se termina si queda un solo jugador
+                return false; // Indica que el jugador fue eliminado
+            }
+            return false; // Indica que el jugador fue eliminado
         }
     }
 
@@ -322,9 +370,16 @@ public class PartidaLogicaBO {
      * @param jugador Jugador a eliminar.
      */
     public void eliminarJugador(Jugador jugador) {
-        partida.getJugadores().remove(jugador);
         for (Ficha ficha : jugador.getFichas()) {
-            ficha.getCasillaActual().setOcupadoPor(null);
+            if (ficha.getCasillaActual() != null) {
+                ficha.getCasillaActual().setOcupadoPor(null); // Limpia la casilla de la ficha
+            }
+        }
+        partida.getJugadores().remove(jugador);
+
+        if (partida.getJugadores().size() == 1) {
+            Jugador ganador = partida.getJugadores().get(0); // El único jugador restante
+            partida.setGanador(ganador);
         }
     }
 
@@ -433,6 +488,43 @@ public class PartidaLogicaBO {
     public void inicializarTurnoSiEsNecesario() {
         if (partida.getTurnoActual() == null) {
             asignarTurnoInicial();
+        }
+    }
+
+    /**
+     * Genera una descripción sobre el resultado del movimiento de una ficha.
+     *
+     * @param jugador Jugador que realizó el movimiento.
+     * @param resultado Resultado del movimiento.
+     * @param numCasillas Número de casillas avanzadas.
+     * @return Descripción del movimiento.
+     */
+    private String generarDescripcionMovimiento(Jugador jugador, ResultadoMovimiento resultado, int numCasillas) {
+        switch (resultado) {
+            case FICHA_ELIMINADA:
+                return "El jugador " + jugador.getNombre() + " eliminó una ficha enemiga al caer en una casilla central.";
+
+            case FICHA_REINICIADA:
+                return "El jugador " + jugador.getNombre() + " fue reiniciado a su casilla inicial.";
+
+            case TURNO_EXTRA:
+                return "El jugador " + jugador.getNombre() + " cayó en una casilla de doble turno.";
+
+            case CAIDA_EN_CASILLA_APUESTA:
+                return "El jugador " + jugador.getNombre() + " pagó una apuesta al caer en una casilla de apuesta.";
+
+            case JUGADOR_GANADOR:
+                return "¡El jugador " + jugador.getNombre() + " ha ganado la partida!";
+
+            case PARTIDA_TERMINADA:
+                return "La partida ha terminado.";
+
+            case JUGADOR_ELIMINADO:
+                return "El jugador " + jugador.getNombre() + " fue eliminado por no poder pagar la apuesta.";
+
+            case MOVIMIENTO_EXITOSO:
+            default:
+                return "El jugador " + jugador.getNombre() + " avanzó " + numCasillas + " casillas.";
         }
     }
 

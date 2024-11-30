@@ -2,6 +2,7 @@ dominio\Casilla.class
 dominio\Ficha.class
 comunicacion\ClientHandler.class
 comunicacion\Servidor.class
+negocio\ResultadoMovimientoDetallado.class
 comunicacion\MessageUtil.class
 dominio\Partida.class
 negocio\PartidaLogicaBO.class
@@ -13,6 +14,7 @@ dominio\Jugador.class
 enums\EstadosPartida.class
 pruebas\crearPartida2.class
 pruebas\PruebaMovimientos.class
+negocio\PartidaLogicaBO$1.class
 pruebas\PruebasCrearPartida.class
 negocio\GestionarPartidaBO.class
 pruebas\PruebasUnirse.class
