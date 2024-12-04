@@ -8,12 +8,22 @@ import modelo.PartidaModelo;
  * @author abelc
  */
 public class ControlNavegacion {
+
     private PartidaModelo partida;
     private JugadorModelo jugador;
     private static ControlNavegacion instance;
 
+    public ControlNavegacion() {
+        partida = null;
+        jugador = null;
+    }
+
     public static ControlNavegacion getInstance() {
-        if (instance == null) {
+        return getInstance(false);
+    }
+
+    public static synchronized ControlNavegacion getInstance(boolean forceNew) {
+        if (instance == null || forceNew) {
             instance = new ControlNavegacion();
         }
         return instance;
@@ -39,12 +49,12 @@ public class ControlNavegacion {
         partida.mostrarPantalla();
     }
 
-    public void mostrarUnirsePartida(){
+    public void mostrarUnirsePartida() {
         UnirsePartidaFrm unirse = new UnirsePartidaFrm();
         unirse.setVisible(true);
     }
-    
-    public void mostrarInstrucciones(){
+
+    public void mostrarInstrucciones() {
         InstruccionesDlg instrucciones = new InstruccionesDlg();
         instrucciones.setVisible(true);
     }
@@ -64,6 +74,5 @@ public class ControlNavegacion {
     public void setJugador(JugadorModelo jugador) {
         this.jugador = jugador;
     }
-
 
 }

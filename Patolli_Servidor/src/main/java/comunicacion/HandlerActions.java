@@ -61,6 +61,8 @@ public class HandlerActions {
                     handleReiniciarFicha(clientSocket, data);
                 case "CAMBIAR_TURNO" ->
                     handleCambiarTurno(clientSocket, data);
+                         case "CANCELAR_PARTIDA" ->
+                    handleCancelarPartida(clientSocket, data);
                 default ->
                     throw new IllegalArgumentException("Acción desconocida: " + accion);
             }
@@ -103,6 +105,19 @@ public class HandlerActions {
     }
 
     /**
+     * Maneja la unión a una partida existente.
+     */
+    private void handleCancelarPartida(Socket clientSocket, Map<String, Object> data) {
+
+        String clientId = obtenerClientId(clientSocket);
+        Partida partida = gestionarPartidaBO.obtenerPartida((String) data.get("codigoAcceso"));
+        PartidaLogicaBO partidaLogicaBO = new PartidaLogicaBO(partida);
+        Map<String, Object> mensaje = partidaLogicaBO.cancelarPartida(clientId);
+        MessageUtil.enviarMensaje(clientSocket, mensaje);
+
+    }
+
+    /**
      * Maneja el inicio de una partida.
      */
     private void handleIniciarPartida(Socket clientSocket, Map<String, Object> data) {
@@ -119,7 +134,7 @@ public class HandlerActions {
         Partida partida = gestionarPartidaBO.obtenerPartida((String) data.get("codigoAcceso"));
         PartidaLogicaBO partidaLogicaBO = new PartidaLogicaBO(partida);
         partidaLogicaBO.inicializarTurnoSiEsNecesario();
-        Map<String, Object> mensaje = partidaLogicaBO.lanzamientoCañas(clientId);
+        Map<String, Object> mensaje = partidaLogicaBO.lanzamientoCañas(clientId,(String) data.get("jugador"));
         MessageUtil.enviarMensaje(clientSocket, mensaje);
     }
 

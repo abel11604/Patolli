@@ -10,6 +10,7 @@ import dominio.Casilla;
 import dominio.Ficha;
 import dominio.Jugador;
 import dominio.Partida;
+import enums.EstadosPartida;
 import enums.ResultadoMovimiento;
 import java.net.Socket;
 import java.util.HashMap;
@@ -106,11 +107,55 @@ public class PartidaLogicaBO {
         return mensaje;
     }
 
-    public Map<String, Object> lanzamientoCañas(String clientId) {
+    /**
+     * Cancela la partida actual y notifica a todos los jugadores excepto al
+     * host.
+     *
+     * @param clientId Identificador del cliente que solicita la cancelación.
+     * @return Mapa con el estado de la cancelación.
+     */
+    public Map<String, Object> cancelarPartida(String clientId) {
+        // Validar si el cliente es el host
+        Jugador host = partida.getJugadores().get(0); // Método para obtener el host de la partida
+        if (!host.getId().equals(clientId)) {
+            throw new IllegalStateException("Solo el host puede cancelar la partida.");
+        }
+
+        // Marcar la partida como cancelada
+        partida.setEstado(EstadosPartida.FINALIZADA);
+        GestionarPartidaBO gestionarPartidaBO = GestionarPartidaBO.getInstance();
+        gestionarPartidaBO.eliminarPartida(partida.getCodigoAcceso());
+
+        // Crear un mensaje para notificar la cancelación, incluyendo el ID de la partida
+        Map<String, Object> mensaje = Map.of(
+                "accion", "CANCELAR_PARTIDA",
+                "codigoPartida", partida.getCodigoAcceso(),
+                "mensaje", "La partida con ID " + partida.getCodigoAcceso() + " ha sido cancelada por el host."
+        );
+
+        // Notificar a todos los jugadores excepto al host
+        for (Jugador jugador : partida.getJugadores()) {
+            if (!jugador.getId().equals(clientId)) { // Excluir al host
+                Socket clientSocket = ClientManager.getClientSocket(jugador.getId());
+                if (clientSocket != null) {
+                    MessageUtil.enviarMensaje(clientSocket, mensaje);
+                } else {
+                    System.err.println("No se encontró un socket para el jugador con ID: " + jugador.getId());
+                }
+            }
+        }
+
+        System.out.println("Partida cancelada por el host: " + clientId);
+
+        // Retornar el mensaje de cancelación solo para el host (opcional)
+        return mensaje;
+    }
+
+    public Map<String, Object> lanzamientoCañas(String clientId,String jugador) {
         validarCliente(clientId);
 
         // Verificar si el cliente tiene el turno
-        Jugador jugador = obtenerJugadorPorId(clientId);
+        String jugadorTiro = jugador;
 
         // Realizar el lanzamiento de cañas
         Map<String, Object> resultadoCañas = tirarCañas();
@@ -120,7 +165,7 @@ public class PartidaLogicaBO {
         // Crear un mensaje para notificar a todos los jugadores
         Map<String, Object> mensaje = Map.of(
                 "accion", "TIRAR_CAÑA",
-                "jugador", jugador.getNombre(),
+                "jugador", jugadorTiro,
                 "resultado", casillasAvanzar,
                 "estadoCañas", estadoCañas // Incluye el estado de las cañas en el mensaje
         );
@@ -229,7 +274,7 @@ public class PartidaLogicaBO {
         Casilla casillaActual = fichaSel.getCasillaActual();
         int posicionActual = partida.getCasillas().indexOf(casillaActual);
         int nuevaPosicion = (posicionActual + numCasillas) % partida.getCasillas().size();
-
+        GestionarPartidaBO b = GestionarPartidaBO.getInstance();
         Casilla casillaDestino = partida.getCasillas().get(nuevaPosicion);
 
         // Manejo de casilla ocupada
@@ -237,6 +282,8 @@ public class PartidaLogicaBO {
             if (casillaDestino.getTipo().equalsIgnoreCase("Central")) {
                 eliminarFicha(casillaDestino.getOcupadoPor());
                 if (partida.getJugadores().size() == 1) {
+                    partida.setEstado(EstadosPartida.FINALIZADA);
+                    b.eliminarPartida(partida.getCodigoAcceso());
                     return ResultadoMovimiento.PARTIDA_TERMINADA;
                 }
                 determinarTurno();
@@ -257,6 +304,8 @@ public class PartidaLogicaBO {
         if (esCasillaGanadora(fichaSel, casillaDestino)) {
             eliminarJugador(fichaSel.getJugador());
             if (partida.getJugadores().size() == 1) {
+                partida.setEstado(EstadosPartida.FINALIZADA);
+                b.eliminarPartida(partida.getCodigoAcceso());
                 return ResultadoMovimiento.PARTIDA_TERMINADA; // Indicar que la partida ha terminado
             }
             return ResultadoMovimiento.JUGADOR_GANADOR; // Indicar que un jugador ha ganado
@@ -270,6 +319,8 @@ public class PartidaLogicaBO {
             case "apuesta":
                 if (!cobrarApuesta(fichaSel.getJugador())) {
                     if (partida.getJugadores().size() == 1) {
+                        partida.setEstado(EstadosPartida.FINALIZADA);
+                        b.eliminarPartida(partida.getCodigoAcceso());
                         return ResultadoMovimiento.PARTIDA_TERMINADA;
                     }
                     determinarTurno();

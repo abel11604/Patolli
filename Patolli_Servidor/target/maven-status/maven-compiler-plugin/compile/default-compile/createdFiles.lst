@@ -12,9 +12,5 @@ negocio\CrearPartidaBO.class
 comunicacion\ClientManager.class
 dominio\Jugador.class
 enums\EstadosPartida.class
-pruebas\crearPartida2.class
-pruebas\PruebaMovimientos.class
 negocio\PartidaLogicaBO$1.class
-pruebas\PruebasCrearPartida.class
 negocio\GestionarPartidaBO.class
-pruebas\PruebasUnirse.class

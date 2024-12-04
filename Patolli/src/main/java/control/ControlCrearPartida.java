@@ -9,10 +9,8 @@ import comunicacion.ClientConnection.MessageListener;
 import factory.CasillasFactory;
 import factory.FichaFactory;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import modelo.CasillaModelo;
 import modelo.JugadorModelo;
 import modelo.PartidaModelo;
 
@@ -51,15 +49,17 @@ public class ControlCrearPartida implements IControlCrearPartida {
         cliente.setMessageListener(listener);
         cliente.connect("localhost", 8080);
     }
-
+  public static ControlCrearPartida getInstance() {
+        return getInstance(false);
+    }
     /**
      * Obtiene la única instancia de la clase ControlCrearPartida. Si no existe
      * una instancia, la crea.
      *
      * @return la instancia Singleton de ControlCrearPartida.
      */
-    public static ControlCrearPartida getInstance() {
-        if (instance == null) {
+    public static ControlCrearPartida getInstance(boolean forceNew) {
+        if (instance == null|| forceNew) {
             instance = new ControlCrearPartida();
         }
         return instance;

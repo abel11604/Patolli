@@ -50,7 +50,6 @@ public class PartidaFrm extends javax.swing.JFrame {
         this.nav = ControlNavegacion.getInstance();
         this.partida.setPartida(nav.getPartida());
         this.jugador = nav.getJugador();
-        System.out.println("jugador" + jugador.getNombre());
         initComponents();
         // Ocultar todos los paneles al inicio
         panelJ1.setVisible(false);
@@ -67,8 +66,9 @@ public class PartidaFrm extends javax.swing.JFrame {
         setApuesta(partida.getPartida().getApuesta());
         actualizarFondoApuesta();
         iniciarTurno();
+
         ClientConnection.getInstance().setMessageListener(message -> {
-            System.out.println("Mensaje recibido del servidor: " + message);
+
             String accion = (String) message.get("accion");
             if (accion == null) {
                 return;
@@ -515,8 +515,13 @@ public class PartidaFrm extends javax.swing.JFrame {
         // Reflejar el estado según el resultado
         switch (resultado) {
             case "FICHA_ELIMINADA":
-                partida.eliminarFicha(fichaEnDestino); // Eliminar la ficha de la lógica del modelo
-                pintarJugadores(); // Actualizar la vista de jugadores
+                if (fichaEnDestino != null) {
+                    eliminarFichaDeVista(fichaEnDestino);
+
+                    partida.eliminarFicha(fichaEnDestino);
+                }
+                pintarJugadores();
+
                 break;
 
             case "FICHA_REINICIADA":
@@ -538,7 +543,7 @@ public class PartidaFrm extends javax.swing.JFrame {
                 break;
 
             case "JUGADOR_GANADOR":
-                JOptionPane.showMessageDialog(this, fichaMover.getJugador().getNombre() + " ha ganado la partida.");
+                JOptionPane.showMessageDialog(this, (String) message.get("jugador") + " ha ganado la partida.");
                 this.dispose();
                 nav.mostrarMenu();
                 break;
@@ -559,16 +564,14 @@ public class PartidaFrm extends javax.swing.JFrame {
             procesarCambioTurno(turno);
         }
 
-        imprimirEstadoCasillas();
     }
 
     private void procesarCambioTurno(String nombreJugador) {
-        System.out.println("hola " + nombreJugador);
+
         if (nombreJugador != null) {
             for (JugadorModelo jugadorTurno : partida.getPartida().getJugadores()) {
                 if (jugadorTurno.getNombre().equalsIgnoreCase(nombreJugador)) {
                     turnoActual = jugadorTurno; // Actualiza el turno actual
-                    System.out.println("segun cambio " + turnoActual.getNombre());
                     break;
                 }
             }
@@ -632,7 +635,7 @@ public class PartidaFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLanzarCañasActionPerformed
 
     private void lanzarCañas() {
-        ClientConnection.getInstance().lanzarCaña(partida.getPartida().getCodigoAcceso());
+        ClientConnection.getInstance().lanzarCaña(partida.getPartida().getCodigoAcceso(), jugador.getNombre());
     }
 
     private void pintarFichas() {
@@ -658,6 +661,26 @@ public class PartidaFrm extends javax.swing.JFrame {
         System.out.println("--------------------------------");
     }
 
+    /**
+     * Elimina la ficha de la vista.
+     *
+     * @param ficha FichaModelo que será eliminada.
+     */
+    private void eliminarFichaDeVista(FichaModelo ficha) {
+        JLabel fichaLabel = fichaLabelMap.get(ficha);
+        if (fichaLabel != null) {
+            // Remover el JLabel de la casilla actual
+            if (fichaLabel.getParent() != null) {
+                fichaLabel.getParent().remove(fichaLabel);
+            }
+
+            fichaLabel.getParent().repaint();
+
+            // Eliminar del mapa para que ya no se rastree
+            fichaLabelMap.remove(ficha);
+        }
+    }
+
     private void procesarTiroCañas(Map<String, Object> message) {
         // Obtener los datos del mensaje como lista
         List<Boolean> estadoCañasList = (List<Boolean>) message.get("estadoCañas");
@@ -678,7 +701,8 @@ public class PartidaFrm extends javax.swing.JFrame {
             }
         }
 
-        // Si el jugador actual es el jugador que lanzó, procesa el avance
+        System.out.println("HOLA " + message.get("jugador"));
+        System.out.println("yo " + jugador.getNombre());
         if (jugador.getNombre().equalsIgnoreCase((String) message.get("jugador"))) {
 
             System.out.println("hola entre al if" + jugador.getNombre());
@@ -886,7 +910,7 @@ public class PartidaFrm extends javax.swing.JFrame {
         tablero.setMaximumSize(tablero.getSize());
 
         for (int i = 1; i <= filas * columnas; i++) {
-            JLabel label = new JLabel(String.valueOf(contadorCasillas), SwingConstants.CENTER); // Etiqueta con el número de casilla
+            JLabel label = new JLabel(); // Crear JLabel vacío
             label.setBorder(new LineBorder(Color.BLACK, 1));
             label.setOpaque(true);
             label.setBackground(Color.WHITE);
@@ -940,7 +964,7 @@ public class PartidaFrm extends javax.swing.JFrame {
 
             tablero.add(label);
             casillas.add(label); // Añadir el JLabel al listado general de casillas
-            contadorCasillas++; // Incrementar el contador para el siguiente JLabel
+            contadorCasillas++; // Incrementar el contador para la siguiente JLabel
         }
 
         return contadorCasillas; // Retornar el contador actualizado para la siguiente sección del tablero
@@ -1048,6 +1072,8 @@ public class PartidaFrm extends javax.swing.JFrame {
             }
         }
     }
+
+   
 
     private void actualizarEstadoBotonLanzarCañas() {
         if (jugador.getNombre().equalsIgnoreCase(turnoActual.getNombre())) {
