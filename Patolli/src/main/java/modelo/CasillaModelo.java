@@ -17,7 +17,6 @@ public class CasillaModelo {
         this.tipo = tipo;
         this.ocupadoPor = null;
         this.numCasilla = numCasilla;
-
     }
 
     public String getTipo() {
