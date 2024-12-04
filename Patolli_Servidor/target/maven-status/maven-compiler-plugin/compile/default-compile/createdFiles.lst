@@ -11,4 +11,5 @@ negocio\CrearPartidaBO.class
 comunicacion\ClientManager.class
 dominio\Jugador.class
 enums\EstadosPartida.class
+negocio\PartidaLogicaBO$1.class
 negocio\GestionarPartidaBO.class

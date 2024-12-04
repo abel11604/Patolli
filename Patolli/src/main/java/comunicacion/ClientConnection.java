@@ -152,6 +152,13 @@ public class ClientConnection {
         sendMessage(data);
     }
 
+    public void cancelarPartida(PartidaModelo partida) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("accion", "CANCELAR_PARTIDA");
+        data.put("codigoAcceso", partida.getCodigoAcceso());
+        sendMessage(data);
+    }
+
     public void unirseAPartida(String codigoAcceso, JugadorModelo jugadorAUnirse) {
         Map<String, Object> data = new HashMap<>();
         data.put("accion", "UNIRSE_PARTIDA");
@@ -168,10 +175,11 @@ public class ClientConnection {
         sendMessage(data);
     }
 
-    public void lanzarCaña(String codigoPartida) {
+    public void lanzarCaña(String codigoPartida,String jugador) {
         Map<String, Object> data = new HashMap<>();
         data.put("accion", "TIRAR_CAÑA");
         data.put("codigoAcceso", codigoPartida);
+        data.put("jugador",jugador);
         sendMessage(data);
     }
 
@@ -182,15 +190,15 @@ public class ClientConnection {
         data.put("idFicha", fichaId);
         sendMessage(data);
     }
-    
+
     public void cambiarTurno(String codigoPartida) {
         Map<String, Object> data = new HashMap<>();
         data.put("accion", "CAMBIAR_TURNO");
         data.put("codigoAcceso", codigoPartida);
         sendMessage(data);
     }
-    
-     public void moverFicha(String codigoPartida,String idFicha,int numCasillas) {
+
+    public void moverFicha(String codigoPartida, String idFicha, int numCasillas) {
         Map<String, Object> data = new HashMap<>();
         data.put("accion", "MOVER_FICHA");
         data.put("codigoAcceso", codigoPartida);
@@ -198,7 +206,7 @@ public class ClientConnection {
         data.put("numCasillas", numCasillas);
         sendMessage(data);
     }
-    
+
     /**
      * Establece el oyente de mensajes para los mensajes entrantes del servidor.
      *

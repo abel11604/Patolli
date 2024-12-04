@@ -18,7 +18,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
      * Creates new form menuPrincipalFrm
      */
     public MenuPrincipalFrm() {
-        this.nav = ControlNavegacion.getInstance();
+     this.nav = ControlNavegacion.getInstance(false); 
 
         initComponents();
 
@@ -162,7 +162,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInstruccionesActionPerformed
 
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
-        this.controlCrear = ControlCrearPartida.getInstance();
+        this.controlCrear = ControlCrearPartida.getInstance(false);
         String nombreJugador = JOptionPane.showInputDialog(this, "Ingresa tu nombre:", "Nombre del jugador", JOptionPane.PLAIN_MESSAGE);
 
         if (nombreJugador == null || nombreJugador.trim().isEmpty()) {

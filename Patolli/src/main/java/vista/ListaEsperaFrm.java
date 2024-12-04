@@ -45,6 +45,8 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
                         procesarNuevoJugador(message);
                     case "PARTIDA_INICIADA" ->
                         procesarPartidaIniciada(message);
+                    case "CANCELAR_PARTIDA" ->
+                        procesarPartidaCancelada(message);
                 }
             });
         });
@@ -256,15 +258,15 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
 
 
     private void btnIniciarPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarPartidaActionPerformed
-        if(partida.getJugadores().size()<2){
-            JOptionPane.showMessageDialog(this, "Debe de haber al menos 2 jugadores para iniciar la partida", 
+        if (partida.getJugadores().size() < 2) {
+            JOptionPane.showMessageDialog(this, "Debe de haber al menos 2 jugadores para iniciar la partida",
                     "Cantidad jugadores", JOptionPane.ERROR_MESSAGE);
         }
         ClientConnection.getInstance().iniciarPartida(partida.getCodigoAcceso());
     }//GEN-LAST:event_btnIniciarPartidaActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-
+        ClientConnection.getInstance().cancelarPartida(partida);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void inicializarPantalla() {
@@ -337,12 +339,19 @@ public class ListaEsperaFrm extends javax.swing.JFrame {
     }
 
     public void procesarPartidaIniciada(Map<String, Object> mensajeNotificacion) {
-        // Mostrar el mensaje recibido (opcional)
-        System.out.println("Partida iniciada: " + mensajeNotificacion);
+        String descripcion = (String) mensajeNotificacion.get("mensaje");
+        JOptionPane.showMessageDialog(this, descripcion);
         dispose(); // Cerrar la ventana actual
         // Cambiar a la pantalla del juego
         nav.mostrarPantallaJuego();
-        
+
+    }
+
+    public void procesarPartidaCancelada(Map<String, Object> mensajeNotificacion) {
+
+        dispose();
+        nav.mostrarMenu();
+
     }
 
     public void mostrarPantalla() {
