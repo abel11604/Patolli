@@ -21,19 +21,16 @@ import java.util.concurrent.Executors;
 public class Servidor {
 
     private static final int PUERTO = 8080; 
-    private static final int MAX_HILOS = 10; 
 
     private final ExecutorService threadPool;
     private final HandlerActions handlerActions; 
     private int clientCounter;
-    
     private final List<Jugador> jugadores; 
-    private Jugador turnoActual;
     private final List<Socket> clientSockets; // Lista de sockets de los clientes
 
 
     public Servidor() {
-        this.threadPool = Executors.newFixedThreadPool(MAX_HILOS); 
+        this.threadPool = Executors.newCachedThreadPool(); // Cambiado a un pool de hilos sin límite
         this.handlerActions = new HandlerActions();
         this.clientCounter = 1; 
         this.jugadores = new ArrayList<>();
@@ -82,6 +79,7 @@ public class Servidor {
         Servidor servidor = new Servidor();
         servidor.iniciar();
     }
+
     
 }
 
